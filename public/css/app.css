@@ -1,0 +1,66 @@
+/* Font Family */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+*{
+    font-family: 'Poppins';
+}
+.content-height {
+    min-height: calc(100vh - 4rem);
+}
+
+.text-justify {
+    text-align: justify;
+}
+
+.primary-color {
+    color: #008000 !important;
+}
+
+ .btn-hover:hover
+ {
+    background-color: white;
+    color: black !important;
+ }
+
+ .img-fixed-height {
+    height: 350px;
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+}
+
+.card-text-custom {
+    display: block;
+    max-height: 3em;
+    line-height: 1.5;
+    overflow: hidden;
+}
+.card-title-custom {
+    display: block;
+    max-height: 1.5em;
+    line-height: 1.5;
+    overflow: hidden;
+}
+
+.accordion {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.accordion-item {
+    border-radius: 10px;
+}
+
+
+.accordion-button {
+    border-radius: 10px 10px 0 0;
+}
+
+
+.accordion-collapse {
+    border-radius: 0 0 10px 10px;
+}
+
+
+
