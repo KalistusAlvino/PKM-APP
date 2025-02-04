@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\AuthController\LoginController;
 use App\Http\Controllers\AuthController\RegisterController;
+use App\Http\Controllers\DashboardController\MainController;
 use App\Http\Controllers\LandingPageController\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,3 +25,4 @@ Route::get('/', function () {
 Route::get('/',[HomeController::class,'getHomePage'])->name('halamanHome');
 Route::get('/login', [LoginController::class,'getLoginPage'])->name('halamanLogin');
 Route::get('/register', [RegisterController::class,'getRegisterPage'])->name('halamanRegister');
+Route::get('/dashboard',[MainController::class,'getDashboardPage'])->name('halamanDashboard');
