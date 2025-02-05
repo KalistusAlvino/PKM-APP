@@ -17,10 +17,11 @@
                                     <div class="d-flex align-items-center mb-3 pb-1">
                                         <img src="{{ config('app.base_url') . 'landing/' . 'ukdw.png' ?? 'https://place-hold.it/700x600'}}"
                                             alt="loginImage" width="25" height="34" class="me-3">
-                                        <span class="h1 fw-bold mb-0 text-success">PKM UKDW</span>
+                                        <span class="h1 fw-bold mb-0 primary-color">PKM UKDW</span>
                                     </div>
 
-                                    <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Sign into your
+                                    <h5 class="fw-normal mb-3 pb-3 third-color" style="letter-spacing: 1px;">Sign into
+                                        your
                                         account</h5>
 
                                     <div data-mdb-input-init class="form-outline mb-4">
@@ -37,13 +38,16 @@
                                     </div>
 
                                     <div class="pt-1 mb-4">
-                                        <button data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-block"
-                                            type="button">Login</button>
+                                        <button data-mdb-button-init data-mdb-ripple-init
+                                            class="btn bg-third-color btn-block" type="button">
+                                            <p class="m-0 secondary-color">Login</p>
+                                        </button>
                                     </div>
 
                                     <a class="small text-muted" href="#!">Forgot password?</a>
-                                    <p class="mb-5 pb-lg-2" style="color: #393f81;">Don't have an account? <a
-                                            href="{{route('halamanRegister')}}" style="color: #393f81;">Register here</a>
+                                    <p class="mb-5 pb-lg-2 third-color">Don't have an account? <a class="third-color"
+                                            href="{{route('halamanRegister')}}">Register
+                                            here</a>
                                     </p>
                                     <a class="small text-muted d-flex justify-content-end"
                                         href="{{route('halamanHome')}}">Back to home</a>

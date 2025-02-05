@@ -10,6 +10,6 @@
 <!-- Grid container -->
 
 <!-- Copyright -->
-<div class="text-center p-3" style="background-color: #008000;">
+<div class="text-center p-3 bg-third-color">
     <p class="text-white fw-bold">PKM UKDW 2025</p>
 </div>

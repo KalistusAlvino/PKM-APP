@@ -14,7 +14,26 @@
 }
 
 .primary-color {
-    color: #008000 !important;
+    color: #16be27 !important;
+}
+
+.secondary-color {
+    color: #f5fffa !important;
+}
+
+.third-color {
+    color: #1d2632 !important;
+}
+.bg-primary-color {
+    background-color: #16be27 !important;
+}
+
+.bg-secondary-color {
+    background-color: #f5fffa !important;
+}
+
+.bg-third-color {
+    background-color: #1d2632 !important;
 }
 
  .btn-hover:hover
@@ -62,5 +81,35 @@
     border-radius: 0 0 10px 10px;
 }
 
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.slide-in-left {
+    animation: slideInLeft 1s ease-out forwards;
+}
+
+.slide-in-right {
+    animation: slideInRight 1s ease-out forwards;
+}
 
 

@@ -18,10 +18,13 @@
         @include('dashboard.assets.sidebar')
         <!-- Main Component -->
         <div class="main">
-            <nav class="navbar navbar-expand">
+            <nav class="navbar navbar-expand d-flex justify-content-between">
                 <button class="toggler-btn" type="button">
-                    <i class="fa-solid fa-align-left"></i>
+                    <i class="fa-solid fa-outdent"></i>
                 </button>
+                <div class="user px-3">
+                    <p class="secondary-color m-0">Selamat Datang! Kalistus Alvino <i class="fa-regular fa-face-smile-wink"></i></p>
+                </div>
             </nav>
             <main class="p-3">
                 <div class="container-fluid">

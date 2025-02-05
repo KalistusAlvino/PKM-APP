@@ -9,6 +9,7 @@ class HomeController extends Controller
 {
     public function getHomePage()
     {
+
         return view('landing.home');
     }
 }

@@ -5,23 +5,23 @@
         <div class="container">
             <div class="row">
                 <div class="col-12 col-lg-5 d-flex content-height align-items-center justify-content-center">
-                    <div class="text">
+                    <div class="text slide-in-left">
                         <h1 class="fw-bold primary-color">PROGRAM KREATIVITAS MAHASISWA</h1>
                         <p class="text-justify">Punya ide brilian? Waktunya wujudkan idemu melalui PKM! PKM
                             bukan sekedar program, tapi juga peluang untuk berkarya dan berprestasi. Yuk, gabung
                             sekarang!</p>
                     </div>
                 </div>
-                <div class="col-12 col-lg-7  d-none d-lg-flex content-height align-items-center justify-content-center">
+                <div class="col-12 col-lg-7 d-none d-lg-flex content-height align-items-center justify-content-center">
                     <img src="{{ config('app.base_url') . 'landing/' . 'skimpkm.png' ?? 'https://place-hold.it/700x600'}}"
-                        alt="landing.home" style="width: 100%;">
+                        alt="landing.home" class="slide-in-right" style="width: 100%;">
                 </div>
             </div>
         </div>
     </div>
 </section>
 <section id="pengumuman">
-    <div class="container-fluid content-height bg-body-tertiary">
+    <div class="container-fluid content-height bg-third-color">
         <div class="container content-height d-flex flex-column">
             <h3 class="pt-5 primary-color fw-bold border-bottom pb-2 border-3">
                 <i class="fa-solid fa-bullhorn pe-2"></i> Pengumuman
@@ -119,7 +119,7 @@
     </div>
 </section>
 <section id="faq">
-    <div class="container-fluid content-height bg-body-tertiary">
+    <div class="container-fluid content-height bg-third-color">
         <div class="container content-height">
             <h3 class="pt-5 primary-color fw-bold border-bottom pb-2 border-3">
                 <i class="fa-regular fa-circle-question pe-2"></i> Frequently Asked Questions
