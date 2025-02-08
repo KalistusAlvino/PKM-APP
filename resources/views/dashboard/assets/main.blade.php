@@ -28,9 +28,7 @@
             </nav>
             <main class="p-3">
                 <div class="container-fluid">
-                    <div class="mb-3 text-center">
-                        <h1>Bootstrap Sidebar Tutorial</h1>
-                    </div>
+                    @yield('content')
                 </div>
             </main>
         </div>

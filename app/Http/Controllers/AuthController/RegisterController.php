@@ -3,19 +3,17 @@
 namespace App\Http\Controllers\AuthController;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreMahasiswaRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Models\Fakultas;
 use App\Models\ProgramStudi;
-use App\Repositories\Mahasiswa\MahasiswaRepository;
-use Exception;
-use Illuminate\Http\Request;
-
+use App\Repositories\Mahasiswa\RegisterRepository;
+use Illuminate\Validation\ValidationException;
 class RegisterController extends Controller
 {
-    protected $mahasiswaRepository;
-    public function __construct(MahasiswaRepository $mahasiswaRepository)
+    protected $registerRepository;
+    public function __construct(RegisterRepository $registerRepository)
     {
-        $this->mahasiswaRepository = $mahasiswaRepository;
+        $this->registerRepository = $registerRepository;
     }
 
     public function getRegisterPage()
@@ -30,17 +28,16 @@ class RegisterController extends Controller
         return response()->json($programStudi);
     }
 
-    public function storeMahasiswa(StoreMahasiswaRequest $request){
+    public function storeMahasiswa(RegisterRequest $request){
         try {
             $validate = $request->validated();
-            $this->mahasiswaRepository->create($validate);
+            $this->registerRepository->create($validate);
 
             return redirect()->route('halamanLogin')->with('success', 'Data berhasil disimpan!');
         }
-        catch (Exception $e)
+        catch (ValidationException $e)
         {
-            dd($e);
-            return redirect()->back()->with('failed', 'Data gagal disimpan!');
+            return redirect()->back()->withErrors($e->getMessage());
         }
     }
 }

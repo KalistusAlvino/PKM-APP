@@ -11,7 +11,7 @@
             Utama
         </li>
         <li class="sidebar-item">
-            <a href="#" class="sidebar-link">
+            <a href="{{route('mahasiswa.dashboard')}}" class="sidebar-link">
                 <i class="fa-solid fa-chart-pie"></i>
                 <span class="ps-1 ">Dashboard</span>
             </a>
@@ -28,9 +28,9 @@
             Kelompok
         </li>
         <li class="sidebar-item">
-            <a href="#" class="sidebar-link">
+            <a href="{{route('mahasiswa.daftar-kelompok')}}" class="sidebar-link">
                 <i class="fa-solid fa-users"></i>
-                <span class="ps-1 ">Detail Kelompok</span>
+                <span class="ps-1 ">Daftar Kelompok</span>
             </a>
         </li>
         <li class="sidebar-header">

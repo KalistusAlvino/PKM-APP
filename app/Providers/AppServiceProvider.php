@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
-use App\Repositories\Mahasiswa\MahasiswaRepository;
-use App\Repositories\Mahasiswa\MahasiswaRepositoryInterface;
+use App\Repositories\Users\AuthRepository;
+use App\Repositories\Users\AuthRepositoryInterface;
+use App\Repositories\Mahasiswa\RegisterRepository;
+use App\Repositories\Mahasiswa\RegisterRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,10 +15,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(
-            MahasiswaRepositoryInterface::class,
-            MahasiswaRepository::class
-        );
+        $bindings = [
+            RegisterRepositoryInterface::class => RegisterRepository::class,
+            AuthRepositoryInterface::class => AuthRepository::class,
+        ];
+
+        foreach ($bindings as $interface => $implementation) {
+            $this->app->bind($interface, $implementation);
+        }
     }
 
     /**

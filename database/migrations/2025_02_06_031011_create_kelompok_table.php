@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user', function (Blueprint $table) {
+        Schema::create('kelompok', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('username');
-            $table->enum('role',['mahasiswa','dosen','koordinator','biro']);
-            $table->string('password');
+            $table->uuid('dospemId')->nullable()->onDelete('cascade');
             $table->timestamps();
+
+            $table->foreign('dospemId')->references('id')->on('dosen');
         });
     }
 
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user');
+        Schema::dropIfExists('kelompok');
     }
 };

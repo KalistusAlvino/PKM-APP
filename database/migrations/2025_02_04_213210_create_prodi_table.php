@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('prodi', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('fakultas_id');
+            $table->unsignedBigInteger('fakultas_id')->onDelete('cascade');
             $table->string('nama_prodi');
             $table->timestamps();
 

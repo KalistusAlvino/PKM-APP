@@ -13,14 +13,15 @@ return new class extends Migration
     {
         Schema::create('mahasiswa', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('userId');
+            $table->uuid('userId')->onDelete('cascade');
+            $table->string('name');
             $table->string('fakultas');
             $table->string('prodi');
             $table->string('email');
             $table->string('no_wa');
             $table->timestamps();
 
-            $table->foreign('userId')->references('id')->on('user');
+            $table->foreign('userId')->references(columns: 'id')->on('user');
         });
     }
 

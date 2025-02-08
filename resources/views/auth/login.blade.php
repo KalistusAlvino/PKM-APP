@@ -13,7 +13,8 @@
                         </div>
                         <div class="col-md-6 col-lg-5 d-flex align-items-center">
                             <div class="card-body p-4 p-lg-5 text-black">
-                                <form>
+                                <form action="{{route('auth.login')}}" method="post">
+                                    @csrf
                                     <div class="d-flex align-items-center mb-3 pb-1">
                                         <img src="{{ config('app.base_url') . 'landing/' . 'ukdw.png' ?? 'https://place-hold.it/700x600'}}"
                                             alt="loginImage" width="25" height="34" class="me-3">
@@ -25,21 +26,21 @@
                                         account</h5>
 
                                     <div data-mdb-input-init class="form-outline mb-4">
-                                        <label class="form-label" for="form2Example17">Email address</label>
-                                        <input type="email" id="form2Example17" class="form-control custom-input"
-                                            placeholder="example: abcd@students.ukdw.ac.id" />
+                                        <label class="form-label" for="formUsername">Username</label>
+                                        <input type="text" id="formUsername" name="username" class="form-control custom-input"
+                                            placeholder="example: 72210487" required/>
 
                                     </div>
 
                                     <div data-mdb-input-init class="form-outline mb-4">
                                         <label class="form-label" for="form2Example27">Password</label>
-                                        <input type="password" id="form2Example27" class="form-control" />
+                                        <input type="password" id="form2Example27" name="password" class="form-control" required/>
 
                                     </div>
 
                                     <div class="pt-1 mb-4">
                                         <button data-mdb-button-init data-mdb-ripple-init
-                                            class="btn bg-third-color btn-block" type="button">
+                                            class="btn bg-third-color btn-block" type="submit">
                                             <p class="m-0 secondary-color">Login</p>
                                         </button>
                                     </div>

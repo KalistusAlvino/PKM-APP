@@ -6,18 +6,16 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Mahasiswa extends Model
+class Dosen extends Model
 {
     use HasFactory;
 
     use HasUuids;
-    protected $table = 'mahasiswa';
+
+    protected $table = 'dosen';
+
     protected $fillable = [
-        'userId',
-        'name',
-        'fakultas',
-        'prodi',
-        'email',
+        'nama',
         'no_wa',
     ];
 
@@ -25,9 +23,8 @@ class Mahasiswa extends Model
     {
         return $this->belongsTo(User::class);
     }
-
     public function kelompok()
     {
-        return $this->hasMany(MahasiswaKelompok::class,'mahasiswaId','id');
+        return $this->hasMany(Kelompok::class);
     }
 }
