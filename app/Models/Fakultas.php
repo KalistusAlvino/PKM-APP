@@ -17,4 +17,6 @@ class Fakultas extends Model
     {
         return $this->hasMany(ProgramStudi::class);
     }
+
+    
 }

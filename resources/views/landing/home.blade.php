@@ -1,4 +1,5 @@
 @extends('assets.main')
+@section('title','PKM UKDW')
 @section('content')
 <section id="home">
     <div class="container-fluid content-height" style="background-color: white;">

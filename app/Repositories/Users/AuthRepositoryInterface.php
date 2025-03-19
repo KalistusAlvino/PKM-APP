@@ -7,4 +7,6 @@ use Illuminate\Support\Collection;
 
 interface AuthRepositoryInterface {
     public function login(array $data): ?User;
+
+    public function logout();
 }

@@ -28,12 +28,26 @@ class LoginController extends Controller
 
             $route = match (true) {
                 $user->isMahasiswa() => 'mahasiswa.dashboard',
-                
+                $user->isDosen() => 'dosen.dashboard',
+                $user->isKoordinator() => 'koordinator.dashboard',
+                $user->isBiro() => 'biro.dashboard',
             };
 
-            return redirect()->intended(route($route));
+            return redirect()->intended(route($route))->with('success','Login Berhasil');
         } catch (ValidationException $e) {
-            return redirect()->back()->withErrors($e->getMessage());
+            return redirect()->back()->withErrors(['errors'=>'Ada kesalahan saat melakukan Login']);
+        }
+    }
+
+    public function logout()
+    {
+        try {
+            $this->authRepository->logout();
+
+            return redirect()->route('halamanHome');
+        }
+        catch (ValidationException $e) {
+            return redirect()->back()->withErrors(['errors'=>'Ada kesalahan saat melakukan logout']);
         }
     }
 }

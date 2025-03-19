@@ -33,11 +33,11 @@ class RegisterController extends Controller
             $validate = $request->validated();
             $this->registerRepository->create($validate);
 
-            return redirect()->route('halamanLogin')->with('success', 'Data berhasil disimpan!');
+            return redirect()->route('halamanLogin')->with('success', 'Pendaftaran Berhasil, Ayo Login!');
         }
         catch (ValidationException $e)
         {
-            return redirect()->back()->withErrors($e->getMessage());
+            return redirect()->back()->with('errors','Ada kesalahan dalam melakukan registrasi');
         }
     }
 }

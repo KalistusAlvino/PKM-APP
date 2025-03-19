@@ -22,9 +22,9 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => 'required|string|max:8|unique:user,username',
+            'username' => 'required|string|min:8|max:8|unique:user,username',
             'role' => 'required',
-            'no_wa' => 'required|string|max:13',
+            'no_wa' => 'required|string|min:11|max:13|unique:mahasiswa,no_wa',
             'fakultas' => 'required|string',
             'prodi' => 'required|string',
             'name' => 'required|string|max:255',
@@ -36,7 +36,9 @@ class RegisterRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'username.unique' => 'Username sudah digunakan.',
+            'username.min'=> 'Username minimal :min karakter',
+            'username.unique' => 'NIM anda sudah terdaftar.',
+            'no_wa.unique' => 'No. Whatsapp sudah digunakan.',
             'email.unique' => 'Email sudah digunakan.',
             'password.min' => 'Password minimal :min karakter.',
         ];

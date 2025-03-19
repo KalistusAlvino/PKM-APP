@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
+use Hash;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LoginRequest extends FormRequest
@@ -22,7 +24,16 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => 'required|string|max:255',
+            'username' => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) {
+                    if (!User::where('username', $value)->exists()) {
+                        $fail('Username belum terdaftar. Silahkah lakukan registrasi');
+                    }
+                }
+            ],
             'password' => 'required|min:8',
         ];
 
@@ -35,5 +46,21 @@ class LoginRequest extends FormRequest
             'password.required' => 'Password wajib diisi.',
             'password.min' => 'Password minimal :min karakter.',
         ];
+    }
+    public function withValidator($validator)
+    {
+        // Setelah username terdaftar, cek apakah password benar
+        $validator->after(function ($validator) {
+            $username = $this->input('username');
+            $password = $this->input('password');
+
+            // Dapatkan user berdasarkan username
+            $user = User::where('username', $username)->first();
+
+            // Jika user ditemukan dan password tidak cocok
+            if ($user && !Hash::check($password, $user->password)) {
+                $validator->errors()->add('password', 'Password yang dimasukkan salah.');
+            }
+        });
     }
 }

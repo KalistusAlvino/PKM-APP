@@ -5,6 +5,7 @@
 *{
     font-family: 'Poppins';
 }
+
 .content-height {
     min-height: calc(100vh - 4rem);
 }
@@ -14,7 +15,7 @@
 }
 
 .primary-color {
-    color: #16be27 !important;
+    color: #3b564d !important;
 }
 
 .secondary-color {
@@ -25,7 +26,7 @@
     color: #1d2632 !important;
 }
 .bg-primary-color {
-    background-color: #16be27 !important;
+    background-color: #3b564d !important;
 }
 
 .bg-secondary-color {
@@ -33,7 +34,7 @@
 }
 
 .bg-third-color {
-    background-color: #1d2632 !important;
+    background-color: #b9c5b1 !important;
 }
 
  .btn-hover:hover

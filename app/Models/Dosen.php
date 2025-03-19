@@ -15,16 +15,18 @@ class Dosen extends Model
     protected $table = 'dosen';
 
     protected $fillable = [
-        'nama',
+        'userId',
+        'nip',
+        'name',
         'no_wa',
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class,'userId','id');
     }
     public function kelompok()
     {
-        return $this->hasMany(Kelompok::class);
+        return $this->hasMany(Kelompok::class,'dospemId','id');
     }
 }

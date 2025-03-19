@@ -16,7 +16,7 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next, $role): Response
     {
         if ($request->user()->role !== $role) {
-            return  redirect()->back()->with('errors','Unknown Users');
+            return  redirect()->back()->withErrors(['errors','Anda tidak memiliki akses']);
         }
         return $next($request);
     }

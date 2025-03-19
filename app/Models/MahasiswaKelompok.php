@@ -24,4 +24,12 @@ class MahasiswaKelompok extends Model
     {
         return $this->belongsTo(Mahasiswa::class,'mahasiswaId','id');
     }
+    public function kelompok()
+    {
+        return $this->belongsTo(Kelompok::class,'kelompokId','id');
+    }
+
+    public function nim(){
+        return $this->belongsToMany(User::class, 'mahasiswa', 'userId');
+    }
 }

@@ -20,6 +20,11 @@ class Kelompok extends Model
 
     public function dosen()
     {
-        return $this->belongsTo(Dosen::class);
+        return $this->belongsTo(Dosen::class,'dospemId','id');
+    }
+
+    public function mahasiswaKelompok()
+    {
+        return $this->hasMany(MahasiswaKelompok::class,'kelompokId','id');
     }
 }

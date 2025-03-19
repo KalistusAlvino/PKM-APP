@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('dosen', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('userId')->onDelete('cascade');
-            $table->string('nama');
+            $table->bigInteger('nip');
+            $table->string('name');
             $table->string('no_wa');
             $table->timestamps();
 

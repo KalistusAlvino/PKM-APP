@@ -41,7 +41,7 @@
                                     <div class="pt-1 mb-4">
                                         <button data-mdb-button-init data-mdb-ripple-init
                                             class="btn bg-third-color btn-block" type="submit">
-                                            <p class="m-0 secondary-color">Login</p>
+                                            <p class="m-0 primary-color">Login</p>
                                         </button>
                                     </div>
 
