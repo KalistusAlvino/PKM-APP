@@ -19,46 +19,73 @@
                     Kelompok</span>
             </div>
             <div class="col-12 col-md-3 d-none d-md-flex align-items-center justify-content-center">
-                <img src="{{ config('app.base_url') . 'dashboard/biro/' . 'user-group.png' ?? 'https://place-hold.it/700x600'}}"
+                <img src="{{ config('app.base_url') . 'dashboard/biro/' . 'user-group.png' ?? 'https://place-hold.it/700x600' }}"
                     alt="user-group" width="100" height="100">
             </div>
         </div>
     </div>
-    <div class="card mx-2 my-2 bg-third-color">
-        <div class="table-responsive mx-3 my-3">
-            <table class="table table-borderless bg-table-third-color">
-                <thead>
-                    <tr>
-                        <th scope="col">No.</th>
-                        <th scope="col">NIP</th>
-                        <th scope="col">Nama</th>
-                        <th scope="col">No. Whatsapp</th>
-                        <th scope="col">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($dospem as $idx => $dos)
-                        <tr>
-                            <th scope="row" class="align-middle">{{ $dospem->firstItem() + $idx }}</th>
-                            <td class="align-middle">{{ $dos->nip }}</td>
-                            <td class="align-middle">{{ $dos->name }}</td>
-                            <td class="align-middle">{{ $dos->no_wa }}</td>
-                            <td class="align-middle"> <button
-                                    onclick="confirmAdd('{{ $dos->name }}','{{ route('storeInvite', [$id_kelompok, $dos->id]) }}')"
-                                    class="btn bg-primary-color" data-confirm-delete="true">
-                                    <i class="fa-solid fa-user-plus secondary-color"></i>
-                                </button></td>
-                        </tr>
-
-                    @empty
-                        <tr>
-                            <td> <em>Belum ada Dosen Pembimbing yang tersedia</em></td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+    <div class="row mb-2 mx-1">
+        <div class="col-12 col-md-6 col-lg-4">
+            <form method="POST" action="{{ route('mahasiswa.tambah-dosen-page', $id_kelompok) }}">
+                @csrf
+                <div class="input-group d-flex">
+                    <span class="input-group-text" id="addon-wrapping"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" class="form-control" placeholder="Cari berdasarkan nama"
+                        aria-describedby="addon-wrapping" name="cari" required>
+                </div>
+            </form>
         </div>
     </div>
+    <div class="row mx-1">
+        @forelse ($dospem as $dos)
+            <div class="col-12 col-lg-6">
+                <div class="card my-2">
+                    <div class="card-header bg-primary-color">
+                        <div class="d-flex flex-column mx-4 my-2 gap-3">
+                            <span class="fw-bold secondary-color fs-5">{{ $dos->name }}</span>
+                            <span class="secondary-color fs-5">{{ $dos->program_studi }}</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="mx-4 my-2">
+                            <span class="fw-bold primary-color fs-5">Bidang Minat PKM:</span>
+                            <div class="d-flex flex-row gap-2">
+                                @foreach (explode(',', $dos->ketertarikan) as $ketertarikan)
+                                    <div class="card my-2 rounded-4 bg-primary-color">
+                                        <span class="my-2 mx-2 secondary-color">{{ $ketertarikan }}</span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div class="mx-4 my-2">
+                            <span class="fw-bold primary-color fs-5">Whatsapp Number <i class="fa-brands fa-whatsapp"></i> :
+                            </span>
+                            <div class="d-flex flex-row gap-2">
+                                <div class="card my-2 rounded-4 bg-primary-color">
+                                    <span class="my-2 mx-2 secondary-color">{{ $dos->no_wa }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-primary-color d-flex justify-content-center">
+                        <button
+                            onclick="confirmAdd('{{ $dos->name }}','{{ route('storeInvite', [$id_kelompok, $dos->id]) }}')"
+                            class="btn bg-secondary-color mx-4 my-2" data-confirm-delete="true">
+                            Undang Dosen <i class="fa-solid fa-user-plus primary-color"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        @empty
+            <div class="card bg-third-color my-3">
+                <span class="primary-color fw-bold mx-2 my-2 fst-italic">Belum ada atau tidak ada dosen</span>
+            </div>
+        @endforelse
+    </div>
+
+
+
+
     <form id="post-undangan-form" method="POST" style="display: none;">
         @csrf
         @method('POST')

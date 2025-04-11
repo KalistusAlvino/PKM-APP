@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use App\Models\Fakultas;
 use App\Models\ProgramStudi;
+use App\Models\SkemaPkm;
 use App\Repositories\Mahasiswa\RegisterRepository;
 use Illuminate\Validation\ValidationException;
 class RegisterController extends Controller

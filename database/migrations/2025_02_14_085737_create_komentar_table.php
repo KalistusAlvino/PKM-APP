@@ -13,14 +13,11 @@ return new class extends Migration
     {
         Schema::create('komentar', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('id_judul');
-            $table->uuid('id_user');
+            $table->foreignUuid('id_judul')->references('id')->on('judul')->onDelete('cascade');
+            $table->foreignUuid('id_user')->references('id')->on('user')->onDelete('cascade');
             $table->string('komentar');
             $table->enum('status',['perlu perbaikan','diterima']);
             $table->timestamps();
-
-            $table->foreign('id_judul')->references('id')->on('judul');
-            $table->foreign('id_user')->references('id')->on('user');
         });
     }
 

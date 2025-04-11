@@ -26,6 +26,9 @@ class RegisterDosenRequest extends FormRequest
             'username' => 'required|string|unique:user,username',
             'no_wa' => 'required|string|max:13|unique:dosen,no_wa',
             'name' => 'required|string|max:255',
+            'program_studi' => 'required|string|max:255',
+            'ketertarikan' => 'required|array', // Validasi bahwa ketertarikan harus berupa array
+            'ketertarikan.*' => 'required|string|max:255', // Validasi setiap elemen dalam array
         ];
     }
     public function messages(): array

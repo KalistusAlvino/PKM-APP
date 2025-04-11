@@ -1,7 +1,19 @@
 @extends('dashboard.assets.main')
 @section('title', 'Kelompok Mahasiswa')
 @section('content')
-    <h3 class="fw-bold primary-color mx-2 my-2">Daftar Kelompok</h3>
+    <h3 class="fw-bold primary-color mx-3 my-2">Daftar Kelompok</h3>
+    <div class="row mb-2 mx-1">
+        <div class="col-12 col-md-6 col-lg-4">
+            <form method="POST" action="{{route('mahasiswa.daftar-kelompok')}}">
+                @csrf
+                <div class="input-group d-flex">
+                    <span class="input-group-text" id="addon-wrapping"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" class="form-control" placeholder="Cari berdasarkan nama ketua"
+                        aria-describedby="addon-wrapping" name="nama_ketua" required>
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="mx-2 my-4">
         @forelse ($kelompokList as $index => $kelompok)
             <div class="card bg-third-color my-3">
@@ -22,7 +34,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="card mx-3">
                         <div class="row">
                             <div
@@ -52,7 +63,7 @@
             </div>
         @empty
             <div class="card bg-third-color my-3">
-                <span class="primary-color fw-bold mx-2 my-2 fst-italic">Belum ada kelompok</span>
+                <span class="primary-color fw-bold mx-2 my-2 fst-italic">Belum ada atau tidak ada kelompok</span>
             </div>
         @endforelse
     </div>

@@ -17,7 +17,7 @@ class Judul extends Model
         'id_user',
         'detail_judul',
         'id_skema',
-        'keterangan'
+        'is_proposal',
     ];
     public function user(){
         return $this->belongsTo(User::class, 'id_user','id');

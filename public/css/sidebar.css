@@ -167,6 +167,12 @@
   .logo span {
     font-size: 26px;
   }
+  .change-password-mhs {
+    height: calc(100vh - 100px); /* Sesuaikan tinggi dengan mengurangi tinggi dashboard */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
   .header {
     transition: all 0.5s;

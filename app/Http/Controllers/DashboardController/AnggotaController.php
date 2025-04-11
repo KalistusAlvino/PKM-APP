@@ -19,7 +19,8 @@ class AnggotaController extends Controller
     {
         $userId = Auth::user()->mahasiswa->id;
         $alreadyKetua = MahasiswaKelompok::where('mahasiswaId', $userId)->where('status_mahasiswa','ketua')->exists();
-        return view('dashboard.mahasiswa.daftar-ketua',compact('alreadyKetua'));
+        $key = 'mendaftar';
+        return view('dashboard.mahasiswa.daftar-ketua',compact('alreadyKetua','key'));
     }
 
     public function postDaftarKetua(){

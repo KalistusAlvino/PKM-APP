@@ -16,7 +16,9 @@ return new class extends Migration
             $table->uuid('userId')->onDelete('cascade');
             $table->bigInteger('nip');
             $table->string('name');
+            $table->string('program_studi');
             $table->string('no_wa');
+            $table->string('ketertarikan');
             $table->timestamps();
 
             $table->foreign('userId')->references('id')->on('user');

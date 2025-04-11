@@ -13,16 +13,12 @@ return new class extends Migration
     {
         Schema::create('judul', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('id_kelompok');
-            $table->uuid('id_user');
+            $table->foreignUuid('id_kelompok')->references('id')->on('kelompok')->onDelete('cascade');
+            $table->foreignUuid('id_user')->references('id')->on('user')->onDelete('cascade');
             $table->string('detail_judul');
-            $table->uuid('id_skema');
-            $table->enum('keterangan',['Diterima','Ditolak'])->nullable()->default(null);
+            $table->foreignUuid('id_skema')->references('id')->on('skema_pkm')->onDelete('cascade');
+            $table->boolean('is_proposal')->default(false);
             $table->timestamps();
-
-            $table->foreign('id_kelompok')->references('id')->on('kelompok');
-            $table->foreign('id_skema')->references('id')->on('skema_pkm');
-            $table->foreign('id_user')->references('id')->on('user');
         });
     }
 

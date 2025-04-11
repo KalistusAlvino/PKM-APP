@@ -5,15 +5,22 @@
 
         <li class="nav-heading">Utama</li>
         <li class="nav-item">
-            <a class="nav-link collapsed" href="{{route('dosen.dashboard')}}">
+            <a class="nav-link {{ $key == 'dashboard' ? 'collapsed' : ''}}" href="{{route('biro.dashboard')}}">
                 <i class="fa-solid fa-chart-pie"></i>
                 <span>Dashboard</span>
             </a>
         </li><!-- End Dashboard Nav -->
 
+        <li class="nav-heading">Kelola Kelompok</li>
+        <li class="nav-item">
+            <a class="nav-link {{ $key == 'daftar-kelompok' ? 'collapsed' : ''}}" href="{{route('biro.daftar-kelompok-page')}}">
+                <i class="fa-solid fa-users"></i>
+                <span>Daftar Kelompok</span>
+            </a>
+        </li>
         <li class="nav-heading">Kelola User</li>
         <li class="nav-item">
-            <a class="nav-link" href="{{route('biro.dosen-account-page')}}">
+            <a class="nav-link {{ $key == 'dosen-account' ? 'collapsed' : ''}}" href="{{route('biro.dosen-account-page')}}">
                 <i class="fa-solid fa-user-tie"></i>
                 <span>Dosen</span>
             </a>
@@ -25,12 +32,20 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{route('biro.mahasiswa-account-page')}}">
+            <a class="nav-link {{ $key == 'mahasiswa-account' ? 'collapsed' : ''}}" href="{{route('biro.mahasiswa-account-page')}}">
             <i class="fa-solid fa-user-graduate"></i>
                 <span>Mahasiswa</span>
             </a>
         </li>
         <!-- End Kelompok Nav -->
+        <li class="nav-heading">Managemen Akun</li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('change-password')}}">
+                <i class="fa-solid fa-lock"></i>
+                <span>Ganti Password</span>
+            </a>
+        </li><!-- End Akun Nav -->
+
 
     </ul>
 

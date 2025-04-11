@@ -3,91 +3,87 @@
 namespace App\Http\Controllers\DashboardController;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CariKetuaRequest;
 use App\Http\Requests\KomentarRequest;
+use App\Http\Requests\UpdateKomentarRequest;
 use App\Models\Judul;
-use App\Models\Kelompok;
-use App\Models\User;
 use App\Repositories\Judul\JudulRepository;
-use Auth;
+use App\Repositories\Kelompok\KelompokDataRepository;
+use App\Repositories\Kelompok\ValidationRepository;
 use Dotenv\Exception\ValidationException;
-use Illuminate\Http\Request;
+use Exception;
+use Illuminate\Support\Facades\Auth;
 
 class KoordinatorController extends Controller
 {
     protected $judulRepository;
-    public function __construct(JudulRepository $judulRepository) {
+    protected $kelompokDataRepository;
+    protected $validationRepository;
+    public function __construct(JudulRepository $judulRepository, KelompokDataRepository $kelompokDataRepository, ValidationRepository $validationRepository)
+    {
         $this->judulRepository = $judulRepository;
+        $this->kelompokDataRepository = $kelompokDataRepository;
+        $this->validationRepository = $validationRepository;
     }
     public function getDashboardKoordinator()
     {
-        return view('dashboard.koordinator.dashboard');
+        $key = 'dashboard';
+        return view('dashboard.koordinator.dashboard',compact('key'));
     }
-    public function getDaftarKelompok()
+    public function getDaftarKelompok(CariKetuaRequest $request)
     {
-        $daftarKelompok = Kelompok::with(['mahasiswaKelompok.mahasiswa'])
-            ->get()
-            ->map(function ($kelompok) {
-                return [
-                    'id_kelompok' => $kelompok->id,
-                    'ketua' => $kelompok->mahasiswaKelompok
-                        ->where('status_mahasiswa', 'ketua')
-                        ->first()?->mahasiswa->name ?? 'Tidak ada ketua',
-                    'total_anggota' => $kelompok->mahasiswaKelompok->count(),
-                    'anggota' => $kelompok->mahasiswaKelompok
-                        ->where('status_mahasiswa', 'anggota')
-                        ->map(function ($item) {
-                            return [
-                                'nama' => $item->mahasiswa->name,
-                                'status' => $item->status_mahasiswa,
-                            ];
-                        }),
-                ];
-            });
-
-        return view('dashboard.koordinator.kelompok', compact('daftarKelompok'));
+        $validate = $request->validated();
+        $daftarKelompok = $this->kelompokDataRepository->getAllKelompok($validate);
+        $key = 'daftar_kelompok';
+        return view('dashboard.koordinator.kelompok', compact('daftarKelompok','key'));
     }
 
     public function getDetailKelompok($id)
     {
-        $kelompok = Kelompok::where('id', $id)->with('mahasiswaKelompok.mahasiswa.user', 'dosen')->first();
-        $informasiKelompok = [];
-        if ($kelompok) {
-            $ketua = $kelompok->mahasiswaKelompok
-                ->where('status_mahasiswa', 'ketua')
-                ->first();
-
-            $anggota = $kelompok->mahasiswaKelompok
-                ->where('status_mahasiswa', 'anggota')
-                ->map(function ($item) {
-                    return [
-                        'nama' => $item->mahasiswa->name,
-                        'username' => $item->mahasiswa->user->username ?? null,
-                    ];
-                });
-
-            $dosen = $kelompok->dosen;
-            $informasiKelompok = [
-                'id_kelompok' => $kelompok->id,
-                'ketua' => ['nama' => $ketua ? $ketua->mahasiswa->name : null, 'username' => $ketua->mahasiswa->user->username],
-                'anggota' => $anggota,
-                'dosen' => $dosen->name ?? null
-            ];
+        try {
+            $key = 'daftar-kelompok';
+            $informasiKelompok = $this->kelompokDataRepository->getDetailKelompokByIdKelompok($id);
+            $judul = $this->judulRepository->getJudulByKelompokId($id);
+            $proposal = $this->judulRepository->getProposal($id);
+            $hasDospem = $this->validationRepository->hasDospem($informasiKelompok);
+            $hasPendingInvite = $this->validationRepository->hasPendingInvite($id);
+            return view('dashboard.koordinator.detailkelompok',compact('informasiKelompok','judul','key','proposal','hasDospem','hasPendingInvite'));
         }
-        $judul = $this->judulRepository->getJudulByKelompokId($id);
-
-        return view('dashboard.koordinator.detailkelompok', compact('informasiKelompok','judul'));
+        catch (Exception $e) {
+            return redirect()->route('koordinator.daftar-kelompok')->withErrors(['error' => $e->getMessage()]);
+        }
     }
 
-    public function postKomentar(KomentarRequest $request,$id_judul, $id_kelompok){
+    public function postKomentar(KomentarRequest $request, $id_judul, $id_kelompok)
+    {
         try {
             $validate = $request->validated();
             $id_user = Auth::user()->id;
-            $this->judulRepository->postKomentar($validate,$id_judul, $id_user);
+            $this->judulRepository->postKomentar($validate, $id_judul, $id_user);
             return redirect()->route('koordinator.detail-kelompok', $id_kelompok)->with('success', 'Berhasil menambahkan komentar');
-        }
-        catch(ValidationException $e) {
+        } catch (ValidationException $e) {
             return redirect()->back()->withErrors(['error' => 'Ada kesalahan saat menambahkan komentar']);
         }
     }
 
+    public function deleteKomentar($id_kelompok, $id_komentar)
+    {
+        try {
+            $this->judulRepository->deleteKomentar($id_komentar);
+            return redirect()->route('koordinator.detail-kelompok', $id_kelompok)->with('success', 'Berhasil menghapus komentar');
+        } catch (ValidationException $e) {
+            return redirect()->back()->withErrors(['error' => 'Ada kesalahan saat menghapus komentar']);
+        }
+    }
+
+    public function updateKomentar(UpdateKomentarRequest $request,$id_komentar, $id_kelompok) {
+        try {
+            $validated = $request->validated();
+            $this->judulRepository->updateKomentar($validated, $id_komentar);
+            return redirect()->route('koordinator.detail-kelompok', $id_kelompok)->with('success', 'Berhasil melakukan update komentar');
+        }
+        catch (Exception $e){
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
 }

@@ -22,14 +22,7 @@ class StoreOldAnggotaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'selectedMahasiswa' => 'required|json',
-        ];
-    }
-    public function messages(): array
-    {
-        return [
-            'selectedMahasiswa.required' => 'Pilih minimal satu mahasiswa.',
-            'selectedMahasiswa.json' => 'Format data mahasiswa harus JSON.',
+            'username' => 'required|string|max:255',
         ];
     }
 }

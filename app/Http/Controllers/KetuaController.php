@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProposalRequest;
-use App\Models\ProposalFinal;
+use App\Models\Mahasiswa;
 use App\Repositories\Kelompok\KetuaRepository;
 use Dotenv\Exception\ValidationException;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
+use Exception;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class KetuaController extends Controller
 {
@@ -42,21 +42,34 @@ class KetuaController extends Controller
     {
         try {
             $validate = $request->validated();
-
             if($request->hasFile('nama_file')){
                 $file = $request->file('nama_file');
 
-                $this->ketuaRepository->postProposalFinal($file, $request->judulId, $id_kelompok);
+                $this->ketuaRepository->postProposalFinal($file, $validate['judulId'], $id_kelompok);
             }
             return redirect()->route('mahasiswa.detail-kelompok', $id_kelompok)->with('success', 'Berhasil Melakukan Upload File');
         }
-        catch (ValidationException $e) {
-            return redirect()->back()->withErrors([$e->getMessage()]);
+        catch (Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
 
+    public function getMahasiswaOutKelompok($idKelompok): LengthAwarePaginator
+    {
+        $mahasiswaBukanAnggota = Mahasiswa::whereDoesntHave('mahasiswaKelompok', function ($query) use ($idKelompok) {
+            $query->where('kelompokId', $idKelompok);
+        })
+            ->with('user')
+            ->paginate(10)
+            ->through(function ($item) {
+                return [
+                    'nama' => $item->name,
+                    'username' => $item->user->username ?? null,
+                    'prodi' => $item->prodi,
+                ];
+            });
 
-
-
+        return $mahasiswaBukanAnggota;
+    }
 
 }

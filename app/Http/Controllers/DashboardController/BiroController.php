@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\DashboardController;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ChangePasswordByBiroRequest;
 use App\Http\Requests\RegisterDosenRequest;
 use App\Http\Requests\RegisterKoordinatorRequest;
+use App\Models\Fakultas;
+use App\Models\SkemaPkm;
 use App\Repositories\Biro\AkunRepository;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -18,17 +22,24 @@ class BiroController extends Controller
     }
     public function getDashboardBiro()
     {
-        return view('dashboard.biro.dashboard');
+        $key = 'dashboard';
+        return view('dashboard.biro.dashboard',compact('key'));
     }
 
     public function getDosenAccountPage()
     {
+        $skema = SkemaPkm::all();
+        $fakultas = Fakultas::all();
+        $key = 'dosen-account';
         $dosen = $this->akunRepository->getDosen();
-        return view('dashboard.biro.account.dosen', compact('dosen'));
+        return view('dashboard.biro.account.dosen', compact('dosen', 'fakultas', 'skema','key'));
     }
-    public function getMahasiswaAccountPage(){
+    public function getMahasiswaAccountPage()
+    {
+        $key = 'mahasiswa-account';
         $mahasiswa = $this->akunRepository->getMahasiswa();
-        return view('dashboard.biro.account.mahasiswa',compact('mahasiswa'));
+        $fakultas = Fakultas::all();
+        return view('dashboard.biro.account.mahasiswa', compact('mahasiswa', 'fakultas','key'));
     }
 
     public function postDosenAccount(RegisterDosenRequest $request)
@@ -37,7 +48,7 @@ class BiroController extends Controller
             $validate = $request->validated();
             $this->akunRepository->postDosen($validate);
 
-            return redirect()->route('biro.dosen-account-page')->with('success','Berhasil Menambahkan Data Dosen');
+            return redirect()->route('biro.dosen-account-page')->with('success', 'Berhasil Menambahkan Data Dosen');
         } catch (ValidationException $e) {
             return redirect()->back()->with('error', collect($e->errors())->flatten()->first());
         }
@@ -56,10 +67,22 @@ class BiroController extends Controller
 
             $this->akunRepository->postKoordinator($validate);
 
-            return redirect()->route('biro.koordinator-account-page')->with('success','Berhasil menambahkan data Koordinator');
+            return redirect()->route('biro.koordinator-account-page')->with('success', 'Berhasil menambahkan data Koordinator');
         } catch (ValidationException $e) {
             dd($e);
             return redirect()->back()->with('errors', $e->getMessage());
+        }
+    }
+
+    public function gantiPasswordMhs(ChangePasswordByBiroRequest $request)
+    {
+        try {
+            $validate = $request->validated();
+
+            $this->akunRepository->gantiPasswordMhs($validate);
+            return redirect()->back()->with('success', 'Berhasil mengganti password mahasiswa');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
 }

@@ -20,7 +20,9 @@ class Invite extends Model
 
     public function inviter()
     {
-        return $this->belongsTo(Mahasiswa::class,'inviterId','id');  
+        return $this->belongsTo(Mahasiswa::class,'inviterId','id');
     }
+
+    
 
 }

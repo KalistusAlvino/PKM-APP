@@ -164,10 +164,10 @@
                     <span class="fw-bold primary-color fs-5"><i class="fa-regular fa-lightbulb me-3"></i>Judul atau
                         Ide</span>
                     @if ($jd->id_user == Auth::user()->id)
-                        <button type="button" class="btn popover-button">
+                        <button type="button" class="btn popover-button" data-id="{{ $jd->id }}">
                             <i class="fa-solid fa-ellipsis-vertical fs-5"></i>
                         </button>
-                        <div id="popover-content" class="d-none">
+                        <div id="popover-content-{{$jd->id}}" class="d-none">
                             <div class="d-flex flex-column align-items-start">
                                 <button class="btn btn-sm editJudul" data-id="{{ $jd->id }}" data-bs-toggle="modal"
                                     data-bs-target="#editJudulModal">Edit</button>
@@ -180,7 +180,7 @@
                 <div class="row">
                     <div class="col-12 col-md-10">
                         <span
-                            class="mx-5 my-2 fw-normal primary-color fs-5 fst-italic text-wrap d-block">{{ $jd->detail_judul }}
+                            class="mx-4 my-2 fw-normal primary-color fs-5 fst-italic text-wrap d-block">{{ $jd->detail_judul }}
                             - Ditambahkan: {{ $jd->user->getNamaUserAttribute() }}.</span>
                     </div>
                     <div class="col-12 d-flex col-md-2 d-flex justify-content-md-end">
@@ -191,8 +191,8 @@
                 <span class="mx-4 mt-1  fw-bold primary-color fs-5 d-flex align-items-center"><i
                         class="fa-regular fa-message me-3"></i>Komentar</span>
                 @forelse ($jd->komentar as $komentar)
-                    <div class="card mx-5 my-2 bg-secondary-color rounded-4">
-                        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center ">
+                    <div class="card mx-3 my-2 bg-secondary-color rounded-4 mb-3">
+                        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center my-1">
                             <span class="mx-4 mt-2  fw-bold primary-color fs-5 d-flex align-items-center"><i
                                     class="fa-solid fa-graduation-cap me-3"></i>{{ $komentar->user->nama_komentator }}</span>
                             <span class="mx-4 my-1 fw-normal primary-color fs-5"><i class="fa-regular fa-calendar me-1 "></i>
@@ -233,22 +233,25 @@
     <!-- Popover script -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            var popoverButton = document.querySelector(".popover-button");
+            document.querySelectorAll(".popover-button").forEach(function (btn) {
+                const id = btn.getAttribute("data-id");
+                const popoverContent = document.querySelector("#popover-content-" + id);
 
-            var popover = new bootstrap.Popover(popoverButton, {
-                html: true,
-                sanitize: false,
-                content: function () {
-                    return document.querySelector("#popover-content").innerHTML;
-                },
-                placement: "left"
-            });
+                const popover = new bootstrap.Popover(btn, {
+                    html: true,
+                    sanitize: false,
+                    content: function () {
+                        return popoverContent.innerHTML;
+                    },
+                    placement: "left"
+                });
 
-            // Agar popover bisa ditutup ketika klik di luar
-            document.addEventListener("click", function (event) {
-                if (!popoverButton.contains(event.target)) {
-                    popover.hide();
-                }
+                // Tutup popover jika klik di luar
+                document.addEventListener("click", function (event) {
+                    if (!btn.contains(event.target) && !popoverContent.contains(event.target)) {
+                        popover.hide();
+                    }
+                });
             });
         });
     </script>
