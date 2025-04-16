@@ -11,6 +11,13 @@
             </a>
         </li><!-- End Dashboard Nav -->
 
+        <li class="nav-heading">Akademik & Pengembangan</li>
+        <li class="nav-item">
+            <a class="nav-link {{ $key == 'manajemen-akademik' ? 'collapsed' : ''}}" href="{{route('biro.getPage-manajemen-akademik')}}">
+                <i class="fa-solid fa-school"></i>
+                <span>Manajemen Akademik</span>
+            </a>
+        </li>
         <li class="nav-heading">Kelola Kelompok</li>
         <li class="nav-item">
             <a class="nav-link {{ $key == 'daftar-kelompok' ? 'collapsed' : ''}}" href="{{route('biro.daftar-kelompok-page')}}">
@@ -26,7 +33,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{route('biro.koordinator-account-page')}}">
+            <a class="nav-link {{ $key == 'koordinator-account' ? 'collapsed' : ''}}" href="{{route('biro.koordinator-account-page')}}">
                 <i class="fa-solid fa-user-tie"></i>
                 <span>Koordinator</span>
             </a>

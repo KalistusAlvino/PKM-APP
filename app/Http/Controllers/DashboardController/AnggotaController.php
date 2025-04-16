@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\DashboardController;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateProfileMhsRequest;
+use App\Models\Fakultas;
+use App\Models\Mahasiswa;
 use App\Models\MahasiswaKelompok;
 use App\Repositories\Kelompok\AnggotaRepository;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
@@ -31,6 +35,26 @@ class AnggotaController extends Controller
         }
         catch(ValidationException $e) {
             return redirect()->back()->withErrors(['error' => 'Ada kesalahan saat mendaftar']);
+        }
+    }
+
+    public function getUpdateProfile(){
+        $key = 'update-profile-mhs';
+        $id_user = Auth::user()->id;
+        $fakultas = Fakultas::all();
+        $mhs = Mahasiswa::where('userId',$id_user)->firstOrFail();
+        return view('dashboard.mahasiswa.update-profile',compact('key','mhs','fakultas'));
+    }
+
+    public function postUpdate(UpdateProfileMhsRequest $request) {
+        try {
+            $validate = $request->validated();
+            $this->anggotaRepository->updateProfile($validate);
+
+            return redirect()->route('mahasiswa.update-profile')->with('success','Berhasil melakukan update profile');
+        }
+        catch (Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
 }

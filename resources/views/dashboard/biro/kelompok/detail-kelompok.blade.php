@@ -15,10 +15,12 @@
             <div class="row">
                 <div class="col-12 d-flex justify-content-between">
                     <h3 class="fw-bold primary-color mx-2 my-2">Detail Kelompok</h3>
-                    <button type="button" class="btn bg-danger my-2" onclick="confirmDeleteKelompok('{{ route('biro.delete-kelompok', $informasiKelompok['id_kelompok']) }}')">
-                            <i class="fa-solid fa-trash-can secondary-color me-2"></i> <span class="secondary-color"> Delete Kelompok
-                                </span>
-                        </button>
+                    <button type="button" class="btn bg-danger my-2"
+                        onclick="confirmDeleteKelompok('{{ route('biro.delete-kelompok', $informasiKelompok['id_kelompok']) }}')">
+                        <i class="fa-solid fa-trash-can secondary-color me-2"></i> <span class="secondary-color"> Delete
+                            Kelompok
+                        </span>
+                    </button>
                 </div>
             </div>
             <div class="row">
@@ -81,11 +83,18 @@
                                         class="fa-solid fa-users me-3"></i>Anggota Kelompok</span>
                             </div>
                             @forelse ($informasiKelompok['anggota'] as $anggota)
-                                <div class="card mx-5 my-2 bg-secondary-color">
-                                    <span class="mx-2 my-2 primary-color fw-normal"><i
-                                            class="ms-2 fa-regular fa-user me-3"></i>{{ $anggota['nama'] }}
-                                        ({{ $anggota['username'] }})
-                                    </span>
+                                <div class="d-flex">
+                                    <div class="card ms-5 my-2 bg-secondary-color flex-grow-1">
+                                        <span class="mx-2 my-2 primary-color fw-normal"><i
+                                                class="ms-2 fa-regular fa-user me-3"></i>{{ $anggota['nama'] }}
+                                            ({{ $anggota['username'] }})
+                                        </span>
+                                    </div>
+                                    <button class="btn bg-primary-color tes me-4 ms-3 my-2"
+                                        onclick="confrimUpdateKetua('{{ $anggota['nama'] }}','{{ route('biro.ganti-ketua-kelompok', [$anggota['id_kelompok'], $anggota['id_mk']]) }}')">
+                                        <i class="fa-solid fa-web-awesome secondary-color"></i>
+                                    </button>
+
                                 </div>
                             @empty
                                 <div class="card mx-5 my-2 bg-secondary-color">
@@ -170,6 +179,10 @@
         @csrf
         @method('DELETE')
     </form>
+    <form id="update-form" method="POST" style="display: none;">
+        @csrf
+        @method('PATCH')
+    </form>
     <script>
         function confirmDeleteKelompok(url) {
             Swal.fire({
@@ -186,6 +199,26 @@
                     let form = document.getElementById("delete-form");
                     form.action = url;
                     form.submit(); // Kirim form dengan method DELETE
+                }
+            });
+        }
+    </script>
+    <script>
+        function confrimUpdateKetua(nama, url) {
+            Swal.fire({
+                title: `Anda Yakin ingin menjadikan mahasiswa ${nama} sebagai ketua?`,
+                text: "Anda tidak akan dapat mengembalikan ini!",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3b564d',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, ganti!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Buat form dinamis
+                    let form = document.getElementById("update-form");
+                    form.action = url;
+                    form.submit(); // Kirim form dengan method PATCH
                 }
             });
         }

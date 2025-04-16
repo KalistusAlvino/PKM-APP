@@ -4,6 +4,7 @@ namespace App\Repositories\Judul;
 
 use App\Models\Judul;
 use App\Models\Komentar;
+use App\Models\SkemaPkm;
 use Illuminate\Database\Eloquent\Collection;
 
 class JudulRepository implements JudulRepositoryInterface
@@ -82,5 +83,9 @@ class JudulRepository implements JudulRepositoryInterface
         }
 
         return $komentar->delete();
+    }
+
+    public function getSkema(): Collection {
+        return SkemaPkm::all();
     }
 }

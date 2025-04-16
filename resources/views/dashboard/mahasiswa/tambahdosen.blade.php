@@ -105,7 +105,7 @@
                         // Buat form dinamis
                         let form = document.getElementById("post-undangan-form");
                         form.action = url;
-                        form.submit(); // Kirim form dengan method DELETE
+                        form.submit(); // Kirim form dengan method POST
                     }
                 }
             });

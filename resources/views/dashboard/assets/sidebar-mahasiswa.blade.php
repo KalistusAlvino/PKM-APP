@@ -27,9 +27,9 @@
 
         <li class="nav-heading">Managemen Akun</li>
         <li class="nav-item">
-            <a class="nav-link {{ $key == 'change_password' ? 'collapsed' : ''}}" href="{{route('change-password')}}">
+            <a class="nav-link {{ $key == 'update-profile-mhs' ? 'collapsed' : ''}}" href="{{route('mahasiswa.update-profile')}}">
                 <i class="fa-solid fa-lock"></i>
-                <span>Ganti Password</span>
+                <span>Update Profile</span>
             </a>
         </li><!-- End Akun Nav -->
 

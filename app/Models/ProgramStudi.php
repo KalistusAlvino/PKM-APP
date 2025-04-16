@@ -11,7 +11,7 @@ class ProgramStudi extends Model
 
     protected $table = 'prodi';
 
-    protected $fillable = ['id_fakultas','nama_prodi'];
+    protected $fillable = ['fakultas_id','nama_prodi'];
 
     public function fakultas()
     {

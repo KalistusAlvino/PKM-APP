@@ -56,8 +56,9 @@ class BiroController extends Controller
 
     public function getKoordinatorAccountPage()
     {
+        $key = 'koordinator-account';
         $koordinator = $this->akunRepository->getKoordinator();
-        return view('dashboard.biro.account.koordinator', compact('koordinator'));
+        return view('dashboard.biro.account.koordinator', compact('koordinator','key'));
     }
 
     public function postKoordinatorAccount(RegisterKoordinatorRequest $request)

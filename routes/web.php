@@ -4,6 +4,7 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController\LoginController;
 use App\Http\Controllers\AuthController\RegisterController;
+use App\Http\Controllers\Biro\ManajemenAkademikController;
 use App\Http\Controllers\BiroKelompokController;
 use App\Http\Controllers\DashboardController\AnggotaController;
 use App\Http\Controllers\DashboardController\BiroController;
@@ -57,6 +58,8 @@ Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
     Route::match(['get','post'],'/dashboard/kelompok', [MahasiswaController::class, 'getKelompokPage'])->name('mahasiswa.daftar-kelompok');
     Route::get('/dashboard/daftar-ketua', [AnggotaController::class, 'getDaftarKetuaPage'])->name('mahasiswa.daftar-ketua');
     Route::post('/daftar-ketua/post-daftar-ketua', [AnggotaController::class, 'postDaftarKetua'])->name('mahasiswa.post-daftar-ketua');
+    Route::get('/mahasiswa/update-profile',[AnggotaController::class,'getUpdateProfile'])->name('mahasiswa.update-profile');
+    Route::put('mahasiswa/update-profile',[AnggotaController::class,'postUpdate'])->name('mahasiswa.post-update-profile');
 
     Route::middleware('verify.kelompok')->group(function () {
         Route::get('/dashboard/detail-kelompok/{id_kelompok}', [MahasiswaController::class, 'getDetailKelompokPage'])->name('mahasiswa.detail-kelompok');
@@ -107,4 +110,18 @@ Route::middleware(['auth', 'role:biro'])->group(function () {
     Route::match(['post','get'],'/biro-kelola-kelompok/daftar-kelompok',[BiroKelompokController::class,'getKelompokPage'])->name('biro.daftar-kelompok-page');
     Route::get('/biro-kelola-kelompok/detail-kelompok/{id_kelompok}',[BiroKelompokController::class,'detailKelompok'])->name('biro.detail-kelompok');
     Route::delete('/biro-kelola-kelompok/delete-kelompok/{id_kelompok}',[BiroKelompokController::class,'deleteKelompok'])->name('biro.delete-kelompok');
+    Route::patch('/biro-kelola-kelompok/ganti-ketua/{id_kelompok}/{id_mk}',[BiroKelompokController::class,'gantiKetuaKelompok'])->name('biro.ganti-ketua-kelompok');
+    Route::get('/biro-manajemen-akademik',[ManajemenAkademikController::class,'getPage'])->name('biro.getPage-manajemen-akademik');
+    Route::post('/biro-manajemen-akademik/tambah-skema',[ManajemenAkademikController::class,'postSkema'])->name('biro.manajemen-akademik-tambah-skema');
+    Route::post('/biro-manajemen-akademik/tambah-fakultas',[ManajemenAkademikController::class,'postFakultas'])->name('biro.manajemen-akademik-tambah-fakultas');
+    Route::post('/biro-manajemen-akademik/tambah-prodi',[ManajemenAkademikController::class,'postProdi'])->name('biro.manajemen-akademik-tambah-prodi');
+    Route::delete('/biro-manajemen-akademik/delete-skema/{id_skema}',[ManajemenAkademikController::class,'deleteSkema'])->name('biro.manajemen-akademik-delete-skema');
+    Route::delete('/biro-manajemen-akademik/delete-fakultas/{id_fakultas}',[ManajemenAkademikController::class,'deleteFakultas'])->name('biro.manajemen-akademik-delete-fakultas');
+    Route::delete('/biro-manajemen-akademik/delete-prodi/{id_prodi}',[ManajemenAkademikController::class,'deleteProdi'])->name('biro.manajemen-akademik-delete-prodi');
+    Route::put('/biro-manajemen-akademik/update-skema/{id_skema}',[ManajemenAkademikController::class,'updateSkema'])->name('biro.manajemen-akademik-update-skema');
+    Route::put('/biro-manajemen-akademik/update-fakultas/{id_fakultas}',[ManajemenAkademikController::class,'updateFakultas'])->name('biro.manajemen-akademik-update-fakultas');
+    Route::put('/biro-manajemen-akademik/update-prodi/{id_prodi}',[ManajemenAkademikController::class,'updateProdi'])->name('biro.manajemen-akademik-update-prodi');
+    Route::get('/biro-manajemen-akademik/detail-skema/{id_skema}',[ManajemenAkademikController::class,'detailSkema'])->name('biro.manajemen-akademik-detail-skema');
+    Route::get('/biro-manajemen-akademik/detail-fakultas/{id_fakultas}',[ManajemenAkademikController::class,'detailFakultas'])->name('biro.manajemen-akademik-detail-fakultas');
+    Route::get('/biro-manajemen-akademik/detail-prodi/{id_prodi}',[ManajemenAkademikController::class,'detailProdi'])->name('biro.manajemen-akademik-detail-prodi');
 });

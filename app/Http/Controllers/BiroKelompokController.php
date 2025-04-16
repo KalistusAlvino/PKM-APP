@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CariKetuaRequest;
 use App\Models\Kelompok;
+use App\Models\MahasiswaKelompok;
 use App\Repositories\Biro\KelolaKelompokRepository;
 use App\Repositories\Judul\JudulRepository;
 use App\Repositories\Kelompok\KelompokDataRepository;
@@ -49,6 +50,16 @@ class BiroKelompokController extends Controller
         try {
             $this->kelolaKelompokRepository->deleteKelompok($id_kelompok);
             return redirect()->route('biro.daftar-kelompok-page')->with('success','Berhasil menghapus data kelompok');
+        }
+        catch(Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function gantiKetuaKelompok($id_kelompok, $id_mk) {
+        try {
+            $this->kelolaKelompokRepository->gantiKetuaKelompok($id_kelompok,$id_mk);
+            return redirect()->route('biro.detail-kelompok',$id_kelompok)->with('success','Berhasil melakukan update ketua');
         }
         catch(Exception $e) {
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);

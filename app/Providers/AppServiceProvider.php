@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Repositories\Biro\AkunRepositoryInterface;
 use App\Repositories\Biro\AkunRepository;
+use App\Repositories\Biro\KelolaAkademikRepository;
+use App\Repositories\Biro\KelolaAkademikRepositoryInterface;
 use App\Repositories\Biro\KelolaKelompokRepository;
 use App\Repositories\Biro\KelolaKelompokRepositoryInterface;
 use App\Repositories\Dosen\InviteRepository;
@@ -43,6 +45,7 @@ class AppServiceProvider extends ServiceProvider
             ValidationRepositoryInterface::class => ValidationRepository::class,
             KelompokDataRepositoryInterface::class => KelompokDataRepository::class,
             KelolaKelompokRepositoryInterface::class => KelolaKelompokRepository::class,
+            KelolaAkademikRepositoryInterface::class => KelolaAkademikRepository::class,
         ];
 
         foreach ($bindings as $interface => $implementation) {

@@ -29,9 +29,12 @@ class KetuaRepository implements KetuaRepositoryInterface
 
     public function getDospem(array $data): Collection
     {
-        return Dosen::when(isset($data['cari']) && $data['cari'], function ($query) use ($data) {
-            return $query->where('name', 'like', '%' . $data['cari'] . '%');
-        })->get();
+        return Dosen::withCount('kelompok')
+            ->when(isset($data['cari']) && $data['cari'], function ($query) use ($data) {
+                return $query->where('name', 'like', '%' . $data['cari'] . '%');
+            })
+            ->having('kelompok_count', '<', 10)
+            ->get();
     }
     public function postAnggota(array $data, $idKelompok): RegisterAnggota
     {
@@ -97,7 +100,7 @@ class KetuaRepository implements KetuaRepositoryInterface
         $extension = $file->getClientOriginalExtension();
         $file_name = $id_kelompok . '.' . $extension;
         $path = 'proposal/';
-        Judul::where('id_kelompok',$id_kelompok)->update(['is_proposal' => false]);
+        Judul::where('id_kelompok', $id_kelompok)->update(['is_proposal' => false]);
         // Debug sementara: pastikan judulId benar
         $judul = Judul::find($judulId);
         if (!$judul) {

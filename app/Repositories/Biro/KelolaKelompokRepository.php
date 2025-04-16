@@ -4,6 +4,7 @@ namespace App\Repositories\Biro;
 
 use App\Models\Judul;
 use App\Models\Kelompok;
+use App\Models\MahasiswaKelompok;
 use App\Models\ProposalFinal;
 use Illuminate\Support\Facades\Storage;
 
@@ -20,5 +21,19 @@ class KelolaKelompokRepository implements KelolaKelompokRepositoryInterface
         }
         $kelompok->delete();
         return $kelompok;
+    }
+    public function gantiKetuaKelompok($id_kelompok, $id_mk) {
+        $mahasiswa = MahasiswaKelompok::where('id',$id_mk)->with('mahasiswa')->firstOrFail();
+        $id_mahasiswa = $mahasiswa->mahasiswa->id;
+        $alredyKetua = MahasiswaKelompok::where('mahasiswaId',$id_mahasiswa)->where('status_mahasiswa','ketua')->exists();
+        if($alredyKetua) {
+            throw new \Exception("Mahasiswa ". $mahasiswa->mahasiswa->name. " sudah menjadi ketua dikelompok lain!");
+        }
+        MahasiswaKelompok::where('kelompokId', $id_kelompok)->where('status_mahasiswa','ketua')->update([
+            'status_mahasiswa' => 'anggota'
+        ]);
+        MahasiswaKelompok::where('id',$id_mk)->update([
+            'status_mahasiswa' => 'ketua'
+        ]);
     }
 }
