@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\DashboardController;
 
+use App\Charts\UploadedProposalBySkemaChart;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CariKetuaRequest;
 use App\Http\Requests\KomentarRequest;
 use App\Http\Requests\UpdateKomentarRequest;
+use App\Models\Dosen;
 use App\Models\Judul;
+use App\Models\Kelompok;
+use App\Models\Mahasiswa;
+use App\Models\SkemaPkm;
 use App\Repositories\Judul\JudulRepository;
 use App\Repositories\Kelompok\KelompokDataRepository;
 use App\Repositories\Kelompok\ValidationRepository;
@@ -25,10 +30,15 @@ class KoordinatorController extends Controller
         $this->kelompokDataRepository = $kelompokDataRepository;
         $this->validationRepository = $validationRepository;
     }
-    public function getDashboardKoordinator()
+    public function getDashboardKoordinator(UploadedProposalBySkemaChart $chart)
     {
+        $barChart = $chart->build();
+        $mahasiswa = Mahasiswa::count();
+        $dosen = Dosen::count();
+        $kelompok = Kelompok::count();
+        $skema = SkemaPkm::count();
         $key = 'dashboard';
-        return view('dashboard.koordinator.dashboard',compact('key'));
+        return view('dashboard.koordinator.dashboard',compact('key','barChart','mahasiswa','dosen','kelompok','skema'));
     }
     public function getDaftarKelompok(CariKetuaRequest $request)
     {

@@ -35,4 +35,7 @@ class Judul extends Model
     public function proposal() {
         return  $this->hasOne(ProposalFinal::class, 'judulId','id');
     }
+    public function kelompok() {
+        return $this->belongsTo(Kelompok::class,'id_kelompok','id');
+    }
 }

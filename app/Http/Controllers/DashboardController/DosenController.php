@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\DashboardController;
 
+use App\Charts\uploadedProposalJudulByKelompokDosen;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CariKetuaRequest;
 use App\Http\Requests\KomentarRequest;
 use App\Http\Requests\UpdateKomentarRequest;
+use App\Models\Invite;
 use App\Models\Judul;
+use App\Models\Kelompok;
 use App\Repositories\Dosen\InviteRepository;
 use App\Repositories\Judul\JudulRepository;
 use App\Repositories\Kelompok\KelompokDataRepository;
@@ -28,10 +31,15 @@ class DosenController extends Controller
         $this->judulRepository = $judulRepository;
     }
 
-    public function getDashboardDosen()
+    public function getDashboardDosen(uploadedProposalJudulByKelompokDosen $chart)
     {
+        $barChart = $chart->build();
+        $dosenId = Auth::user()->dosen->id;
+        $kelompokBimbingan = Kelompok::where('dospemId',$dosenId)->count();
+        $invite = Invite::where('dospemId',$dosenId)->count();
+        $judul = $this->judulRepository->getJudulByDosenId($dosenId);
         $key = 'dashboard';
-        return view('dashboard.dosen.dashboard',compact('key'));
+        return view('dashboard.dosen.dashboard',compact('key','kelompokBimbingan','invite','barChart','judul'));
     }
 
     public function getUndanganDosen()

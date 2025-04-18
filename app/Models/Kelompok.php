@@ -38,6 +38,10 @@ class Kelompok extends Model
         return $this->hasMany(Judul::class, 'id_kelompok', 'id');
     }
 
+    public function getNamaKetua(){
+        return $this->mahasiswaKelompok->firstWhere('status_mahasiswa', 'ketua')?->mahasiswa->name;
+    }
+
     protected static function booted()
     {
         static::deleting(function ($kelompok) {

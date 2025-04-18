@@ -21,8 +21,8 @@ class ProposalController extends Controller
         try {
             $path = 'proposal/' . $nama_file;
             $extension = pathinfo($path, PATHINFO_EXTENSION);
-            $proposal = Judul::where('id_kelompok', $id_kelompok)->with('proposal')->first();
-            $file_name = $proposal->detail_judul . "." . $extension;
+            $proposal = Judul::where('id_kelompok', $id_kelompok)->where('is_proposal',true)->with('proposal')->first();
+            $file_name = "{$proposal->detail_judul}.{$extension}";
             return Storage::disk('public')->download($path, $file_name);
         } catch (FileNotFoundException $e) {
             return redirect()->back()->with('error', 'File tidak ditemukan.');

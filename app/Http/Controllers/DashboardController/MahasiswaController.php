@@ -42,8 +42,11 @@ class MahasiswaController extends Controller
     }
     public function getDashboardMahasiswa()
     {
+        $mahasiswaId =  Auth::user()->mahasiswa->id;
+        $komentar = $this->judulRepository->getKomentarByMahasiswaId($mahasiswaId);
+        $proposal = $this->judulRepository->getProposalByMahasiswaId($mahasiswaId);
         $key = 'dashboard';
-        return view('dashboard.mahasiswa.dashboard',compact('key'));
+        return view('dashboard.mahasiswa.dashboard',compact('key','komentar','proposal'));
     }
     public function getKelompokPage(CariKetuaRequest $request)
     {

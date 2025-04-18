@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('id_kelompok')->references('id')->on('kelompok')->onDelete('cascade');
             $table->foreignUuid('id_user')->references('id')->on('user')->onDelete('cascade');
-            $table->string('detail_judul');
+            $table->text('detail_judul');
             $table->foreignUuid('id_skema')->references('id')->on('skema_pkm')->onDelete('cascade');
             $table->boolean('is_proposal')->default(false);
             $table->timestamps();

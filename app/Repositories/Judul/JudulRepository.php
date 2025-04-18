@@ -4,7 +4,9 @@ namespace App\Repositories\Judul;
 
 use App\Models\Judul;
 use App\Models\Komentar;
+use App\Models\ProposalFinal;
 use App\Models\SkemaPkm;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 class JudulRepository implements JudulRepositoryInterface
@@ -14,6 +16,46 @@ class JudulRepository implements JudulRepositoryInterface
         return Judul::where('id_kelompok', $id_kelompok)
             ->with(['skema', 'komentar.user', 'user', 'proposal'])
             ->orderBy('created_at', 'desc')->get();
+    }
+    public function getJudulByDosenId($id_dosen): Collection
+    {
+        return Judul::whereHas('kelompok', function ($query) use ($id_dosen) {
+            $query->where('dospemId', $id_dosen);
+        })
+            ->with('komentar', 'user', 'skema')
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+    }
+
+    public function getProposalByMahasiswaId($id_mahasiswa): Collection
+    {
+        return ProposalFinal::with([
+            'judul.kelompok.mahasiswaKelompok.mahasiswa',
+            'judul.kelompok.dosen'
+        ])->whereHas('judul', function ($query) use ($id_mahasiswa) {
+            $query->whereHas('kelompok', function ($que) use ($id_mahasiswa) {
+                $que->whereHas('mahasiswaKelompok', function ($q) use ($id_mahasiswa) {
+                    $q->where('mahasiswaId', $id_mahasiswa);
+                });
+            });
+        })
+            ->orderBy('created_at', 'desc')
+            ->limit(2)
+            ->get();
+    }
+
+    public function getKomentarByMahasiswaId($id_mahasiswa): Collection
+    {
+        return Komentar::with('user')->whereHas('judul', function ($query) use ($id_mahasiswa) {
+            $query->whereHas('kelompok', function ($que) use ($id_mahasiswa) {
+                $que->whereHas('mahasiswaKelompok', function ($q) use ($id_mahasiswa) {
+                    $q->where('mahasiswaId', $id_mahasiswa);
+                });
+            });
+        })
+            ->limit(5)
+            ->get();
     }
 
     public function getProposal($id_kelompok): ?Judul
@@ -85,7 +127,8 @@ class JudulRepository implements JudulRepositoryInterface
         return $komentar->delete();
     }
 
-    public function getSkema(): Collection {
-        return SkemaPkm::all();
+    public function getSkema(): Collection
+    {
+        return SkemaPkm::with('judul.proposal')->get();
     }
 }

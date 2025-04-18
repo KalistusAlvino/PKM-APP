@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\DashboardController;
 
+use App\Charts\UploadedProposalBySkemaChart;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChangePasswordByBiroRequest;
 use App\Http\Requests\RegisterDosenRequest;
 use App\Http\Requests\RegisterKoordinatorRequest;
+use App\Models\Dosen;
 use App\Models\Fakultas;
+use App\Models\Kelompok;
+use App\Models\Mahasiswa;
 use App\Models\SkemaPkm;
 use App\Repositories\Biro\AkunRepository;
 use Exception;
@@ -20,10 +24,15 @@ class BiroController extends Controller
     {
         $this->akunRepository = $akunRepository;
     }
-    public function getDashboardBiro()
+    public function getDashboardBiro(UploadedProposalBySkemaChart $chart)
     {
+        $barChart = $chart->build();
+        $mahasiswa = Mahasiswa::count();
+        $dosen = Dosen::count();
+        $kelompok = Kelompok::count();
+        $skema = SkemaPkm::count();
         $key = 'dashboard';
-        return view('dashboard.biro.dashboard',compact('key'));
+        return view('dashboard.biro.dashboard',compact('key','barChart','mahasiswa','dosen','kelompok','skema'));
     }
 
     public function getDosenAccountPage()
