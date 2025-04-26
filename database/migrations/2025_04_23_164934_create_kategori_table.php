@@ -11,15 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dosen', function (Blueprint $table) {
+        Schema::create('kategori', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('userId')->references('id')->on('user')->onDelete('cascade');
-            $table->bigInteger('nip');
-            $table->string('name');
-            $table->string('fakultas');
-            $table->string('program_studi');
-            $table->string('no_wa');
-            $table->string('ketertarikan');
+            $table->string('nama_kategori');
             $table->timestamps();
         });
     }
@@ -29,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dosen');
+        Schema::dropIfExists('kategori');
     }
 };

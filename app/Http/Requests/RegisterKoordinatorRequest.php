@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Koordinator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class RegisterKoordinatorRequest extends FormRequest
 {
@@ -21,8 +23,14 @@ class RegisterKoordinatorRequest extends FormRequest
      */
     public function rules(): array
     {
+        $userId = optional(Koordinator::find($this->id_koordinator))->userId;
+
         return [
-            'username' => 'required|string|unique:user,username',
+           'username' => [
+            'required',
+            'string',
+            Rule::unique('user', 'username')->ignore($userId),
+        ],
             'name' => 'required|string|max:255',
         ];
     }

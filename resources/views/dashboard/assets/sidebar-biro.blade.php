@@ -25,6 +25,13 @@
                 <span>Daftar Kelompok</span>
             </a>
         </li>
+        <li class="nav-heading">SAC</li>
+        <li class="nav-item">
+            <a class="nav-link {{ $key == 'kegiatan-mahasiswa' ? 'collapsed' : ''}}" href="{{route('biro.kegiatan-mahasiswa-page')}}">
+                <i class="fa-solid fa-users"></i>
+                <span>Kegiatan Mahasiswa</span>
+            </a>
+        </li>
         <li class="nav-heading">Kelola User</li>
         <li class="nav-item">
             <a class="nav-link {{ $key == 'dosen-account' ? 'collapsed' : ''}}" href="{{route('biro.dosen-account-page')}}">

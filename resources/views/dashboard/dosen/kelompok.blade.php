@@ -28,7 +28,7 @@
                 <div class="input-group d-flex">
                     <span class="input-group-text" id="addon-wrapping"><i class="fa-solid fa-magnifying-glass"></i></span>
                     <input type="text" class="form-control" placeholder="Cari berdasarkan nama ketua"
-                        aria-describedby="addon-wrapping" name="nama_ketua" required>
+                        aria-describedby="addon-wrapping" name="nama_ketua">
                 </div>
             </form>
         </div>
@@ -49,7 +49,7 @@
                             </div>
                             <div class="d-flex flex-row justify-content-start align-items-center primary-color mb-3">
                                 <i class="fa-solid fa-user-plus me-2 mb-1"></i>
-                                <span>{{ $kelompok['total_anggota'] }} Total Anggota</span>
+                                <span>{{ $kelompok['total_anggota'] }} Total Anggota - Skema : {{$kelompok['skema']}}</span>
                             </div>
                         </div>
                     </div>

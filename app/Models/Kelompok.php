@@ -37,6 +37,9 @@ class Kelompok extends Model
     {
         return $this->hasMany(Judul::class, 'id_kelompok', 'id');
     }
+    public function kegiatan(){
+        return $this->hasOne(Kegiatan::class,'id_kelompok','id');
+    }
 
     public function getNamaKetua(){
         return $this->mahasiswaKelompok->firstWhere('status_mahasiswa', 'ketua')?->mahasiswa->name;

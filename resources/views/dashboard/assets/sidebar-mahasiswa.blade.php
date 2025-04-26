@@ -25,6 +25,17 @@
             </a>
         </li><!-- End Kelompok Nav -->
 
+        <li class="nav-heading">SAC</li>
+        <li class="nav-item">
+            <a class="nav-link {{ $key == 'sac-home' ? 'collapsed' : ''}}" href="{{route('mahasiswa.get-home')}}">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </a>
+            <a class="nav-link {{ $key == 'sac-kegiatan' ? 'collapsed' : ''}}" href="{{route('mahasiswa.get-kegiatan')}}">
+                <i class="fa-solid fa-rocket"></i>
+                <span>Kegiatan Mahasiswa</span>
+            </a>
+        </li><!-- End SAC Nav -->
         <li class="nav-heading">Managemen Akun</li>
         <li class="nav-item">
             <a class="nav-link {{ $key == 'update-profile-mhs' ? 'collapsed' : ''}}" href="{{route('mahasiswa.update-profile')}}">

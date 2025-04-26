@@ -51,11 +51,12 @@
                     <input type="text" value="{{ $mhs['username'] }}" name="username" hidden>
                     <div class="card-footer bg-primary-color d-flex justify-content-center">
                         <button type="button" class="btn bg-secondary-color mx-4 my-2" data-bs-toggle="modal"
-                            data-bs-target="#ganti-password-mhs" data-id="{{$mhs->user->username}}" data-name="{{$mhs->name}}">
+                            data-bs-target="#ganti-password-mhs" data-id="{{ $mhs->user->username }}"
+                            data-name="{{ $mhs->name }}">
                             <i class="fa-solid fa-user-lock primary-color"></i> <span class="primary-color"> Ganti
                                 password</span>
                         </button>
-                        <button type="button" onclick="confirmAdd('{{ $mhs['username'] }}', '{{ $mhs['nama'] }}')"
+                        <button type="button" onclick="confirmDelete('{{ $mhs->name }}','{{ route('biro.delete-account', $mhs->userId) }}')"
                             class="btn bg-secondary-color mx-4 my-2">
                             <i class="fa-solid fa-trash-can primary-color"></i> Delete akun
                         </button>
@@ -71,5 +72,30 @@
     </div>
 
     @include('dashboard.biro.account.modalmahasiswa.ganti-password-modal')
+
+    <form id="delete-form" method="POST" style="display: none;">
+        @csrf
+        @method('DELETE')
+    </form>
+    <script>
+        function confirmDelete(name, url) {
+            Swal.fire({
+                title: `Anda Yakin ingin menghapus akun ${name} ?`,
+                text: "Anda tidak akan dapat mengembalikan ini!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Buat form dinamis
+                    let form = document.getElementById("delete-form");
+                    form.action = url;
+                    form.submit(); // Kirim form dengan method DELETE
+                }
+            });
+        }
+    </script>
 
 @endsection

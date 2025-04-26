@@ -3,7 +3,9 @@ namespace App\Repositories\Kelompok;
 
 use App\Models\Dosen;
 use App\Models\Invite;
+use App\Models\Jenis;
 use App\Models\Judul;
+use App\Models\Kegiatan;
 use App\Models\Kelompok;
 use App\Models\Mahasiswa;
 use App\Models\MahasiswaKelompok;
@@ -11,6 +13,7 @@ use App\Models\ProposalFinal;
 use App\Models\RegisterAnggota;
 use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -118,10 +121,35 @@ class KetuaRepository implements KetuaRepositoryInterface
         $file->storeAs($path, $file_name, 'public');
 
         // Simpan ke database
-        return ProposalFinal::create([
+        $proposal = ProposalFinal::create([
             'judulId' => $judulId,
             'nama_file' => $file_name,
         ]);
+        $mahasiswa = MahasiswaKelompok::with('mahasiswa')->where('kelompokId', $id_kelompok)->get();
+        $jenis = Jenis::where('nama_jenis', 'PESERTA/PROPOSAL')->firstOrFail();
+        foreach ($mahasiswa as $mhs) {
+            $alreadyUploaded = Kegiatan::with('proposal.judul')->where('id_mahasiswa', $mhs->mahasiswa->id)
+                ->where('id_jenis', $jenis->id)
+                ->where('id_kelompok', $id_kelompok)
+                ->first();
+            if (!$alreadyUploaded) {
+                Kegiatan::create([
+                    'id_jenis' => $jenis->id,
+                    'id_file' => $proposal->id,
+                    'id_kelompok' => $id_kelompok,
+                    'id_mahasiswa' => $mhs->mahasiswa->id,
+                    'nama_kegiatan' => 'Proposal Program Kreativitas Mahasiswa',
+                    'kegiatan_inggris' => 'Student Creativity Program Proposal',
+                    'tanggal' => Carbon::now(),
+                    'status' => 'menunggu'
+                ]);
+            } else {
+                $alreadyUploaded->update([
+                    'id_file' => $proposal->id
+                ]);
+            }
+        }
+        return $proposal;
     }
 
     public function getMahasiswaOutKelompok($idKelompok, array $data): Collection

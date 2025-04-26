@@ -9,7 +9,7 @@
                 <div class="input-group d-flex">
                     <span class="input-group-text" id="addon-wrapping"><i class="fa-solid fa-magnifying-glass"></i></span>
                     <input type="text" class="form-control" placeholder="Cari berdasarkan nama ketua"
-                        aria-describedby="addon-wrapping" name="nama_ketua" required>
+                        aria-describedby="addon-wrapping" name="nama_ketua">
                 </div>
             </form>
         </div>
@@ -30,7 +30,11 @@
                             </div>
                             <div class="d-flex flex-row justify-content-start align-items-center primary-color mb-3">
                                 <i class="fa-solid fa-user-plus me-2 mb-1"></i>
-                                <span>{{ $kelompok['total_anggota'] }} Total Anggota</span>
+                                <span>{{ $kelompok['total_anggota'] }} Total Anggota - Skema : {{$kelompok['skema']}}</span>
+                            </div>
+                            <div class="d-flex flex-row justify-content-start align-items-center primary-color mb-3">
+                                <i class="fa-solid fa-chalkboard-user me-2"></i>
+                                <span>Dosen Pembimbing : {{$kelompok['dosen']}}</span>
                             </div>
                         </div>
                     </div>
@@ -45,7 +49,7 @@
                                 class="col-12 d-flex flex-row justify-content-start align-items-center third-color mx-3 mt-1 mb-3 fw-semibold">
                                 <div class="d-flex flex-column flex-md-row">
                                     @if ($kelompok['anggota']->isEmpty())
-                                        <span class="third-color ms-1">Belum ada anggota</span>
+                                        <span class="primary-color ms-1 fst-italic">Belum ada anggota</span>
                                     @else
                                         @foreach ($kelompok['anggota'] as $anggota)
                                             <div class="card primary-color bg-third-color mx-1 my-1 my-md-0">

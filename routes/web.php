@@ -5,6 +5,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController\LoginController;
 use App\Http\Controllers\AuthController\RegisterController;
 use App\Http\Controllers\Biro\ManajemenAkademikController;
+use App\Http\Controllers\Biro\ManajemenSACController;
 use App\Http\Controllers\BiroKelompokController;
 use App\Http\Controllers\DashboardController\AnggotaController;
 use App\Http\Controllers\DashboardController\BiroController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\DashboardController\KoordinatorController;
 use App\Http\Controllers\DashboardController\MahasiswaController;
 use App\Http\Controllers\KetuaController;
 use App\Http\Controllers\LandingPageController\HomeController;
+use App\Http\Controllers\MahasiswaController\SacController;
 use App\Http\Controllers\ProposalController;
 use Illuminate\Support\Facades\Route;
 
@@ -60,6 +62,8 @@ Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
     Route::post('/daftar-ketua/post-daftar-ketua', [AnggotaController::class, 'postDaftarKetua'])->name('mahasiswa.post-daftar-ketua');
     Route::get('/mahasiswa/update-profile',[AnggotaController::class,'getUpdateProfile'])->name('mahasiswa.update-profile');
     Route::put('mahasiswa/update-profile',[AnggotaController::class,'postUpdate'])->name('mahasiswa.post-update-profile');
+    Route::get('/mahasiswa/sac/home',[SacController::class,'getHome'])->name('mahasiswa.get-home');
+    Route::get('/mahasiswa/sac/kegiatan',[SacController::class,'getKegiatan'])->name('mahasiswa.get-kegiatan');
 
     Route::middleware('verify.kelompok')->group(function () {
         Route::get('/dashboard/detail-kelompok/{id_kelompok}', [MahasiswaController::class, 'getDetailKelompokPage'])->name('mahasiswa.detail-kelompok');
@@ -101,12 +105,19 @@ Route::middleware(['auth', 'role:koordinator'])->group(function () {
 });
 Route::middleware(['auth', 'role:biro'])->group(function () {
     Route::get('/dashboard-biro', [BiroController::class, 'getDashboardBiro'])->name('biro.dashboard');
+    //Kelola Akun
     Route::get('/biro-kelola-akun/dosen-account', [BiroController::class, 'getDosenAccountPage'])->name('biro.dosen-account-page');
     Route::get('/biro-kelola-akun/koordinator-account', [BiroController::class, 'getKoordinatorAccountPage'])->name('biro.koordinator-account-page');
     Route::get('/biro-kelola-akun/mahasiswa-account', [BiroController::class, 'getMahasiswaAccountPage'])->name('biro.mahasiswa-account-page');
     Route::post('/biro-kelola-akun/post-dosen-account', [BiroController::class, 'postDosenAccount'])->name('biro.dosen-post');
     Route::post('/biro-kelola-akun/post-koordinator-account', [BiroController::class, 'postKoordinatorAccount'])->name('biro.koordinator-post');
-    Route::post('/mahasiswa/ganti-password',[BiroController::class,'gantiPasswordMhs'])->name('biro.ganti-password-mhs');
+    Route::post('/biro/change-account-password',[BiroController::class,'gantiPassword'])->name('biro.ganti-password');
+    Route::delete('/biro/delete-account/{userId}',[BiroController::class,'deleteAccount'])->name('biro.delete-account');
+    Route::get('/detail-koordinator/{id_koordinator}',[BiroController::class,'detailKoordinator'])->name('biro.detail-koordinator');
+    Route::get('/edit-dosen/{id_dosen}',[BiroController::class,'editDosen'])->name('biro.edit-dosen');
+    Route::patch('/biro/update-koordinator/{id_koordinator}',[BiroController::class,'updateKoordinator'])->name('biro.update-koordinator');
+    Route::patch('/biro/update-dosen/{id_dosen}',[BiroController::class,'updateDosen'])->name('biro.update-dosen');
+    //Kelompok
     Route::match(['post','get'],'/biro-kelola-kelompok/daftar-kelompok',[BiroKelompokController::class,'getKelompokPage'])->name('biro.daftar-kelompok-page');
     Route::get('/biro-kelola-kelompok/detail-kelompok/{id_kelompok}',[BiroKelompokController::class,'detailKelompok'])->name('biro.detail-kelompok');
     Route::delete('/biro-kelola-kelompok/delete-kelompok/{id_kelompok}',[BiroKelompokController::class,'deleteKelompok'])->name('biro.delete-kelompok');
@@ -115,6 +126,7 @@ Route::middleware(['auth', 'role:biro'])->group(function () {
     Route::post('/biro-manajemen-akademik/tambah-skema',[ManajemenAkademikController::class,'postSkema'])->name('biro.manajemen-akademik-tambah-skema');
     Route::post('/biro-manajemen-akademik/tambah-fakultas',[ManajemenAkademikController::class,'postFakultas'])->name('biro.manajemen-akademik-tambah-fakultas');
     Route::post('/biro-manajemen-akademik/tambah-prodi',[ManajemenAkademikController::class,'postProdi'])->name('biro.manajemen-akademik-tambah-prodi');
+    //Manajemen Akademik
     Route::delete('/biro-manajemen-akademik/delete-skema/{id_skema}',[ManajemenAkademikController::class,'deleteSkema'])->name('biro.manajemen-akademik-delete-skema');
     Route::delete('/biro-manajemen-akademik/delete-fakultas/{id_fakultas}',[ManajemenAkademikController::class,'deleteFakultas'])->name('biro.manajemen-akademik-delete-fakultas');
     Route::delete('/biro-manajemen-akademik/delete-prodi/{id_prodi}',[ManajemenAkademikController::class,'deleteProdi'])->name('biro.manajemen-akademik-delete-prodi');
@@ -124,4 +136,7 @@ Route::middleware(['auth', 'role:biro'])->group(function () {
     Route::get('/biro-manajemen-akademik/detail-skema/{id_skema}',[ManajemenAkademikController::class,'detailSkema'])->name('biro.manajemen-akademik-detail-skema');
     Route::get('/biro-manajemen-akademik/detail-fakultas/{id_fakultas}',[ManajemenAkademikController::class,'detailFakultas'])->name('biro.manajemen-akademik-detail-fakultas');
     Route::get('/biro-manajemen-akademik/detail-prodi/{id_prodi}',[ManajemenAkademikController::class,'detailProdi'])->name('biro.manajemen-akademik-detail-prodi');
+    //SAC
+    Route::get('/biro/kegiatan-mahasiswa',[ManajemenSACController::class,'kegiatanMahasiswa'])->name('biro.kegiatan-mahasiswa-page');
+    Route::patch('/biro/kegiatan-mahasiswa/update-status/{id_kegiatan}',[ManajemenSACController::class,'updateStatusKegiatan'])->name('biro.update-status-kegiatan');
 });

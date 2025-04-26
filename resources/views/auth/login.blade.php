@@ -26,7 +26,7 @@
                                         account</h5>
 
                                     <div data-mdb-input-init class="form-outline mb-4">
-                                        <label class="form-label" for="formUsername">Username</label>
+                                        <label class="form-label" for="formUsername">Username / NIM</label>
                                         <input type="text" id="formUsername" name="username" class="form-control custom-input"
                                             placeholder="example: 72210487" required/>
 

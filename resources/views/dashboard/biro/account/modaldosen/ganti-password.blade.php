@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="ganti-password-mhs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="ganti-password-dosen" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered ">
         <div class="modal-content bg-third-color">
             <form action="{{route('biro.ganti-password')}}" method="post">
@@ -34,7 +34,7 @@
 </div>
 
 <script>
-    const passwordModal = document.getElementById('ganti-password-mhs');
+    const passwordModal = document.getElementById('ganti-password-dosen');
 
     passwordModal.addEventListener('show.bs.modal', function (event) {
         const button = event.relatedTarget; // Tombol yang diklik

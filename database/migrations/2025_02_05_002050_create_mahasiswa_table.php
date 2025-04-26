@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('mahasiswa', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('userId')->onDelete('cascade');
+            $table->foreignUuid('userId')->references( 'id')->on('user')->onDelete('cascade');
             $table->string('name');
             $table->string('fakultas');
             $table->string('prodi');
@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('no_wa');
             $table->timestamps();
 
-            $table->foreign('userId')->references(columns: 'id')->on('user');
+
         });
     }
 

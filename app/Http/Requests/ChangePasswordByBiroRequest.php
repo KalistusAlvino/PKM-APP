@@ -22,7 +22,7 @@ class ChangePasswordByBiroRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => 'required|min:8|max:8',
+            'username' => 'required',
             'new_password' => 'required|min:8',
             'confirm_password' => 'required|same:new_password',
         ];

@@ -28,8 +28,38 @@ class AkunRepository implements AkunRepositoryInterface
         $mahasiswa = Mahasiswa::with('user')->get();
         return $mahasiswa;
     }
+    public function detailKoordinator($id_koordinator): Koordinator {
+        return Koordinator::with('user')->findOrFail($id_koordinator);
+    }
+    public function updateKoordinator($id_koordinator, array $data) {
+        $userId = Koordinator::findOrFail($id_koordinator)->userId;
+        User::findOrFail($userId)->update([
+            'username' => $data['username']
+        ]);
+        Koordinator::findOrFail($id_koordinator)->update([
+            'name' => $data['name']
+        ]);
+    }
+    public function updateDosen($id_dosen, array $data) {
+        $ketertarikan = implode(', ', $data['ketertarikan']);
+        $userId = Dosen::findOrFail($id_dosen)->userId;
+        User::findOrFail($userId)->update([
+            'username' => $data['username']
+        ]);
+        Dosen::findOrFail($id_dosen)->update([
+            'nip' => $data['nip'],
+            'name' => $data['name'],
+            'fakultas' => $data['fakultas'],
+            'program_studi' => $data['program_studi'],
+            'no_wa' => $data['no_wa'],
+            'ketertarikan' => $ketertarikan,
+        ]);
+    }
+    public function detailDosen($id_dosen): Dosen {
+        return Dosen::with('user')->findOrFail($id_dosen);
+    }
 
-    public function gantiPasswordMhs(array $data): ?User {
+    public function gantiPassword(array $data): ?User {
         $user = User::where('username',$data['username'])->firstOrFail();
 
         $user->update([
@@ -37,6 +67,11 @@ class AkunRepository implements AkunRepositoryInterface
         ]);
 
         return $user;
+    }
+    public function deleteAccount($userId): bool {
+        $user = User::findOrFail($userId);
+
+        return $user->delete();
     }
 
     public function postDosen(array $data): RegisterDosen
@@ -52,6 +87,7 @@ class AkunRepository implements AkunRepositoryInterface
             'userId' => $user->id,
             'nip' => $data['nip'],
             'name' => $data['name'],
+            'fakultas' => $data['fakultas'],
             'program_studi' => $data['program_studi'],
             'no_wa' => $data['no_wa'],
             'ketertarikan' => $ketertarikan

@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('mahasiswa_kelompok', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('kelompokId')->onDelete('cascade');
-            $table->uuid('mahasiswaId')->onDelete('cascade');
+            $table->foreignUuid('mahasiswaId')->references('id')->on('mahasiswa')->onDelete('cascade');
             $table->enum('status_mahasiswa',['ketua','anggota']);
             $table->timestamps();
 
             $table->foreign('kelompokId')->references('id')->on('kelompok');
-            $table->foreign('mahasiswaId')->references('id')->on('mahasiswa');
+
         });
     }
 

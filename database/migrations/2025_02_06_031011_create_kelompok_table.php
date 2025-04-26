@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('kelompok', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('dospemId')->nullable()->onDelete('cascade');
+            $table->uuid('dospemId')->nullable(); 
+            $table->foreign('dospemId')->references('id')->on('dosen')->onDelete('set null');
             $table->timestamps();
-
-            $table->foreign('dospemId')->references('id')->on('dosen');
         });
     }
 

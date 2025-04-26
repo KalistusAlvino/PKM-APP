@@ -19,23 +19,27 @@ class Judul extends Model
         'id_skema',
         'is_proposal',
     ];
-    public function user(){
-        return $this->belongsTo(User::class, 'id_user','id');
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user', 'id');
     }
 
     public function skema()
     {
-        return $this->belongsTo(SkemaPkm::class,'id_skema','id');
+        return $this->belongsTo(SkemaPkm::class, 'id_skema', 'id');
     }
     public function komentar()
     {
-        return $this->hasMany(Komentar::class, 'id_judul', 'id')->orderBy('created_at','desc');
+        return $this->hasMany(Komentar::class, 'id_judul', 'id')->orderBy('created_at', 'desc');
     }
 
-    public function proposal() {
-        return  $this->hasOne(ProposalFinal::class, 'judulId','id');
+    public function proposal()
+    {
+        return $this->hasOne(ProposalFinal::class, 'judulId', 'id');
     }
-    public function kelompok() {
-        return $this->belongsTo(Kelompok::class,'id_kelompok','id');
+    public function kelompok()
+    {
+        return $this->belongsTo(Kelompok::class, 'id_kelompok', 'id');
     }
+
 }

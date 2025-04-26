@@ -91,7 +91,7 @@
                                         </span>
                                     </div>
                                     <button class="btn bg-primary-color tes me-4 ms-3 my-2"
-                                        onclick="confrimUpdateKetua('{{ $anggota['nama'] }}','{{ route('biro.ganti-ketua-kelompok', [$anggota['id_kelompok'], $anggota['id_mk']]) }}')">
+                                        onclick="confirmUpdateKetua('{{ $anggota['nama'] }}','{{ route('biro.ganti-ketua-kelompok', [$anggota['id_kelompok'], $anggota['id_mk']]) }}')">
                                         <i class="fa-solid fa-web-awesome secondary-color"></i>
                                     </button>
 
@@ -204,7 +204,7 @@
         }
     </script>
     <script>
-        function confrimUpdateKetua(nama, url) {
+        function confirmUpdateKetua(nama, url) {
             Swal.fire({
                 title: `Anda Yakin ingin menjadikan mahasiswa ${nama} sebagai ketua?`,
                 text: "Anda tidak akan dapat mengembalikan ini!",

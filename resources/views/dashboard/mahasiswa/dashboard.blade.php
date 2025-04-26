@@ -7,8 +7,8 @@
         <div class="col-12 col-lg-6 mb-2">
             @forelse ($proposal as $p)
                 <div class="card bg-secondary-color shadow-lg my-2">
-                    <span class="mx-3 my-3 fw-bold primary-color fs-5">Proposal Terbaru</span>
-                    <span class="mx-3 my-1 fw-semibold primary-color fs-5 text-justify">{{$p->judul->detail_judul}}</span>
+                    <span class="mx-3 mt-3 mb-2 fw-bold primary-color fs-5">Proposal Terbaru</span>
+                    <span class="mx-3 my-1 fw-normal primary-color fs-5 text-justify">{{$p->judul->detail_judul ?? 'Belum ada proposal'}}</span>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item bg-transparent">
                             <div class="row mx-2 my-2">
@@ -17,7 +17,7 @@
 
                                 </div>
                                 <div class="col-8">
-                                    <span>{{$p->judul->kelompok->dosen->name}}</span>
+                                    <span>{{$p->judul->kelompok->dosen->name ?? 'Belum ada dosen pembimbing'}}</span>
                                 </div>
                             </div>
                         </li>
@@ -28,7 +28,7 @@
 
                                 </div>
                                 <div class="col-8">
-                                    <span>{{$p->judul->kelompok->getNamaKetua()}}</span>
+                                    <span>{{$p->judul->kelompok->getNamaKetua() ?? 'Belum ada ketua'}}</span>
                                 </div>
                             </div>
                         </li>
@@ -39,7 +39,7 @@
 
                                 </div>
                                 <div class="col-8">
-                                    <span>{{$p->created_at->translatedFormat('d F Y') }}</span>
+                                    <span>{{$p->created_at->translatedFormat('d F Y') ?? 'Belum ada tanggal' }}</span>
                                 </div>
                             </div>
                         </li>
@@ -65,15 +65,15 @@
                                 <div class="col d-flex flex-column">
                                     <div class="content d-flex justify-content-between">
                                         <span class="fw-bold primary-color">
-                                            {{ $k->user->getNamaUserAttribute() }}
+                                            {{ $k->user->getNamaUserAttribute() ?? 'Belum ada dosen'}}
                                         </span>
                                         <span class="text-secondary">
-                                            {{ $k->created_at->translatedFormat('d F Y') }}</span>
+                                            {{ $k->created_at->translatedFormat('d F Y') ?? 'Belum ada tanggal'}}</span>
                                     </div>
                                     <div class="row my-2">
                                         <div class="col-9 text-justify">
-                                            <span class="text-secondary my-2">{{ ucwords($k->status) }} -
-                                                {{ $k->komentar }}</span>
+                                            <span class="text-secondary my-2">{{ ucwords($k->status) ?? 'Belum ada status'}} -
+                                                {{ $k->komentar ?? 'Belum ada komentar'}}</span>
                                         </div>
                                         <div class="col-3 d-flex justify-content-end align-items-center">
                                             <a href="{{ route('mahasiswa.detail-kelompok', $k->judul->id_kelompok) }}">Lihat

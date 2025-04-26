@@ -22,7 +22,7 @@ class CariKetuaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_ketua' => 'string|max:255',
+            'nama_ketua' => 'nullable|string|max:255'
         ];
     }
 }

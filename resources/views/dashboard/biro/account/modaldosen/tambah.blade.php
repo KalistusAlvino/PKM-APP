@@ -19,7 +19,7 @@
                         <input type="text" id="nipForm" name="nip" class="form-control custom-input"
                             placeholder="example: 51244**" inputmode="numeric"
                             oninput="this.value = this.value.replace(/[^0-9]/g, '')" required />
-                        <input type="text" id="role" name="role" value="mahasiswa" hidden />
+
                     </div>
 
                     <div data-mdb-input-init class="form-outline mb-4">
@@ -59,7 +59,6 @@
                         <input type="text" id="no_wa" name="no_wa" class="form-control custom-input"
                             placeholder="example: 0812********" inputmode="numeric"
                             oninput="this.value = this.value.replace(/[^0-9]/g, '')" required />
-                        <input type="text" id="role" name="role" value="mahasiswa" hidden />
                     </div>
                     <div data-mdb-input-init class="form-outline mb-4">
                         <label class="form-label primary-color" for="no_wa">Minat/Ketertarikan</label><br>

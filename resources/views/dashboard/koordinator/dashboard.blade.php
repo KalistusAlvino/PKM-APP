@@ -4,7 +4,7 @@
     <span style="display: inline-block; border-bottom: 2px solid #3b564d; width: 100%;"
         class="mx-2 fw-bold fs-2 primary-color">Dashboard Koordinator</span>
     <div class="row my-2 ">
-        <div class="col-12 col-lg-4 mb-2">
+        <div class="col-12 col-lg-6 mb-2">
             <div class="card bg-secondary-color">
                 <div class="d-flex flex-inline justify-content-between align-items-center">
                     <span class="mx-4 my-2 primary-color fw-bold fs-4">
@@ -26,7 +26,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-lg-4 mb-2">
+        <div class="col-12 col-lg-6 mb-2">
             <div class="card bg-secondary-color">
                 <div class="d-flex flex-inline justify-content-between align-items-center">
                     <span class="mx-4 my-2 primary-color fw-bold fs-4">
@@ -48,7 +48,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-lg-4 mb-2">
+        <div class="col-12 col-lg-6 mb-2">
             <div class="card bg-secondary-color">
                 <div class="d-flex flex-inline justify-content-between align-items-center">
                     <span class="mx-4 my-2 primary-color fw-bold fs-4">
@@ -62,7 +62,7 @@
                 </div>
                 <div class="d-flex flex-column">
                     <span class="mx-4 mt-4 primary-color fw-bold fs-3">
-                        {{ $kelom }}
+                        {{ $kelompok }}
                     </span>
                     <span class="mx-4 mb-2 primary-color">
                         Kelompok terdaftar didalam sistem

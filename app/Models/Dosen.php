@@ -18,6 +18,7 @@ class Dosen extends Model
         'userId',
         'nip',
         'name',
+        'fakultas',
         'program_studi',
         'no_wa',
         'ketertarikan'

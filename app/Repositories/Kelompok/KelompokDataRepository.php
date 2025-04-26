@@ -3,6 +3,7 @@
 namespace App\Repositories\Kelompok;
 
 use App\Models\Dosen;
+use App\Models\Judul;
 use App\Models\Kelompok;
 use App\Models\Mahasiswa;
 use App\Models\MahasiswaKelompok;
@@ -27,6 +28,8 @@ class KelompokDataRepository implements KelompokDataRepositoryInterface
                 'id_kelompok' => $mahasiswaKelompok->kelompokId,
                 'ketua' => $ketua->mahasiswa->name,
                 'total_anggota' => MahasiswaKelompok::where('kelompokId', $mahasiswaKelompok->kelompokId)->count(),
+                'skema' => Judul::with('skema')->where('id_kelompok',$mahasiswaKelompok->kelompokId)->first()?->skema->nama_skema ?? 'Proses Bimbingan',
+                'dosen' => Kelompok::with('dosen')->where('id',$mahasiswaKelompok->kelompokId)->first()?->dosen->name ?? 'Belum ada dosen pembimbing',
                 'anggota' => MahasiswaKelompok::with('mahasiswa')
                     ->where('status_mahasiswa', 'anggota')
                     ->where('kelompokId', $mahasiswaKelompok->kelompokId)
@@ -66,7 +69,10 @@ class KelompokDataRepository implements KelompokDataRepositoryInterface
             $dosen = $kelompok->dosen;
             $informasiKelompok = [
                 'id_kelompok' => $kelompok->id,
-                'ketua' => ['nama' => $ketua ? $ketua->mahasiswa->name : null, 'username' => $ketua->mahasiswa->user->username],
+                'ketua' => [
+                    'nama' => $ketua && $ketua->mahasiswa ? $ketua->mahasiswa->name : 'Belum ada ketua',
+                    'username' => $ketua && $ketua->mahasiswa && $ketua->mahasiswa->user ? $ketua->mahasiswa->user->username : 'Belum ada ketua',
+                ],
                 'anggota' => $anggota,
                 'dosen' => $dosen->name ?? null
             ];
@@ -78,7 +84,7 @@ class KelompokDataRepository implements KelompokDataRepositoryInterface
         $dosen = Dosen::where('userId', Auth::id())->first();
 
         $kelompokList = Kelompok::where('dospemId', $dosen->id)
-            ->with(['mahasiswaKelompok.mahasiswa'])
+            ->with(['mahasiswaKelompok.mahasiswa', 'judul.skema'])
             ->when(isset($data['nama_ketua']) && !empty($data['nama_ketua']), function ($query) use ($data) {
                 return $query->whereHas('mahasiswaKelompok', function ($subQuery) use ($data) {
                     $subQuery->where('status_mahasiswa', 'ketua')
@@ -96,6 +102,7 @@ class KelompokDataRepository implements KelompokDataRepositoryInterface
                 return [
                     'id_kelompok' => $kelompok->id,
                     'ketua' => $ketua?->mahasiswa->name ?? 'Tidak ada ketua',
+                    'skema' => $kelompok->judul->where('is_proposal', true)->first()?->skema->nama_skema ?? 'Proses Bimbingan',
                     'total_anggota' => $kelompok->mahasiswaKelompok->count(),
                     'anggota' => $kelompok->mahasiswaKelompok
                         ->where('status_mahasiswa', 'anggota')
@@ -113,7 +120,7 @@ class KelompokDataRepository implements KelompokDataRepositoryInterface
 
     public function getAllKelompok(array $data)
     {
-        $daftarKelompok = Kelompok::with(['mahasiswaKelompok.mahasiswa'])
+        $daftarKelompok = Kelompok::with(['mahasiswaKelompok.mahasiswa', 'judul.skema', 'dosen'])
             ->when(isset($data['nama_ketua']) && !empty($data['nama_ketua']), function ($query) use ($data) {
                 return $query->whereHas('mahasiswaKelompok', function ($subQuery) use ($data) {
                     $subQuery->where('status_mahasiswa', 'ketua')
@@ -129,6 +136,8 @@ class KelompokDataRepository implements KelompokDataRepositoryInterface
                     'ketua' => $kelompok->mahasiswaKelompok
                         ->where('status_mahasiswa', 'ketua')
                         ->first()?->mahasiswa->name ?? 'Tidak ada ketua',
+                    'skema' => $kelompok->judul->where('is_proposal', true)->first()?->skema->nama_skema ?? 'Proses Bimbingan',
+                    'dosen' => $kelompok->dosen->name ?? 'Belum ada dosen pembimbing',
                     'total_anggota' => $kelompok->mahasiswaKelompok->count(),
                     'anggota' => $kelompok->mahasiswaKelompok
                         ->where('status_mahasiswa', 'anggota')

@@ -20,6 +20,8 @@ use App\Repositories\Kelompok\KetuaRepository;
 use App\Repositories\Kelompok\KetuaRepositoryInterface;
 use App\Repositories\Kelompok\ValidationRepository;
 use App\Repositories\Kelompok\ValidationRepositoryInterface;
+use App\Repositories\SAC\KegiatanRepository;
+use App\Repositories\SAC\KegiatanRepositoryInterface;
 use App\Repositories\Users\AuthRepository;
 use App\Repositories\Users\AuthRepositoryInterface;
 use App\Repositories\Mahasiswa\RegisterRepository;
@@ -46,6 +48,7 @@ class AppServiceProvider extends ServiceProvider
             KelompokDataRepositoryInterface::class => KelompokDataRepository::class,
             KelolaKelompokRepositoryInterface::class => KelolaKelompokRepository::class,
             KelolaAkademikRepositoryInterface::class => KelolaAkademikRepository::class,
+            KegiatanRepositoryInterface::class => KegiatanRepository::class,
         ];
 
         foreach ($bindings as $interface => $implementation) {

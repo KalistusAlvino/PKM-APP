@@ -22,4 +22,7 @@ class ProposalFinal extends Model
     public function judul(){
         return $this->belongsTo(Judul::class,'judulId','id');
     }
+    public function kegiatan(){
+        return $this->hasOne(Kegiatan::class,'id_file','id');
+    }
 }

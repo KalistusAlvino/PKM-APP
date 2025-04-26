@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('koordinator', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('userId')->onDelete('cascade');
+            $table->foreignUuid('userId')->references('id')->on('user')->onDelete('cascade');
             $table->string('name');
             $table->timestamps();
 
-            $table->foreign('userId')->references('id')->on('user');
+
         });
     }
 

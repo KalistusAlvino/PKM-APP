@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Dosen;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class RegisterDosenRequest extends FormRequest
 {
@@ -21,14 +23,20 @@ class RegisterDosenRequest extends FormRequest
      */
     public function rules(): array
     {
+        $userId = optional(Dosen::find($this->id_dosen))->userId;
         return [
-            'nip' => 'required|string|unique:dosen,nip',
-            'username' => 'required|string|unique:user,username',
-            'no_wa' => 'required|string|max:13|unique:dosen,no_wa',
+            'nip' => 'required|string|unique:dosen,nip,' . $this->id_dosen,
+            'username' => [
+                'required',
+                'string',
+                Rule::unique('user', 'username')->ignore($userId),
+            ],
+            'no_wa' => 'required|string|max:13|unique:dosen,no_wa,' . $this->id_dosen,
             'name' => 'required|string|max:255',
+            'fakultas' => 'required|string|max:255',
             'program_studi' => 'required|string|max:255',
-            'ketertarikan' => 'required|array', // Validasi bahwa ketertarikan harus berupa array
-            'ketertarikan.*' => 'required|string|max:255', // Validasi setiap elemen dalam array
+            'ketertarikan' => 'required|array',
+            'ketertarikan.*' => 'required|string|max:255',
         ];
     }
     public function messages(): array

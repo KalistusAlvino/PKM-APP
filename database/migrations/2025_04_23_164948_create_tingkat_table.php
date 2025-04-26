@@ -11,15 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dosen', function (Blueprint $table) {
+        Schema::create('tingkat', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('userId')->references('id')->on('user')->onDelete('cascade');
-            $table->bigInteger('nip');
-            $table->string('name');
-            $table->string('fakultas');
-            $table->string('program_studi');
-            $table->string('no_wa');
-            $table->string('ketertarikan');
+            $table->foreignUuid('id_kategori')->references('id')->on('kategori')->onDelete('cascade');
+            $table->string('nama_tingkat');
             $table->timestamps();
         });
     }
@@ -29,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dosen');
+        Schema::dropIfExists('tingkat');
     }
 };
