@@ -19,7 +19,8 @@ class SacController extends Controller
 
         $userId = Auth::user()->id;
         $mahasiswa = Mahasiswa::with('user')->where('userId',$userId)->firstOrFail();
-        $kegiatan = $this->kegiatanRepository->getConfirmKegiatanByIdMahasiswa($mahasiswa);
+        $id_mahasiswa = $mahasiswa->id;
+        $kegiatan = $this->kegiatanRepository->getConfirmKegiatanByIdMahasiswa($id_mahasiswa);
         $key = 'sac-home';
         return view('dashboard.mahasiswa.sac.home',compact('key','mahasiswa','kegiatan'));
     }

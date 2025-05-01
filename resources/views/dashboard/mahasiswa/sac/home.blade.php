@@ -22,7 +22,7 @@
                             </div>
                             <div class="col-7 col-lg-10">
                                 <span class="secondary-color fw-semibold">
-                                    : {{ $mahasiswa->user->username }}
+                                    : {{ $mahasiswa->user->username ?? 'Undetected Mahasiswa' }}
                                 </span>
                             </div>
                         </div>
@@ -34,7 +34,7 @@
                             </div>
                             <div class="col-7 col-lg-10">
                                 <span class="secondary-color fw-semibold">
-                                    : {{ $mahasiswa->name }}
+                                    : {{ $mahasiswa->name ?? 'Undetected Mahasiswa' }}
                                 </span>
                             </div>
                         </div>
@@ -50,7 +50,7 @@
                             </div>
                             <div class="col-7 col-lg-10">
                                 <span class="secondary-color fw-semibold">
-                                    : {{ $mahasiswa->fakultas }}
+                                    : {{ $mahasiswa->fakultas ?? 'Undetected Mahasiswa' }}
                                 </span>
                             </div>
                         </div>
@@ -62,7 +62,7 @@
                             </div>
                             <div class="col-7 col-lg-10">
                                 <span class="secondary-color fw-semibold">
-                                    : {{ $mahasiswa->prodi }}
+                                    : {{ $mahasiswa->prodi ?? 'Undetected Mahasiswa' }}
                                 </span>
                             </div>
                         </div>
