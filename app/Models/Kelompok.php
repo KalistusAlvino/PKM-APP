@@ -32,7 +32,6 @@ class Kelompok extends Model
     {
         return $this->hasMany(Invite::class, 'kelompokId', 'id');
     }
-
     public function judul()
     {
         return $this->hasMany(Judul::class, 'id_kelompok', 'id');

@@ -37,13 +37,15 @@
                         <span class="input-group-text" id="addon-wrapping"><i
                                 class="fa-solid fa-magnifying-glass"></i></span>
                         <input type="text" class="form-control" placeholder="Cari berdasarkan nim"
-                            aria-describedby="addon-wrapping" name="nim" required>
+                            aria-describedby="addon-wrapping" name="nim" inputmode="numeric"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
                     </div>
                 </form>
             </div>
             <div class="col-12 col-md-6 d-flex justify-content-end my-2">
                 <button type="button" class="btn bg-primary-color" data-bs-toggle="modal" data-bs-target="#tambah-anggota">
-                    <i class="fa-solid fa-user-plus secondary-color me-2"></i> <span class="secondary-color">Buat Akun Anggota</span>
+                    <i class="fa-solid fa-user-plus secondary-color me-2"></i> <span class="secondary-color">Buat Akun
+                        Anggota</span>
                 </button>
             </div>
         </div>

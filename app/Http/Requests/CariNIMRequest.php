@@ -22,7 +22,7 @@ class CariNIMRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nim' => 'nullable|string|max:255'
+            'nim' => 'nullable|numeric|max:255'
         ];
     }
 }
