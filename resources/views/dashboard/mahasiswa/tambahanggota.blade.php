@@ -38,7 +38,7 @@
                                 class="fa-solid fa-magnifying-glass"></i></span>
                         <input type="text" class="form-control" placeholder="Cari berdasarkan nim"
                             aria-describedby="addon-wrapping" name="nim" inputmode="numeric"
-                            oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                     </div>
                 </form>
             </div>
