@@ -7,7 +7,7 @@
                 <div class="col col-xl-10">
                     <div class="card shadow-lg" style="border-radius: 1rem; ">
                         <div class="row g-0">
-                            <div class="col-md-6 col-lg-5">
+                            <div class="col-md-6 col-lg-7">
                                 <div class="card-body p-4  p-lg-5 text-black">
                                     <form action="{{route('storeMahasiswa')}}" method="post">
                                         @csrf
@@ -105,10 +105,9 @@
                                     </form>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-lg-7 d-flex align-items-center d-none d-md-block">
+                            <div class="col-md-6 col-lg-5 d-flex align-items-center d-none d-md-block">
                                 <img src="{{ config('app.base_url') . 'login/' . 'pkm.jpg' ?? 'https://place-hold.it/700x600'}}"
-                                    alt="login form" class="img-fluid w-100 h-100" style="border-radius: 0 1rem 1rem 0;" />
-
+                                    alt="login form" class="img-fluid w-auto h-100" style="border-radius: 0 1rem 1rem 0; object-fit: cover; object-position: center" />
                             </div>
                         </div>
                     </div>
