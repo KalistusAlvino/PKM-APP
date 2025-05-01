@@ -65,6 +65,9 @@
                         <input type="text" id="nameForm" name="name" class="form-control custom-input"
                             placeholder="example: Chris Jhon" required />
                     </div>
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <span class="text-danger fst-italic">*Password default anggota adalah 12345678, harap mengganti password setelah membuat akun untuk kepentingan keamanan</span>
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn bg-primary-color"><span class="secondary-color"><i
