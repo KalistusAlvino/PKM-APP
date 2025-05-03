@@ -42,7 +42,7 @@ class KetuaRepository implements KetuaRepositoryInterface
     public function postAnggota(array $data, $idKelompok): RegisterAnggota
     {
         $anggota = MahasiswaKelompok::where('kelompokId', $idKelompok)->where('status_mahasiswa', 'anggota')->count();
-        if ($anggota >= 4) {
+        if ($anggota >= 5) {
             throw new \Exception('Kelompok sudah memiliki anggota maksimal.');
         }
         $user = User::create([
@@ -69,9 +69,13 @@ class KetuaRepository implements KetuaRepositoryInterface
     {
 
         $users = User::where('username', $data['username'])->with('mahasiswa')->firstOrFail();
+        $alreadyAnggota = $users->mahasiswa->mahasiswaKelompok->count();
         $anggota = MahasiswaKelompok::where('kelompokId', $idKelompok)->where('status_mahasiswa', 'anggota')->count();
-        if ($anggota >= 4) {
+        if ($anggota >= 5) {
             throw new \Exception('Kelompok sudah memiliki anggota maksimal.');
+        }
+        if ($alreadyAnggota >= 2) {
+            throw new \Exception('Mahasiswa tersebut sudah memiliki batas jumlah berkelompok');
         }
         return MahasiswaKelompok::create([
             'kelompokId' => $idKelompok,
@@ -156,11 +160,12 @@ class KetuaRepository implements KetuaRepositoryInterface
     {
         $mahasiswaBukanAnggota = Mahasiswa::whereDoesntHave('mahasiswaKelompok', function ($query) use ($idKelompok) {
             $query->where('kelompokId', $idKelompok);
-        })->whereHas('user', function ($query) use ($data) {
-            $query->when(isset($data['nim']) && !empty($data['nim']), function ($q) use ($data) {
-                $q->where('username', 'like', '%' . $data['nim'] . '%');
-            });
-        })
+        })->has('mahasiswaKelompok', '<', 2)
+            ->whereHas('user', function ($query) use ($data) {
+                $query->when(isset($data['nim']) && !empty($data['nim']), function ($q) use ($data) {
+                    $q->where('username', 'like', '%' . $data['nim'] . '%');
+                });
+            })
             ->with('user')
             ->get()
             ->map(function ($item) {

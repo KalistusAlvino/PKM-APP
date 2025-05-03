@@ -94,9 +94,8 @@
                 </div>
             @endforelse
         </div>
-
     @endif
-    @include('dashboard.mahasiswa.modalkelompok.tambah-anggota-modal');
+    @include('dashboard.mahasiswa.modalkelompok.tambah-anggota-modal')
     <script>
         $(document).ready(function() {
             $('#fakultas').change(function() {
