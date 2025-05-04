@@ -9,6 +9,7 @@ use App\Repositories\Judul\JudulRepository;
 use ArielMejiaDev\LarapexCharts\BarChart;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Auth;
+use Illuminate\Support\HtmlString;
 
 class uploadedProposalJudulByKelompokDosen
 {
@@ -30,29 +31,20 @@ class uploadedProposalJudulByKelompokDosen
 
         foreach ($skemas as $skema) {
             $labels[] = $skema->nama_skema;
-
-            $count = Judul::whereHas('kelompok', function ($query) use ($id_dosen) {
-                $query->where('dospemId', $id_dosen);
-            })
-                ->where('id_skema', $skema->id)
-                ->count();
             $countProposal = Judul::whereHas('kelompok', function ($query) use ($id_dosen) {
                 $query->where('dospemId', $id_dosen);
             })
-            ->where('id_skema', $skema->id)
-            ->where('is_proposal', true)
-            ->count();
+                ->where('id_skema', $skema->id)
+                ->where('is_proposal', true)
+                ->count();
 
-
-            $data[] = $count;
             $dataProposal[] = $countProposal;
         }
 
         // Step 5: Return chart
         return $this->chart->barChart()
-            ->setTitle('Jumlah Judul per Skema')
+            ->setTitle('Jumlah Judul Fix per Skema')
             ->setSubtitle('Berdasarkan pembimbing: ' . Auth::user()->getNamaUserAttribute())
-            ->addData('Jumlah Judul', $data)
             ->addData('Jumlah Proposal', $dataProposal)
             ->setXAxis($labels);
     }

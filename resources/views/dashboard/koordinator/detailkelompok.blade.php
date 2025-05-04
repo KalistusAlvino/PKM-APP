@@ -111,11 +111,11 @@
             </div>
         </section>
         <section id="judul">
-            <h3 class="fw-bold primary-color mx-2 my-2 pt-3">Pengajuan Judul atau Ide</h3>
+            <h3 class="fw-bold primary-color mx-2 my-2 pt-3">Pengajuan Ide</h3>
             @forelse ($judul as $jd)
                 <div class="card bg-third-color h-100 my-3 rounded-4">
                     <span class="mx-4 mt-3  fw-bold primary-color fs-5 d-flex align-items-center"><i
-                            class="fa-regular fa-lightbulb me-3"></i>Judul atau Ide</span>
+                            class="fa-regular fa-lightbulb me-3"></i>Ide</span>
                     <div class="row">
                         <div class="col-12">
                             <span

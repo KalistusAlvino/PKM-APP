@@ -16,6 +16,7 @@ class Invite extends Model
         'inviterId',
         'dospemId',
         'kelompokId',
+        'status'
     ];
 
     public function inviter()
@@ -23,6 +24,10 @@ class Invite extends Model
         return $this->belongsTo(Mahasiswa::class,'inviterId','id');
     }
 
-    
+    public function kelompok(){
+        return $this->belongsTo(Kelompok::class,'kelompokId','id');
+    }
+
+
 
 }

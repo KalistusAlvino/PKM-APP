@@ -88,7 +88,9 @@ Route::middleware(['auth', 'role:dosen'])->group(function () {
     Route::get('/dosen-daftarundangan', [DosenController::class, 'getUndanganDosen'])->name('dosen.daftar-undangan');
     Route::match(['get','post'],'/dosen-daftarkelompok', [DosenController::class, 'getDaftarKelompok'])->name('dosen.daftar-kelompok');
     Route::get('/dosen-detailkelompok/{id}', [DosenController::class, 'getDetailKelompok'])->name('dosen.detail-kelompok');
-    Route::put('/dosen-terimaundangan/{id_kelompok}/{id_dosen}', [DosenController::class, 'terimaUndangan'])->name('dosen.terima-undangan');
+    Route::put('/dosen-terima-undangan/{id_kelompok}/{id_dosen}', [DosenController::class, 'terimaUndangan'])->name('dosen.terima-undangan');
+    Route::put('/dosen-tolak-undangan/{id_undangan}', [DosenController::class, 'tolakUndangan'])->name('dosen.tolak-undangan');
+    Route::get('/dosen-detail-undangan/{id_undangan}', [DosenController::class, 'detailUndangan'])->name('dosen.detail-undangan');
     Route::post('/dosen-postkomentar/{id_judul}/{id_kelompok}', [DosenController::class, 'postKomentar'])->name('dosen.post-komentar');
     Route::put('/dosen-updatekomentar/{id_komentar}/{id_kelompok}', [DosenController::class, 'updateKomentar'])->name('dosen.update-komentar');
     Route::delete('/dosen/delete-komentar/{id_kelompok}/{id_komentar}',[DosenController::class,'deleteKomentar'])->name('dosen.delete-komentar');

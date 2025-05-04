@@ -10,7 +10,7 @@ class InviteRepository implements InviteRepositoryInterface
 {
     public function getInvite($id_dosen): Collection
     {
-        return Invite::with('inviter.user')->where('dospemId', $id_dosen)->get();
+        return Invite::with('inviter.user')->where('dospemId', $id_dosen)->orderBy('updated_at', 'desc')->get();
     }
 
     public function insertDospem($id_kelompok, $id_dosen): ?Kelompok
@@ -21,5 +21,28 @@ class InviteRepository implements InviteRepositoryInterface
         ]);
         Invite::where('kelompokId', $id_kelompok)->delete();
         return $kelompok;
+    }
+    public function tolakUndangan($id_invite): ?Invite
+    {
+        $invite = Invite::findOrFail($id_invite);
+        $invite->update([
+            'status' => 'ditolak',
+        ]);
+
+        return $invite;
+    }
+    public function detailUndangan($id_invite): Invite
+    {
+        return Invite::with([
+            'inviter.user',
+            'kelompok.mahasiswaKelompok' => function ($query) {
+                $query->whereHas('mahasiswa', function ($q) {
+                    $q->where('status_mahasiswa', 'anggota');
+                });
+            },
+            'kelompok.mahasiswaKelompok.mahasiswa.user'
+        ])
+            ->where('id', $id_invite)
+            ->firstOrFail();
     }
 }

@@ -149,7 +149,7 @@
     </div>
     </section>
     <section id="judul">
-        <h3 class="fw-bold primary-color mx-2 my-2 pt-3">Pengajuan Judul atau Ide</h3>
+        <h3 class="fw-bold primary-color mx-2 my-2 pt-3">Pengajuan Ide</h3>
         <div class="mx-2 fw-bold primary-color d-flex justify-content-end">
             @if ($verifyKelompok)
                 <button type="button" class="btn bg-primary-color mx-4" data-bs-toggle="modal" data-bs-target="#judulModal">
@@ -161,7 +161,7 @@
         @forelse ($judul as $jd)
             <div class="card bg-third-color h-100 my-3 rounded-4">
                 <div class="d-flex justify-content-between align-items-center mx-4 mt-3">
-                    <span class="fw-bold primary-color fs-5"><i class="fa-regular fa-lightbulb me-3"></i>Judul atau
+                    <span class="fw-bold primary-color fs-5"><i class="fa-regular fa-lightbulb me-3"></i>
                         Ide</span>
                     @if ($jd->id_user == Auth::user()->id)
                         <button type="button" class="btn popover-button" data-id="{{ $jd->id }}">

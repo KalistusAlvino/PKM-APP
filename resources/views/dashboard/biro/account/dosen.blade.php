@@ -31,6 +31,7 @@
                         <th scope="col">NIP</th>
                         <th scope="col">Username</th>
                         <th scope="col">Nama</th>
+                        <th scope="col">Fakultas</th>
                         <th scope="col">Program Studi</th>
                         <th scope="col">No. Whatsapp</th>
                         <th scope="col" class="d-flex justify-content-end me-3">Action</th>

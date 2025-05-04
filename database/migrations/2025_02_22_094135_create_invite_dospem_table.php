@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignUuid('inviterId')->references('id')->on('mahasiswa')->onDelete('cascade');
             $table->foreignUuid('dospemId')->references('id')->on('dosen')->onDelete('cascade');
             $table->foreignUuid('kelompokId')->references('id')->on('kelompok')->onDelete('cascade');
+            $table->enum('status',['menunggu','ditolak'])->default('menunggu');
             $table->timestamps();
         });
     }

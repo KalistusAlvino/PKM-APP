@@ -35,11 +35,11 @@ class DosenController extends Controller
     {
         $barChart = $chart->build();
         $dosenId = Auth::user()->dosen->id;
-        $kelompokBimbingan = Kelompok::where('dospemId',$dosenId)->count();
-        $invite = Invite::where('dospemId',$dosenId)->count();
+        $kelompokBimbingan = Kelompok::where('dospemId', $dosenId)->count();
+        $invite = Invite::where('dospemId', $dosenId)->count();
         $judul = $this->judulRepository->getJudulByDosenId($dosenId);
         $key = 'dashboard';
-        return view('dashboard.dosen.dashboard',compact('key','kelompokBimbingan','invite','barChart','judul'));
+        return view('dashboard.dosen.dashboard', compact('key', 'kelompokBimbingan', 'invite', 'barChart', 'judul'));
     }
 
     public function getUndanganDosen()
@@ -47,7 +47,7 @@ class DosenController extends Controller
         $dosen_id = Auth::user()->dosen->id;
         $invite = $this->inviteRepository->getInvite($dosen_id);
         $key = 'daftar_undangan';
-        return view('dashboard.dosen.undangan', compact('invite','key'));
+        return view('dashboard.dosen.undangan', compact('invite', 'key'));
     }
 
     public function getDaftarKelompok(CariKetuaRequest $request)
@@ -55,7 +55,7 @@ class DosenController extends Controller
         $validate = $request->validated();
         $daftarKelompok = $this->kelompokDataRepository->getKelompokByAuthDosen($validate);
         $key = 'daftar_kelompok';
-        return view('dashboard.dosen.kelompok', compact('daftarKelompok','key'));
+        return view('dashboard.dosen.kelompok', compact('daftarKelompok', 'key'));
     }
 
     public function getDetailKelompok($id)
@@ -64,7 +64,7 @@ class DosenController extends Controller
         $judul = $this->judulRepository->getJudulByKelompokId($id);
         $proposal = $this->judulRepository->getProposal($id);
         $key = 'daftar_kelompok';
-        return view('dashboard.dosen.detailkelompok', compact('informasiKelompok', 'judul', 'proposal','key'));
+        return view('dashboard.dosen.detailkelompok', compact('informasiKelompok', 'judul', 'proposal', 'key'));
     }
     public function terimaUndangan($id_kelompok, $id_dosen)
     {
@@ -72,8 +72,26 @@ class DosenController extends Controller
             $this->inviteRepository->insertDospem($id_kelompok, $id_dosen);
 
             return redirect()->route('dosen.daftar-undangan')->with('success', 'Berhasil Menerima Undangan Mahasiswa');
-        } catch (ValidationException $e) {
+        } catch (Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Ada kesalahan saat menerima undangan']);
+        }
+    }
+    public function detailUndangan($id_undangan) {
+        try {
+            $invite =  $this->inviteRepository->detailUndangan($id_undangan);
+            return response()->json($invite);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage());
+        }
+    }
+
+    public function tolakUndangan($id_undangan)
+    {
+        try {
+            $this->inviteRepository->tolakUndangan($id_undangan);
+            return redirect()->route('dosen.daftar-undangan')->with('success', 'Berhasil melakukan tolak undangan Mahasiswa');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
 
@@ -100,13 +118,13 @@ class DosenController extends Controller
         }
     }
 
-    public function updateKomentar(UpdateKomentarRequest $request,$id_komentar, $id_kelompok) {
+    public function updateKomentar(UpdateKomentarRequest $request, $id_komentar, $id_kelompok)
+    {
         try {
             $validated = $request->validated();
             $this->judulRepository->updateKomentar($validated, $id_komentar);
             return redirect()->route('dosen.detail-kelompok', $id_kelompok)->with('success', 'Berhasil melakukan update komentar');
-        }
-        catch (Exception $e){
+        } catch (Exception $e) {
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
