@@ -6,6 +6,7 @@ use App\Models\Judul;
 use App\Models\Komentar;
 use App\Models\ProposalFinal;
 use App\Models\SkemaPkm;
+use Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -74,7 +75,6 @@ class JudulRepository implements JudulRepositoryInterface
             'id_judul' => $id_judul,
             'id_user' => $id_user,
             'komentar' => $data['komentar'],
-            'status' => $data['status'],
         ]);
     }
 
@@ -111,10 +111,17 @@ class JudulRepository implements JudulRepositoryInterface
         if ($komentar) {
             $komentar->update([
                 'komentar' => $data['komentar'],
-                'status' => $data['status'],
             ]);
         }
         return $komentar;
+    }
+    public function insertKomentarMahasiswa($id_judul, array $data): Komentar {
+        $userId = Auth::user()->id;
+        return Komentar::create([
+            'id_judul' => $id_judul,
+            'id_user' => $userId,
+            'komentar' => $data['komentar']
+        ]);
     }
 
     public function deleteKomentar($id_komentar): bool
@@ -131,4 +138,6 @@ class JudulRepository implements JudulRepositoryInterface
     {
         return SkemaPkm::with('judul.proposal')->get();
     }
+
+
 }

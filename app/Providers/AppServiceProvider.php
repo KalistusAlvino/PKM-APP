@@ -10,6 +10,8 @@ use App\Repositories\Biro\KelolaKelompokRepository;
 use App\Repositories\Biro\KelolaKelompokRepositoryInterface;
 use App\Repositories\Dosen\InviteRepository;
 use App\Repositories\Dosen\InviteRepositoryInterface;
+use App\Repositories\Dosen\KelompokDosenInterface;
+use App\Repositories\Dosen\KelompokDosenRepository;
 use App\Repositories\Judul\JudulRepository;
 use App\Repositories\Judul\JudulRepositoryInterface;
 use App\Repositories\Kelompok\AnggotaRepository;
@@ -49,6 +51,7 @@ class AppServiceProvider extends ServiceProvider
             KelolaKelompokRepositoryInterface::class => KelolaKelompokRepository::class,
             KelolaAkademikRepositoryInterface::class => KelolaAkademikRepository::class,
             KegiatanRepositoryInterface::class => KegiatanRepository::class,
+            KelompokDosenInterface::class => KelompokDosenRepository::class,
         ];
 
         foreach ($bindings as $interface => $implementation) {

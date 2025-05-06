@@ -18,6 +18,7 @@ interface JudulRepositoryInterface
     public function postJudul(array $data, $idKelompok, $id_user): Judul;
     public function getSkema(): Collection;
     public function deleteJudul($id_judul);
+    public function insertKomentarMahasiswa($id_judul, array $data): Komentar;
     public function updateJudul($id_judul, array $data): ?Judul;
     public function postKomentar(array $data, $id_judul, $id_user): Komentar;
     public function updateKomentar(array $data, $id_komentar): Komentar;

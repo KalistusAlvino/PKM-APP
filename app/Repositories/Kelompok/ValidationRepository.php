@@ -25,7 +25,14 @@ class ValidationRepository implements ValidationRepositoryInterface
         if (!$kelompok) {
             throw new \Exception("Kelompok tidak ditemukan");
         }
-        return Invite::where('kelompokId', $id_kelompok)->exists();
+        return Invite::where('kelompokId', $id_kelompok)->where('status','menunggu')->exists();
+    }
+    public function hasRejectedInvite($id_kelompok): bool {
+        $kelompok = Kelompok::where('id', $id_kelompok)->exists();
+        if (!$kelompok) {
+            throw new \Exception("Kelompok tidak ditemukan");
+        }
+        return Invite::where('kelompokId', $id_kelompok)->where('status','ditolak')->exists();
     }
 
     public function hasDospem(array $data): bool

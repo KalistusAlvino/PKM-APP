@@ -72,7 +72,7 @@
                                     </div>
                                     <div class="row my-2">
                                         <div class="col-9 text-justify">
-                                            <span class="text-secondary my-2">{{ ucwords($k->status) ?? 'Belum ada status'}} -
+                                            <span class="text-secondary my-2">
                                                 {{ $k->komentar ?? 'Belum ada komentar'}}</span>
                                         </div>
                                         <div class="col-3 d-flex justify-content-end align-items-center">

@@ -8,6 +8,7 @@ use App\Models\RegisterDosen;
 use App\Models\RegisterKoordinator;
 use App\Models\User;
 use App\Repositories\Biro\AkunRepositoryInterface;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -24,8 +25,8 @@ class AkunRepository implements AkunRepositoryInterface
 
         return $koordinator;
     }
-    public function getMahasiswa(): Collection{
-        $mahasiswa = Mahasiswa::with('user')->get();
+    public function getMahasiswa(): LengthAwarePaginator{
+        $mahasiswa = Mahasiswa::with('user')->paginate(10);
         return $mahasiswa;
     }
     public function detailKoordinator($id_koordinator): Koordinator {

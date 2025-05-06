@@ -44,14 +44,24 @@ class User extends Authenticatable
         return $this->hasOne(Biro::class, 'userId', 'id');
     }
 
-    public function judul(){
-        return $this->hasMany(Judul::class,'id_user','id');
+    public function judul()
+    {
+        return $this->hasMany(Judul::class, 'id_user', 'id');
     }
 
     public function isMahasiswa()
     {
         return $this->role === 'mahasiswa';
     }
+    public function getIsMahasiswaAttribute()
+    {
+        return $this->role === 'mahasiswa';
+    }
+    public function getIsDosenOrKoordinatorAttribute()
+    {
+        return $this->role === 'dosen' || $this->role === 'koordinator';
+    }
+
     public function isDosen()
     {
         return $this->role === 'dosen';

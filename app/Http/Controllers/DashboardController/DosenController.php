@@ -10,7 +10,9 @@ use App\Http\Requests\UpdateKomentarRequest;
 use App\Models\Invite;
 use App\Models\Judul;
 use App\Models\Kelompok;
+use App\Models\Komentar;
 use App\Repositories\Dosen\InviteRepository;
+use App\Repositories\Dosen\KelompokDosenRepository;
 use App\Repositories\Judul\JudulRepository;
 use App\Repositories\Kelompok\KelompokDataRepository;
 use Exception;
@@ -21,14 +23,15 @@ class DosenController extends Controller
 {
     protected $inviteRepository;
     protected $kelompokDataRepository;
-
     protected $judulRepository;
+    protected $kelompokDosenRepository;
 
-    public function __construct(InviteRepository $inviteRepository, KelompokDataRepository $kelompokDataRepository, JudulRepository $judulRepository)
+    public function __construct(InviteRepository $inviteRepository, KelompokDataRepository $kelompokDataRepository, JudulRepository $judulRepository, KelompokDosenRepository $kelompokDosenRepository)
     {
         $this->inviteRepository = $inviteRepository;
         $this->kelompokDataRepository = $kelompokDataRepository;
         $this->judulRepository = $judulRepository;
+        $this->kelompokDosenRepository = $kelompokDosenRepository;
     }
 
     public function getDashboardDosen(uploadedProposalJudulByKelompokDosen $chart)
@@ -66,6 +69,16 @@ class DosenController extends Controller
         $key = 'daftar_kelompok';
         return view('dashboard.dosen.detailkelompok', compact('informasiKelompok', 'judul', 'proposal', 'key'));
     }
+
+    public function keluarKelompok($id_kelompok)
+    {
+        try {
+            $this->kelompokDosenRepository->keluarKelompok($id_kelompok);
+            return redirect()->route('dosen.daftar-kelompok')->with('success','Berhasil keluar kelompok');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Ada kesalahan saat keluar kelompok']);
+        }
+    }
     public function terimaUndangan($id_kelompok, $id_dosen)
     {
         try {
@@ -76,9 +89,10 @@ class DosenController extends Controller
             return redirect()->back()->withErrors(['error' => 'Ada kesalahan saat menerima undangan']);
         }
     }
-    public function detailUndangan($id_undangan) {
+    public function detailUndangan($id_undangan)
+    {
         try {
-            $invite =  $this->inviteRepository->detailUndangan($id_undangan);
+            $invite = $this->inviteRepository->detailUndangan($id_undangan);
             return response()->json($invite);
         } catch (Exception $e) {
             return response()->json($e->getMessage());
@@ -107,6 +121,12 @@ class DosenController extends Controller
             return redirect()->back()->withErrors(['error' => 'Ada kesalahan saat menambahkan komentar']);
         }
     }
+    public function detailKomentar($id_kelompok, $id_komentar)
+    {
+        $komentar = Komentar::find($id_komentar);
+
+        return response()->json($komentar);
+    }
 
     public function deleteKomentar($id_kelompok, $id_komentar)
     {
@@ -118,7 +138,7 @@ class DosenController extends Controller
         }
     }
 
-    public function updateKomentar(UpdateKomentarRequest $request, $id_komentar, $id_kelompok)
+    public function updateKomentar(UpdateKomentarRequest $request, $id_kelompok, $id_komentar)
     {
         try {
             $validated = $request->validated();

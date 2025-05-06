@@ -18,5 +18,5 @@ interface KetuaRepositoryInterface {
     public function getDospem (array $data): Collection;
     public function deleteAnggota ($id_mk) : ?MahasiswaKelompok;
     public function deleteDospem ($id_kelompok) : ?Kelompok;
-    public function getMahasiswaOutKelompok($idKelompok, array $data) : Collection;
+    public function getMahasiswaOutKelompok($idKelompok, array $data) : LengthAwarePaginator;
 }

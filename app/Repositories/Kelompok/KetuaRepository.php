@@ -13,6 +13,7 @@ use App\Models\ProposalFinal;
 use App\Models\RegisterAnggota;
 use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -156,27 +157,23 @@ class KetuaRepository implements KetuaRepositoryInterface
         return $proposal;
     }
 
-    public function getMahasiswaOutKelompok($idKelompok, array $data): Collection
+    public function getMahasiswaOutKelompok($idKelompok, array $data): LengthAwarePaginator
     {
-        $mahasiswaBukanAnggota = Mahasiswa::whereDoesntHave('mahasiswaKelompok', function ($query) use ($idKelompok) {
+        return Mahasiswa::whereDoesntHave('mahasiswaKelompok', function ($query) use ($idKelompok) {
             $query->where('kelompokId', $idKelompok);
-        })->has('mahasiswaKelompok', '<', 2)
+        })
+            ->has('mahasiswaKelompok', '<', 2)
             ->whereHas('user', function ($query) use ($data) {
                 $query->when(isset($data['nim']) && !empty($data['nim']), function ($q) use ($data) {
                     $q->where('username', 'like', '%' . $data['nim'] . '%');
                 });
             })
-            ->with('user')
-            ->get()
-            ->map(function ($item) {
-                return [
-                    'nama' => $item->name,
-                    'username' => $item->user->username ?? null,
-                    'prodi' => $item->prodi,
-                    'no_wa' => $item->no_wa
-                ];
-            });
-
-        return $mahasiswaBukanAnggota;
+            ->with([
+                'user' => function ($query) {
+                    $query->select('id', 'username'); // Optimasi: hanya ambil field yang diperlukan
+                }
+            ])
+            ->select('mahasiswa.*') // Pastikan semua field mahasiswa yang dibutuhkan
+            ->paginate(10);
     }
 }

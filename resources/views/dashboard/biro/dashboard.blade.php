@@ -3,96 +3,72 @@
 @section('content')
     <span style="display: inline-block; border-bottom: 2px solid #3b564d; width: 100%;"
         class="mx-2 fw-bold fs-2 primary-color">Dashboard Biro</span>
-    <div class="row my-2 ">
-        <div class="col-12 col-lg-6 mb-2">
-            <div class="card bg-secondary-color">
-                <div class="d-flex flex-inline justify-content-between align-items-center">
-                    <span class="mx-4 my-2 primary-color fw-bold fs-4">
-                        Total Mahasiswa
-                    </span>
-                    <div class="card mx-4 my-2 border border-0 bg-primary-color">
-                        <span class="mx-2 my-1 secondary-color fw-bold fs-2">
-                            <i class="fa-solid fa-graduation-cap"></i>
+    <div class="row g-2 my-2">
+        <!-- Mahasiswa Card -->
+        <div class="col-6 col-md-3">
+            <div class="card-dashboard bg-secondary-color h-100 shadow-sm border-0">
+                <div class="card-body p-3 text-center">
+                    <div class="d-flex align-items-center justify-content-center mb-2">
+                        <span class="primary-color fw-bold fs-5 me-2">Mahasiswa</span>
+                        <span class="bg-primary-color p-2 rounded-circle">
+                            <i class="fa-solid fa-graduation-cap text-white fs-4"></i>
                         </span>
                     </div>
-                </div>
-                <div class="d-flex flex-column">
-                    <span class="mx-4 mt-4 primary-color fw-bold fs-3">
-                        {{ $mahasiswa }}
-                    </span>
-                    <span class="mx-4 mb-2 primary-color">
-                        Mahasiswa terdaftar didalam sistem
-                    </span>
+                    <h4 class="primary-color mb-0 fs-3">{{ $mahasiswa }}</h4>
+                    <small class="text-muted">Terdaftar dalam sistem</small>
                 </div>
             </div>
         </div>
-        <div class="col-12 col-lg-6 mb-2">
-            <div class="card bg-secondary-color">
-                <div class="d-flex flex-inline justify-content-between align-items-center">
-                    <span class="mx-4 my-2 primary-color fw-bold fs-4">
-                        Total Dosen
-                    </span>
-                    <div class="card mx-4 my-2 border border-0 bg-primary-color">
-                        <span class="mx-2 my-1 secondary-color fw-bold fs-2">
-                            <i class="fa-solid fa-person-chalkboard"></i>
+
+        <!-- Dosen Card -->
+        <div class="col-6 col-md-3">
+            <div class="card-dashboard bg-secondary-color h-100 shadow-sm border-0">
+                <div class="card-body p-3 text-center">
+                    <div class="d-flex align-items-center justify-content-center mb-2">
+                        <span class="primary-color fw-bold fs-5 me-2">Dosen</span>
+                        <span class="bg-primary-color p-2 rounded-circle">
+                            <i class="fa-solid fa-person-chalkboard text-white fs-4"></i>
                         </span>
                     </div>
-                </div>
-                <div class="d-flex flex-column">
-                    <span class="mx-4 mt-4 primary-color fw-bold fs-3">
-                        {{ $dosen }}
-                    </span>
-                    <span class="mx-4 mb-2 primary-color">
-                        Dosen terdaftar didalam sistem
-                    </span>
+                    <h4 class="primary-color mb-0 fs-3">{{ $dosen }}</h4>
+                    <small class="text-muted">Terdaftar dalam sistem</small>
                 </div>
             </div>
         </div>
-        <div class="col-12 col-lg-6 mb-2">
-            <div class="card bg-secondary-color">
-                <div class="d-flex flex-inline justify-content-between align-items-center">
-                    <span class="mx-4 my-2 primary-color fw-bold fs-4">
-                        Total Kelompok
-                    </span>
-                    <div class="card mx-4 my-2 border border-0 bg-primary-color">
-                        <span class="mx-2 my-1 secondary-color fw-bold fs-2">
-                            <i class="fa-solid fa-users-rectangle"></i>
+
+        <!-- Kelompok Card -->
+        <div class="col-6 col-md-3">
+            <div class="card-dashboard bg-secondary-color h-100 shadow-sm border-0">
+                <div class="card-body p-3 text-center">
+                    <div class="d-flex align-items-center justify-content-center mb-2">
+                        <span class="primary-color fw-bold fs-5 me-2">Kelompok</span>
+                        <span class="bg-primary-color p-2 rounded-circle">
+                            <i class="fa-solid fa-users-rectangle text-white fs-4"></i>
                         </span>
                     </div>
-                </div>
-                <div class="d-flex flex-column">
-                    <span class="mx-4 mt-4 primary-color fw-bold fs-3">
-                        {{ $kelompok }}
-                    </span>
-                    <span class="mx-4 mb-2 primary-color">
-                        Kelompok terdaftar didalam sistem
-                    </span>
+                    <h4 class="primary-color mb-0 fs-3">{{ $kelompok }}</h4>
+                    <small class="text-muted">Terdaftar dalam sistem</small>
                 </div>
             </div>
         </div>
-        <div class="col-12 col-lg-6 mb-2">
-            <div class="card bg-secondary-color">
-                <div class="d-flex flex-inline justify-content-between align-items-center">
-                    <span class="mx-4 my-2 primary-color fw-bold fs-4">
-                        Total Skema PKM
-                    </span>
-                    <div class="card mx-4 my-2 border border-0 bg-primary-color">
-                        <span class="mx-2 my-1 secondary-color fw-bold fs-2">
-                            <i class="fa-solid fa-book-open"></i>
+
+        <!-- Skema PKM Card -->
+        <div class="col-6 col-md-3">
+            <div class="card-dashboard bg-secondary-color h-100 shadow-sm border-0">
+                <div class="card-body p-3 text-center">
+                    <div class="d-flex align-items-center justify-content-center mb-2">
+                        <span class="primary-color fw-bold fs-5 me-2">Skema PKM</span>
+                        <span class="bg-primary-color p-2 rounded-circle">
+                            <i class="fa-solid fa-book-open text-white fs-4"></i>
                         </span>
                     </div>
-                </div>
-                <div class="d-flex flex-column">
-                    <span class="mx-4 mt-4 primary-color fw-bold fs-3">
-                        {{ $skema }}
-                    </span>
-                    <span class="mx-4 mb-2 primary-color">
-                        Skema PKM terdaftar didalam sistem
-                    </span>
+                    <h4 class="primary-color mb-0 fs-3">{{ $skema }}</h4>
+                    <small class="text-muted">Terdaftar dalam sistem</small>
                 </div>
             </div>
         </div>
     </div>
+
     <div class="card bg-secondary-color shadow-lg py-2 px-2">
         {!! $barChart->container() !!}
     </div>

@@ -66,5 +66,6 @@ class Kernel extends HttpKernel
         'role' => \App\Http\Middleware\RoleMiddleware::class,
         'cek.ketua' => \App\Http\Middleware\StatusMiddleware::class,
         'verify.kelompok' => \App\Http\Middleware\VerifyKelompok::class,
+        'verify.dosen' => \App\Http\Middleware\VerifyKelompokDosen::class,
     ];
 }

@@ -43,7 +43,7 @@ class uploadedProposalJudulByKelompokDosen
 
         // Step 5: Return chart
         return $this->chart->barChart()
-            ->setTitle('Jumlah Judul Fix per Skema')
+            ->setTitle('Jumlah Bimbingan per Skema')
             ->setSubtitle('Berdasarkan pembimbing: ' . Auth::user()->getNamaUserAttribute())
             ->addData('Jumlah Proposal', $dataProposal)
             ->setXAxis($labels);

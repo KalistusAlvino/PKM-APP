@@ -129,47 +129,100 @@
         </section>
         <section id="judul">
             <h3 class="fw-bold primary-color mx-2 my-2 pt-3">Pengajuan Ide</h3>
-            @forelse ($judul as $jd)
-                <div class="card bg-third-color h-100 my-3 rounded-4">
-                    <span class="mx-4 mt-3  fw-bold primary-color fs-5 d-flex align-items-center"><i
-                            class="fa-regular fa-lightbulb me-3"></i>Ide</span>
-                    <div class="row">
-                        <div class="col-12">
-                            <span
-                                class="mx-4 my-2 fw-normal primary-color fs-5 fst-italic text-wrap d-block text-justify border-bottom border-white border-2 pb-2">{{ $jd->detail_judul }}</span>
-                            <span class="mx-4 my-2 fw-normal primary-color fs-5 fst-italic d-block">Skema :
-                                {{ $jd->skema->nama_skema }}</span>
+            @forelse ($judul as $item)
+                <div class="card bg-primary-color h-100 my-3 rounded-4">
+                    <div class="card-body p-1">
+                        <div class="row">
+                            <div class="col-12 order-2 order-md-1">
+                                <span class="my-2 mx-3 fw-normal secondary-color fs-5 text-justify d-block">
+                                    {{ $item->detail_judul }}
+                                    @if ($item->updated_at != $item->created_at && $item->updated_at->diffInHours(now()) <= 24)
+                                        <span class="badge bg-primary ms-2">Diperbarui</span>
+                                    @else
+                                        <span class="badge bg-primary ms-2">Usulan Baru</span>
+                                    @endif
+                                    @foreach ($item->komentar as $km)
+                                        @if ($km->user && $km->user->isMahasiswa && $km->created_at->diffInHours(now()) <= 24)
+                                            <span class="badge bg-success ms-2">Komentar Baru</span>
+                                            @break
+                                        @endif
+                                    @endforeach
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <span class="mx-4 mt-1  fw-bold primary-color fs-5 d-flex align-items-center"><i
-                            class="fa-regular fa-message me-3"></i>Komentar</span>
-                    @forelse ($jd->komentar as $komentar)
-                        <div class="card h-100 mx-3 my-2 bg-secondary-color rounded-4 mb-3">
-                            <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center ">
-                                <span class="mx-4 mt-2  fw-bold primary-color fs-5 d-flex align-items-center"><i
-                                        class="fa-solid fa-graduation-cap me-3"></i>{{ $komentar->user->nama_komentator }}</span>
-                                <div class="d-flex flex-inline mx-2 my-2 align-items-center gap-2">
-                                    <span class="fw-normal text-secondary"><i class="fa-regular fa-calendar me-1 "></i>
-                                        {{ $komentar->created_at->diffForHumans() }}</span>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-start mx-3 mb-2 secondary-color gap-4">
+                                    <div class="skema d-flex gap-2 align-items-center">
+                                        <i class="fa-solid fa-book fst-italic"></i><span
+                                            class="fw-normal fst-italic d-block">{{ $item->skema->nama_skema }}</span>
+                                    </div>
+                                    <div class="user d-flex gap-2 align-items-center">
+                                        <i class="fa-regular fa-user fst-italic"></i>
+                                        {{ $item->user->getNamaUserAttribute() }}</span>
+                                    </div>
+                                    <div class="tanggal align-items-center">
+                                        <span class="fst-italic">{{ $item->created_at->format('d M Y') }}</span>
+                                    </div>
                                 </div>
                             </div>
-                            <span id="text-{{ $komentar->id }}"
-                                class="mx-4 my-1 fw-normal primary-color fs-5 fst-italic text-justify">
+                        </div>
+                    </div>
+                    <div class="card-footer mx-1 d-flex justify-content-between">
+                        @if ($item->Komentar->count() > 0)
+                            <span class="secondary-color">{{ $item->komentar->count() }} Komentar</span>
+                            <a data-bs-toggle="collapse" href="#collapseExample{{ $item->id }}" role="button"
+                                aria-expanded="false" aria-controls="collapseExample{{ $item->id }}">
+                                <i class="fa-solid fa-square-caret-down secondary-color"></i>
+                            </a>
+                        @else
+                            <span class="secondary-color">{{ $item->komentar->count() }} Komentar</span>
+                            <a data-bs-toggle="collapse" href="#collapseExample{{ $item->id }}" role="button"
+                                aria-expanded="false" aria-controls="collapseExample{{ $item->id }}">
+                                <i class="fa-solid fa-square-caret-down secondary-color"></i>
+                            </a>
+                        @endif
+                    </div>
+                    <div class="collapse mx-3 mb-2" id="collapseExample{{ $item->id }}">
+                        @forelse ($item->komentar->sortBy('created_at') as $km)
+                            <div
+                                class="card card-body p-2 mb-3 {{ $km->user->isDosenOrKoordinator ? 'bg-white' : 'bg-secondary' }}">
+                                <div class="d-flex flex-column flex-md-row justify-content-between">
+                                    <span
+                                        class="{{ $km->user->isDosenOrKoordinator ? 'primary-color' : 'text-white' }} fw-bold">{{ $km->user->getNamaUserAttribute() }}</span>
+                                    <div class="commentar flex-inline gap-2 align-items-center">
+                                        <span
+                                            class="{{ $km->user->isDosenOrKoordinator ? 'primary-color' : 'text-white' }}">{{ $km->created_at->format('d M Y') }}</span>
+                                    </div>
+                                </div>
                                 <span
-                                    class="fw-normal fs-5 fst-italic {{ $komentar->status == 'diterima' ? 'text-success' : ($komentar->status == 'perlu perbaikan' ? 'text-warning' : 'text-danger') }}">
-                                    {{ ucwords($komentar->status) }}
-                                </span> - {{ $komentar->komentar }}
-                            </span>
-                        </div>
-                    @empty
-                        <div class="card bg-secondary-color h-100 my-3 rounded-4 mx-4">
-                            <em class="mx-4 my-4 primary-color fw-bold">Belum komentar</em>
-                        </div>
-                    @endforelse
+                                    class="{{ $km->user->isDosenOrKoordinator ? 'primary-color' : 'text-white' }} pt-1 text-justify">
+                                    {{ $km->komentar }}
+                                </span>
+                            </div>
+                        @empty
+                            <div class="card card-body p-2">
+                                <span
+                                    class="primary-color d-flex align-items-center justify-content-center fst-italic">Belum
+                                    ada komentar
+                                    untuk usulan ide ini</span>
+                            </div>
+                        @endforelse
+                    </div>
                 </div>
             @empty
-                <div class="card bg-third-color h-100 my-3 rounded-4">
-                    <em class="mx-4 my-4 primary-color fw-bold">Belum ada ide atau judul</em>
+                <div class="card bg-primary-color h-100 my-3 rounded-4">
+                    <div class="card-body p-1">
+                        <div class="row">
+                            <div class="col-12 col-md-11">
+                                <span
+                                    class="my-2 mx-3 fw-normal secondary-color fs-5 text-justify d-block fst-italic">Belum
+                                    ada usulan
+                                    ide
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             @endforelse
         </section>

@@ -18,7 +18,6 @@ class Komentar extends Model
         'id_judul',
         'id_user',
         'komentar',
-        'status',
     ];
 
     public function user()

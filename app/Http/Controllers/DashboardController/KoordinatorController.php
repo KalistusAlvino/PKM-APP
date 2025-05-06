@@ -5,11 +5,13 @@ namespace App\Http\Controllers\DashboardController;
 use App\Charts\UploadedProposalBySkemaChart;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CariKetuaRequest;
+use App\Http\Requests\FilterKelompokRequest;
 use App\Http\Requests\KomentarRequest;
 use App\Http\Requests\UpdateKomentarRequest;
 use App\Models\Dosen;
 use App\Models\Judul;
 use App\Models\Kelompok;
+use App\Models\Komentar;
 use App\Models\Mahasiswa;
 use App\Models\SkemaPkm;
 use App\Repositories\Judul\JudulRepository;
@@ -38,14 +40,15 @@ class KoordinatorController extends Controller
         $kelompok = Kelompok::count();
         $skema = SkemaPkm::count();
         $key = 'dashboard';
-        return view('dashboard.koordinator.dashboard',compact('key','barChart','mahasiswa','dosen','kelompok','skema'));
+        return view('dashboard.koordinator.dashboard', compact('key', 'barChart', 'mahasiswa', 'dosen', 'kelompok', 'skema'));
     }
-    public function getDaftarKelompok(CariKetuaRequest $request)
+    public function getDaftarKelompok(CariKetuaRequest $request, FilterKelompokRequest $filterKelompokRequest)
     {
+        $validateFilter = $filterKelompokRequest->validated();
         $validate = $request->validated();
-        $daftarKelompok = $this->kelompokDataRepository->getAllKelompok($validate);
+        $daftarKelompok = $this->kelompokDataRepository->getAllKelompok($validate, $validateFilter);
         $key = 'daftar_kelompok';
-        return view('dashboard.koordinator.kelompok', compact('daftarKelompok','key'));
+        return view('dashboard.koordinator.kelompok', compact('daftarKelompok', 'key'));
     }
 
     public function getDetailKelompok($id)
@@ -57,9 +60,8 @@ class KoordinatorController extends Controller
             $proposal = $this->judulRepository->getProposal($id);
             $hasDospem = $this->validationRepository->hasDospem($informasiKelompok);
             $hasPendingInvite = $this->validationRepository->hasPendingInvite($id);
-            return view('dashboard.koordinator.detailkelompok',compact('informasiKelompok','judul','key','proposal','hasDospem','hasPendingInvite'));
-        }
-        catch (Exception $e) {
+            return view('dashboard.koordinator.detailkelompok', compact('informasiKelompok', 'judul', 'key', 'proposal', 'hasDospem', 'hasPendingInvite'));
+        } catch (Exception $e) {
             return redirect()->route('koordinator.daftar-kelompok')->withErrors(['error' => $e->getMessage()]);
         }
     }
@@ -86,14 +88,20 @@ class KoordinatorController extends Controller
         }
     }
 
-    public function updateKomentar(UpdateKomentarRequest $request,$id_komentar, $id_kelompok) {
+    public function updateKomentar(UpdateKomentarRequest $request, $id_kelompok, $id_komentar)
+    {
         try {
             $validated = $request->validated();
             $this->judulRepository->updateKomentar($validated, $id_komentar);
             return redirect()->route('koordinator.detail-kelompok', $id_kelompok)->with('success', 'Berhasil melakukan update komentar');
-        }
-        catch (Exception $e){
+        } catch (Exception $e) {
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
+    }
+    public function detailKomentar($id_komentar)
+    {
+        $komentar = Komentar::find($id_komentar);
+
+        return response()->json($komentar);
     }
 }

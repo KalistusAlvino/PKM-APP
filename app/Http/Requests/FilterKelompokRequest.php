@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateKomentarRequest extends FormRequest
+class FilterKelompokRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,7 @@ class UpdateKomentarRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'komentar' => 'required|string',
+            'filter_judul' => 'nullable|in:true,false',
         ];
     }
 }

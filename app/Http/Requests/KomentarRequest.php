@@ -23,7 +23,6 @@ class KomentarRequest extends FormRequest
     {
         return [
             'komentar' => 'required|string',
-            'status' => 'required',
         ];
     }
 }

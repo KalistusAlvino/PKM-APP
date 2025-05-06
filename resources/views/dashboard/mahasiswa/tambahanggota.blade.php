@@ -49,50 +49,53 @@
                 </button>
             </div>
         </div>
-
-        <div class="row mx-1">
-            @forelse ($mahasiswa as $mhs)
-                <div class="col-12 col-lg-6">
-                    <form id="form-{{ $mhs['username'] }}" action="{{ route('storeOldAnggota', $id_kelompok) }}"
-                        method="POST">
-                        @csrf
-                        <div class="card my-2">
-                            <div class="card-header bg-primary-color">
-                                <div class="d-flex flex-column mx-4 my-2 gap-3">
-                                    <span class="fw-bold secondary-color fs-5">{{ $mhs['nama'] }} -
-                                        {{ $mhs['username'] }}</span>
-                                    <span class="secondary-color fs-5">{{ $mhs['prodi'] }}</span>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="mx-4 my-2">
-                                    <span class="fw-bold primary-color fs-5">Whatsapp Number <i
-                                            class="fa-brands fa-whatsapp"></i> :
-                                    </span>
-                                    <div class="d-flex flex-row gap-2">
-                                        <div class="card my-2 rounded-4 bg-primary-color">
-                                            <span class="my-2 mx-2 secondary-color">{{ $mhs['no_wa'] }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <input type="text" value="{{ $mhs['username'] }}" name="username" hidden>
-                            <div class="card-footer bg-primary-color d-flex justify-content-center">
-                                <button type="button"
-                                    onclick="confirmAdd('{{ $mhs['username'] }}', '{{ $mhs['nama'] }}')"
-                                    class="btn bg-secondary-color mx-4 my-2">
-                                    <i class="fa-solid fa-user-plus primary-color"></i> Tambah
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            @empty
-                <div class="card bg-third-color my-3 mx-1">
-                    <span class="primary-color fw-bold mx-2 my-2 fst-italic">Belum ada atau tidak ada
-                        Mahasiswa</span>
-                </div>
-            @endforelse
+        <div class="table-responsive mx-2">
+            <table class="table align-middle text-center">
+                <thead>
+                    <tr>
+                        <th class="bg-primary-color secondary-color">Nama</th>
+                        <th class="bg-primary-color secondary-color">Username</th>
+                        <th class="bg-primary-color secondary-color">Prodi</th>
+                        <th class="bg-primary-color secondary-color">Whatsapp Number</th>
+                        <th class="bg-primary-color secondary-color">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($mahasiswa as $mhs)
+                        <tr>
+                            <td>{{ $mhs->name }}</td>
+                            <td>{{ $mhs->user->username ?? null }}</td>
+                            <td>{{ $mhs->prodi }}</td>
+                            <td>
+                                <span class="badge bg-primary-color secondary-color rounded-pill">
+                                    {{ $mhs->no_wa }}
+                                </span>
+                            </td>
+                            <td>
+                                <form id="form-{{ $mhs['username'] }}" action="{{ route('storeOldAnggota', $id_kelompok) }}"
+                                    method="POST">
+                                    @csrf
+                                    <input type="text" value="{{ $mhs['username'] }}" name="username" hidden>
+                                    <button type="button"
+                                        onclick="confirmAdd('{{ $mhs['username'] }}', '{{ $mhs['nama'] }}')"
+                                        class="btn btn-sm bg-secondary-color">
+                                        <i class="fa-solid fa-user-plus primary-color"></i> Tambah
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center bg-third-color">
+                                <span class="primary-color fw-bold fst-italic">Belum ada atau tidak ada Mahasiswa</span>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex justify-content-center mt-4">
+            {{ $mahasiswa->links() }}
         </div>
     @endif
     @include('dashboard.mahasiswa.modalkelompok.tambah-anggota-modal')

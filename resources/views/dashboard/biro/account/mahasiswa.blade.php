@@ -25,50 +25,50 @@
             </form>
         </div>
     </div>
-
-    <div class="row">
-        @forelse ($mahasiswa as $mhs)
-            <div class="col-12 col-lg-6">
-                <div class="card my-2">
-                    <div class="card-header bg-primary-color">
-                        <div class="d-flex flex-column mx-4 my-2 gap-3">
-                            <span class="fw-bold secondary-color fs-5">{{ $mhs->name }} -
-                                {{ $mhs->user->username }}</span>
-                            <span class="secondary-color fs-5">{{ $mhs->prodi }}</span>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="mx-4 my-2">
-                            <span class="fw-bold primary-color fs-5">Whatsapp Number <i class="fa-brands fa-whatsapp"></i> :
-                            </span>
-                            <div class="d-flex flex-row gap-2">
-                                <div class="card my-2 rounded-4 bg-primary-color">
-                                    <span class="my-2 mx-2 secondary-color">{{ $mhs->no_wa }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <input type="text" value="{{ $mhs['username'] }}" name="username" hidden>
-                    <div class="card-footer bg-primary-color d-flex justify-content-center">
-                        <button type="button" class="btn bg-secondary-color mx-4 my-2" data-bs-toggle="modal"
-                            data-bs-target="#ganti-password-mhs" data-id="{{ $mhs->user->username }}"
-                            data-name="{{ $mhs->name }}">
-                            <i class="fa-solid fa-user-lock primary-color"></i> <span class="primary-color"> Ganti
-                                password</span>
-                        </button>
-                        <button type="button" onclick="confirmDelete('{{ $mhs->name }}','{{ route('biro.delete-account', $mhs->userId) }}')"
-                            class="btn bg-secondary-color mx-4 my-2">
-                            <i class="fa-solid fa-trash-can primary-color"></i> Delete akun
-                        </button>
-                    </div>
-                </div>
-            </div>
-        @empty
-            <div class="card bg-third-color my-3 mx-1">
-                <span class="primary-color fw-bold mx-2 my-2 fst-italic">Belum ada atau tidak ada
-                    Mahasiswa</span>
-            </div>
-        @endforelse
+    <div class="mx-2 my-2">
+        <div class="table-responsive">
+            <table class="table table-striped bg-third-color my-3 align-middle text-center">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>Username</th>
+                        <th>Prodi</th>
+                        <th>Whatsapp Number</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($mahasiswa as $index => $mhs)
+                        <tr>
+                            <td>{{ $mahasiswa->firstItem() + $index }}</td>
+                            <td>{{ $mhs->name }}</td>
+                            <td>{{ $mhs->user->username }}</td>
+                            <td>{{ $mhs->prodi }}</td>
+                            <td>{{ $mhs->no_wa }}</td>
+                            <td>
+                                <button type="button" class="btn bg-secondary-color mx-1" data-bs-toggle="modal"
+                                    data-bs-target="#ganti-password-mhs" data-id="{{ $mhs->user->username }}"
+                                    data-name="{{ $mhs->name }}">
+                                    <i class="fa-solid fa-user-lock primary-color"></i> Ganti password
+                                </button>
+                                <button type="button" onclick="confirmDelete('{{ $mhs->name }}','{{ route('biro.delete-account', $mhs->userId) }}')"
+                                    class="btn bg-secondary-color mx-1">
+                                    <i class="fa-solid fa-trash-can primary-color"></i> Delete akun
+                                </button>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" class="text-center primary-color fw-bold fst-italic">Belum ada atau tidak ada Mahasiswa</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex justify-content-center mt-4">
+            {{ $mahasiswa->links() }}
+        </div>
     </div>
 
     @include('dashboard.biro.account.modalmahasiswa.ganti-password-modal')

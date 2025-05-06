@@ -112,225 +112,130 @@
         </section>
         <section id="judul">
             <h3 class="fw-bold primary-color mx-2 my-2 pt-3">Pengajuan Ide</h3>
-            @forelse ($judul as $jd)
-                <div class="card bg-third-color h-100 my-3 rounded-4">
-                    <span class="mx-4 mt-3  fw-bold primary-color fs-5 d-flex align-items-center"><i
-                            class="fa-regular fa-lightbulb me-3"></i>Ide</span>
-                    <div class="row">
-                        <div class="col-12">
-                            <span
-                                class="mx-4 my-2 fw-normal primary-color fs-5 fst-italic text-wrap d-block text-justify border-bottom border-white border-2 pb-2">{{ $jd->detail_judul }}</span>
-                            <span class="mx-4 my-2 fw-normal primary-color fs-5 fst-italic d-block">Skema :
-                                {{ $jd->skema->nama_skema }}</span>
+            @forelse ($judul as $item)
+                <div class="card bg-primary-color h-100 my-3 rounded-4">
+                    <div class="card-body p-1">
+                        <div class="row">
+                            <div class="col-12 order-2 order-md-1">
+                                <span class="my-2 mx-3 fw-normal secondary-color fs-5 text-justify d-block">
+                                    {{ $item->detail_judul }}
+                                    @if ($item->updated_at != $item->created_at && $item->updated_at->diffInHours(now()) <= 24)
+                                        <span class="badge bg-primary ms-2">Diperbarui</span>
+                                    @else
+                                        <span class="badge bg-primary ms-2">Usulan Baru</span>
+                                    @endif
+                                    @foreach ($item->komentar as $km)
+                                        @if ($km->user && $km->user->isMahasiswa && $km->created_at->diffInHours(now()) <= 24)
+                                            <span class="badge bg-success ms-2">Komentar Baru</span>
+                                            @break
+                                        @endif
+                                    @endforeach
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-start mx-3 mb-2 secondary-color gap-4">
+                                    <div class="skema d-flex gap-2 align-items-center">
+                                        <i class="fa-solid fa-book fst-italic"></i><span
+                                            class="fw-normal fst-italic d-block">{{ $item->skema->nama_skema }}</span>
+                                    </div>
+                                    <div class="user d-flex gap-2 align-items-center">
+                                        <i class="fa-regular fa-user fst-italic"></i>
+                                        {{ $item->user->getNamaUserAttribute() }}</span>
+                                    </div>
+                                    <div class="tanggal align-items-center">
+                                        <span class="fst-italic">{{ $item->created_at->format('d M Y') }}</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <span class="mx-4 mt-1  fw-bold primary-color fs-5 d-flex align-items-center"><i
-                            class="fa-regular fa-message me-3"></i>Komentar</span>
-                    @forelse ($jd->komentar as $komentar)
-                        <div class="card h-100 mx-3 my-2 bg-secondary-color rounded-4 mb-3">
-                            <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center ">
-                                <span class="mx-4 mt-2  fw-bold primary-color fs-5 d-flex align-items-center"><i
-                                        class="fa-solid fa-graduation-cap me-3"></i>{{ $komentar->user->nama_komentator }}</span>
-                                <div class="d-flex flex-inline mx-2 my-2 align-items-center gap-2">
-                                    <span class="fw-normal text-secondary"><i class="fa-regular fa-calendar me-1 "></i>
-                                        {{ $komentar->created_at->diffForHumans() }}</span>
-                                    @if ($komentar->id_user == Auth::user()->id)
-                                        <button type="button" class="btn popover-button" data-id="{{ $komentar->id }}">
-                                            <i class="fa-solid fa-ellipsis-vertical"></i>
-                                        </button>
-                                        <div id="popover-content-{{ $komentar->id }}" class="d-none">
-                                            <div class="d-flex flex-column align-items-start">
-                                                <button class="btn btn-sm editKomentarBtn" data-id="{{ $komentar->id }}"
-                                                    data-bs-toggle="modal">Edit</button>
-                                                <button class="btn btn-sm"
-                                                    onclick="confirmDeleteKomentar('{{ route('koordinator.delete-komentar', [$informasiKelompok['id_kelompok'], $komentar->id]) }}')">Delete</button>
-                                            </div>
-                                        </div>
-                                    @endif
+                    <div class="card-footer mx-1 d-flex justify-content-between">
+                        @if ($item->Komentar->count() > 0)
+                            <span class="secondary-color">{{ $item->komentar->count() }} Komentar</span>
+                            <a data-bs-toggle="collapse" href="#collapseExample{{ $item->id }}" role="button"
+                                aria-expanded="false" aria-controls="collapseExample{{ $item->id }}">
+                                <i class="fa-solid fa-square-caret-down secondary-color"></i>
+                            </a>
+                        @else
+                            <span class="secondary-color">{{ $item->komentar->count() }} Komentar</span>
+                            <a data-bs-toggle="collapse" href="#collapseExample{{ $item->id }}" role="button"
+                                aria-expanded="false" aria-controls="collapseExample{{ $item->id }}">
+                                <i class="fa-solid fa-square-caret-down secondary-color"></i>
+                            </a>
+                        @endif
+                    </div>
+                    <div class="collapse mx-3 mb-2" id="collapseExample{{ $item->id }}">
+                        @forelse ($item->komentar->sortBy('created_at') as $km)
+                            <div
+                                class="card card-body p-2 mb-3 {{ $km->user->isDosenOrKoordinator ? 'bg-white' : 'bg-secondary' }}">
+                                <div class="d-flex flex-column flex-md-row justify-content-between">
+                                    <span
+                                        class="{{ $km->user->isDosenOrKoordinator ? 'primary-color' : 'text-white' }} fw-bold">{{ $km->user->getNamaUserAttribute() }}</span>
+                                    <div class="commentar flex-inline gap-2 align-items-center">
+                                        <span
+                                            class="{{ $km->user->isDosenOrKoordinator ? 'primary-color' : 'text-white' }}">{{ $km->created_at->format('d M Y') }}</span>
+                                        @if ($km->id_user == Auth::user()->id)
+                                            <button class="btn btn-primary btn-sm editKomentar" data-bs-toggle="modal"
+                                                data-bs-target="#editKomentarModal" data-id="{{ $km->id }}">
+                                                <i class="fa-solid fa-pen-to-square secondary-color"></i>
+                                            </button>
+                                            <button class="btn btn-danger btn-sm"
+                                                onclick="confirmDeleteKomentar('{{ route('koordinator.delete-komentar', [$informasiKelompok['id_kelompok'], $km->id]) }}')">
+                                                <i class="fa-solid fa-trash-can secondary-color"></i>
+                                            </button>
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
-                            <span id="text-{{ $komentar->id }}"
-                                class="mx-4 my-1 fw-normal primary-color fs-5 fst-italic text-justify">
                                 <span
-                                    class="fw-normal fs-5 fst-italic {{ $komentar->status == 'diterima' ? 'text-success' : ($komentar->status == 'perlu perbaikan' ? 'text-warning' : 'text-danger') }}">
-                                    {{ ucwords($komentar->status) }}
-                                </span> - {{ $komentar->komentar }}
-                            </span>
-
-                            <!-- Form Edit (disembunyikan awalnya) -->
-                            <div id="form-{{ $komentar->id }}" class="edit-form d-none mx-3">
-                                <form
-                                    action="{{ route('koordinator.update-komentar', [$komentar->id, $jd->id_kelompok]) }}"
-                                    method="post">
-                                    @method('PUT')
-                                    @csrf
-                                    <div class="komentar d-flex flex-column flex-md-row my-2 gap-2 align-items-center">
-                                        <input type="text" class="form-control" name="komentar"
-                                            id="input-{{ $komentar->id }}" value="{{ $komentar->komentar }}" required>
-
-                                        <!-- Radio button -->
-                                        <div class="radio d-flex gap-2 align-items-center">
-                                            <input type="radio" class="btn-check" name="status"
-                                                id="options-checked-{{ $komentar->id }}" autocomplete="off"
-                                                value="diterima" {{ $komentar->status == 'diterima' ? 'checked' : '' }}
-                                                required>
-                                            <label class="btn border border-success"
-                                                for="options-checked-{{ $komentar->id }}"><span class="text-success"><i
-                                                        class="fa-regular fa-thumbs-up"></i></span></label>
-
-                                            <input type="radio" class="btn-check" name="status"
-                                                id="options-radio-{{ $komentar->id }}" value="perlu perbaikan"
-                                                {{ $komentar->status == 'perlu perbaikan' ? 'checked' : '' }}
-                                                autocomplete="off">
-                                            <label class="btn border border-danger"
-                                                for="options-radio-{{ $komentar->id }}"><span class="text-danger"><i
-                                                        class="fa-regular fa-thumbs-down"></i></span></label>
-                                        </div>
-
-                                        <button type="submit" class="btn border-primary d-flex align-items-center"><i
-                                                class="fa-regular fa-paper-plane text-primary me-1"></i><span
-                                                class="text-primary">Send</span></button>
-                                        <button type="button" class="btn btn-danger cancelEdit"
-                                            data-id="{{ $komentar->id }}">
-                                            Batal
-                                        </button>
-                                    </div>
-                                </form>
+                                    class="{{ $km->user->isDosenOrKoordinator ? 'primary-color' : 'text-white' }} pt-1 text-justify">
+                                    {{ $km->komentar }}
+                                </span>
                             </div>
-                        </div>
-                    @empty
-                        <div class="card bg-secondary-color h-100 my-3 rounded-4 mx-4">
-                            <em class="mx-4 my-4 primary-color fw-bold">Belum komentar</em>
-                        </div>
-                    @endforelse
-                    <div class="card-footer">
-                        <div class="mb-3 mx-3">
-                            <label for="exampleFormControlInput1" class="form-label fw-bold primary-color fs-5">Tambah
-                                Komentar</label>
-                            <form action="{{ route('koordinator.post-komentar', [$jd->id, $jd->id_kelompok]) }}"
-                                method="post">
-                                @csrf
-                                <div class="komentar d-flex flex-column flex-md-row my-2 gap-2 align-items-center">
-                                    <input type="text" class="form-control" id="exampleFormControlInput1"
-                                        placeholder="Tulis komentar..." name="komentar" required>
-                                    <div class="radio d-flex gap-2 align-items-center">
-                                        <input type="radio" class="btn-check" name="status"
-                                            id="options-checked-{{ $jd->id }}" autocomplete="off" value="diterima"
-                                            required>
-                                        <label class="btn border border-success"
-                                            for="options-checked-{{ $jd->id }}"><span class="text-success"><i
-                                                    class="fa-regular fa-thumbs-up"></i></span></label>
-                                        <input type="radio" class="btn-check" name="status"
-                                            id="options-radio-{{ $jd->id }}" value="perlu perbaikan"
-                                            autocomplete="off">
-                                        <label class="btn border border-danger"
-                                            for="options-radio-{{ $jd->id }}"><span class="text-danger"><i
-                                                    class="fa-regular fa-thumbs-down"></i></span></label required>
-                                        <button type="submit" class="btn border-primary d-flex align-items-center"><i
-                                                class="fa-regular fa-paper-plane text-primary me-1"></i><span
-                                                class="text-primary">Send</span></button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+                        @empty
+                            <div class="card card-body p-2">
+                                <span
+                                    class="primary-color d-flex align-items-center justify-content-center fst-italic">Belum
+                                    ada komentar
+                                    untuk usulan ide ini</span>
+                            </div>
+                        @endforelse
+                        <form action="{{ route('koordinator.post-komentar', [$item->id, $item->id_kelompok]) }}"
+                            method="POST">
+                            @csrf
+                            <div class="input-group mb-3 mt-3">
+                                <input type="text" class="form-control" name="komentar"
+                                    placeholder="Tambahkan komentar terkait usulan ide">
+                                <button type="submit" class="btn btn-primary"><i
+                                        class="fa-solid fa-paper-plane me-2"></i>Kirim</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             @empty
-                <div class="card bg-third-color h-100 my-3 rounded-4">
-                    <em class="mx-4 my-4 primary-color fw-bold">Belum ada ide atau judul</em>
+                <div class="card bg-primary-color h-100 my-3 rounded-4">
+                    <div class="card-body p-1">
+                        <div class="row">
+                            <div class="col-12 col-md-11">
+                                <span
+                                    class="my-2 mx-3 fw-normal secondary-color fs-5 text-justify d-block fst-italic">Belum
+                                    ada usulan
+                                    ide
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             @endforelse
         </section>
     </div>
+    @include('dashboard.koordinator.modal.editkomentar')
     <!-- Form Untuk Delete -->
     <form id="delete-form" method="POST" style="display: none;">
         @csrf
         @method('DELETE')
     </form>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            function updateButtonColors(radio) {
-                let group = radio.closest(".radio"); // Ambil parent div radio group
-                let labels = group.querySelectorAll("input.btn-check + label"); // Cari label di dalam grup ini
-
-                // Reset semua tombol dalam grup
-                labels.forEach(label => {
-                    label.classList.remove("bg-success", "bg-danger", "text-white");
-                    label.querySelector("span").classList.remove("text-white");
-                });
-
-                // Tambahkan warna ke tombol yang dipilih
-                let selectedLabel = group.querySelector(`label[for="${radio.id}"]`);
-                if (radio.value === "diterima") {
-                    selectedLabel.classList.add("bg-success", "text-white");
-                    selectedLabel.querySelector("span").classList.add("text-white");
-                } else {
-                    selectedLabel.classList.add("bg-danger", "text-white");
-                    selectedLabel.querySelector("span").classList.add("text-white");
-                }
-            }
-
-            // Terapkan warna saat halaman dimuat
-            document.querySelectorAll(".btn-check:checked").forEach(updateButtonColors);
-
-            // Tambahkan event listener ke setiap radio button
-            document.querySelectorAll(".btn-check").forEach(function(radio) {
-                radio.addEventListener("change", function() {
-                    updateButtonColors(this);
-                });
-            });
-        });
-    </script>
-    <!-- Popover script -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Ambil semua tombol popover
-            var popoverButtons = document.querySelectorAll(".popover-button");
-
-            popoverButtons.forEach(function(button) {
-                // Ambil ID komentar dari atribut data
-                var komentarId = button.getAttribute("data-id");
-                var popoverContent = document.querySelector("#popover-content-" + komentarId);
-
-                // Buat popover untuk tiap tombol
-                new bootstrap.Popover(button, {
-                    html: true,
-                    sanitize: false,
-                    content: function() {
-                        return popoverContent.innerHTML;
-                    },
-                    placement: "left"
-                });
-            });
-
-            // Delegasi event untuk tombol edit
-            document.body.addEventListener("click", function(event) {
-                if (event.target.classList.contains("editKomentarBtn")) {
-                    let id = event.target.getAttribute("data-id");
-                    document.getElementById(`text-${id}`).classList.add("d-none");
-                    document.getElementById(`form-${id}`).classList.remove("d-none");
-                }
-
-                if (event.target.classList.contains("cancelEdit")) {
-                    let id = event.target.getAttribute("data-id");
-                    document.getElementById(`text-${id}`).classList.remove("d-none");
-                    document.getElementById(`form-${id}`).classList.add("d-none");
-                }
-            });
-
-            // Menutup popover jika klik di luar
-            document.addEventListener("click", function(event) {
-                popoverButtons.forEach(function(button) {
-                    const popoverInstance = bootstrap.Popover.getInstance(button);
-                    if (popoverInstance && !button.contains(event.target)) {
-                        popoverInstance.hide();
-                    }
-                });
-            });
-        });
-    </script>
-
     <script>
         function confirmDeleteKomentar(url) {
             Swal.fire({

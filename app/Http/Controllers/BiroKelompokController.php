@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CariKetuaRequest;
+use App\Http\Requests\FilterKelompokRequest;
 use App\Models\Kelompok;
 use App\Models\MahasiswaKelompok;
 use App\Repositories\Biro\KelolaKelompokRepository;
@@ -24,10 +25,11 @@ class BiroKelompokController extends Controller
         $this->validationRepository = $validationRepository;
         $this->kelolaKelompokRepository = $kelolaKelompokRepository;
     }
-    public function getKelompokPage(CariKetuaRequest $request){
+    public function getKelompokPage(CariKetuaRequest $request, FilterKelompokRequest $requestFilter){
+        $validatedFilter = $requestFilter->validated();
         $validated = $request->validated();
         $key = 'daftar-kelompok';
-        $daftarKelompok = $this->kelompokDataRepository->getAllKelompok($validated);
+        $daftarKelompok = $this->kelompokDataRepository->getAllKelompok($validated, $validatedFilter);
         return view('dashboard.biro.kelompok.daftar-kelompok',compact('key','daftarKelompok','validated'));
     }
 

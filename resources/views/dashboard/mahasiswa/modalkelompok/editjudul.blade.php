@@ -6,7 +6,7 @@
                 @csrf
                 @method('PUT')
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5 primary-color fw-bold" id="exampleModalLabel">Edit Judul atau Ide</h1>
+                    <h1 class="modal-title fs-5 primary-color fw-bold" id="exampleModalLabel">Edit usulan Ide</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body ">
@@ -33,7 +33,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn bg-primary-color"><span
-                            class="secondary-color">Tambah</span></button>
+                            class="secondary-color">Edit</span></button>
                 </div>
             </form>
         </div>
