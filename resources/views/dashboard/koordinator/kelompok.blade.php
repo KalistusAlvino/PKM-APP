@@ -22,11 +22,11 @@
         <div class="col-12 col-md-6 col-lg-4">
             <form id="filterForm" method="GET" action="{{ route('koordinator.daftar-kelompok') }}">
                 <div class="input-group mb-3">
-                    <span class="input-group-text">Filter Kelompok</span>
+                    <span class="input-group-text"><i class="fa-solid fa-filter"></i></span>
                     <select class="form-select" name="filter_judul" aria-label="Default select example" id="filterSelect">
                         <option value=""
                             {{ request('filter_judul') === null || request('filter_judul') === '' ? 'selected' : '' }}>
-                            Filter berdasarkan</option>
+                            Filter</option>
                         <option value="true" {{ request('filter_judul') === 'true' ? 'selected' : '' }}>Judul valid
                         </option>
                         <option value="false" {{ request('filter_judul') === 'false' ? 'selected' : '' }}>Belum ada judul

@@ -63,6 +63,7 @@ class KetuaRepository implements KetuaRepositoryInterface
             'kelompokId' => $idKelompok,
             'mahasiswaId' => $mahasiswa->id,
             'status_mahasiswa' => 'anggota',
+            'tahun_daftar' => date('Y')
         ]);
         return new RegisterAnggota($user, $mahasiswa, $mahasiswaKelompok);
     }
@@ -70,7 +71,7 @@ class KetuaRepository implements KetuaRepositoryInterface
     {
 
         $users = User::where('username', $data['username'])->with('mahasiswa')->firstOrFail();
-        $alreadyAnggota = $users->mahasiswa->mahasiswaKelompok->count();
+        $alreadyAnggota = $users->mahasiswa->mahasiswaKelompok->where('tahun_daftar',date('Y'))->count();
         $anggota = MahasiswaKelompok::where('kelompokId', $idKelompok)->where('status_mahasiswa', 'anggota')->count();
         if ($anggota >= 5) {
             throw new \Exception('Kelompok sudah memiliki anggota maksimal.');
@@ -81,7 +82,8 @@ class KetuaRepository implements KetuaRepositoryInterface
         return MahasiswaKelompok::create([
             'kelompokId' => $idKelompok,
             'mahasiswaId' => $users->mahasiswa->id,
-            'status_mahasiswa' => 'anggota'
+            'status_mahasiswa' => 'anggota',
+            'tahun_daftar' => date('Y'),
         ]);
     }
 

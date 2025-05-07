@@ -21,8 +21,7 @@ class AnggotaController extends Controller
     }
     public function getDaftarKetuaPage()
     {
-        $userId = Auth::user()->mahasiswa->id;
-        $alreadyKetua = MahasiswaKelompok::where('mahasiswaId', $userId)->where('status_mahasiswa','ketua')->exists();
+        $alreadyKetua = MahasiswaKelompok::where('mahasiswaId', Auth::user()->mahasiswa->id)->where('status_mahasiswa','ketua')->where('tahun_daftar',date('Y'))->exists();
         $key = 'mendaftar';
         return view('dashboard.mahasiswa.daftar-ketua',compact('alreadyKetua','key'));
     }

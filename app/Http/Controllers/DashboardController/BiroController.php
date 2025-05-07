@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\DashboardController;
 
+use App\Charts\IdeDanJudulChart;
 use App\Charts\UploadedProposalBySkemaChart;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChangePasswordByBiroRequest;
@@ -24,15 +25,16 @@ class BiroController extends Controller
     {
         $this->akunRepository = $akunRepository;
     }
-    public function getDashboardBiro(UploadedProposalBySkemaChart $chart)
+    public function getDashboardBiro(UploadedProposalBySkemaChart $chart,IdeDanJudulChart $ideDanJudulChart)
     {
         $barChart = $chart->build();
+        $pieChart = $ideDanJudulChart->build();
         $mahasiswa = Mahasiswa::count();
         $dosen = Dosen::count();
         $kelompok = Kelompok::count();
         $skema = SkemaPkm::count();
         $key = 'dashboard';
-        return view('dashboard.biro.dashboard', compact('key', 'barChart', 'mahasiswa', 'dosen', 'kelompok', 'skema'));
+        return view('dashboard.biro.dashboard', compact('key', 'barChart', 'mahasiswa', 'dosen', 'kelompok', 'skema','pieChart'));
     }
 
     public function getDosenAccountPage()

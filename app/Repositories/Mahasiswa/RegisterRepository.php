@@ -7,6 +7,7 @@ use App\Models\MahasiswaKelompok;
 use App\Models\RegisterMahasiswa;
 use App\Models\User;
 use App\Models\Mahasiswa;
+use Illuminate\Support\Carbon;
 
 class RegisterRepository implements RegisterRepositoryInterface
 {
@@ -32,6 +33,7 @@ class RegisterRepository implements RegisterRepositoryInterface
             'kelompokId' => $kelompok->id,
             'mahasiswaId' => $mahasiswa->id,
             'status_mahasiswa' => 'ketua',
+            'tahun_daftar' => date('Y'),
         ]);
 
         return new RegisterMahasiswa($user, $mahasiswa, $kelompok, $mahasiswaKelompok);

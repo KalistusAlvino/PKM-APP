@@ -55,6 +55,7 @@ class MahasiswaSeeder extends Seeder
                 'kelompokId' => $kelompok->id,
                 'mahasiswaId' => $mahasiswa->id,
                 'status_mahasiswa' => 'ketua',
+                'tahun_daftar' => 2024
             ]);
         }
     }

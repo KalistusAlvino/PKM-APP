@@ -72,12 +72,12 @@
                                 </span>
                             </td>
                             <td>
-                                <form id="form-{{ $mhs['username'] }}" action="{{ route('storeOldAnggota', $id_kelompok) }}"
+                                <form id="form-{{ $mhs->user->username }}" action="{{ route('storeOldAnggota', $id_kelompok) }}"
                                     method="POST">
                                     @csrf
-                                    <input type="text" value="{{ $mhs['username'] }}" name="username" hidden>
+                                    <input type="text" value="{{ $mhs->user->username }}" name="username" hidden>
                                     <button type="button"
-                                        onclick="confirmAdd('{{ $mhs['username'] }}', '{{ $mhs['nama'] }}')"
+                                        onclick="confirmAdd('{{ $mhs->user->username }}', '{{ $mhs->name }}')"
                                         class="btn btn-sm bg-secondary-color">
                                         <i class="fa-solid fa-user-plus primary-color"></i> Tambah
                                     </button>

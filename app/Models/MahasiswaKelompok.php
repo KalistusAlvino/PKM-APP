@@ -18,6 +18,7 @@ class MahasiswaKelompok extends Model
         'kelompokId',
         'mahasiswaId',
         'status_mahasiswa',
+        'tahun_daftar'
     ];
 
     public function mahasiswa()

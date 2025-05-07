@@ -80,7 +80,7 @@ class KelompokDataRepository implements KelompokDataRepositoryInterface
         }
         return $informasiKelompok;
     }
-    public function getKelompokByAuthDosen(array $data): array
+    public function getKelompokByAuthDosen(array $data): LengthAwarePaginator
     {
         $dosen = Dosen::where('userId', Auth::id())->first();
 
@@ -94,30 +94,28 @@ class KelompokDataRepository implements KelompokDataRepositoryInterface
                         });
                 });
             })
-            ->get()
-            ->map(function ($kelompok) {
-                $ketua = $kelompok->mahasiswaKelompok
-                    ->where('status_mahasiswa', 'ketua')
-                    ->first();
+            ->paginate(10); // Lakukan paginasi langsung
 
-                return [
-                    'id_kelompok' => $kelompok->id,
-                    'ketua' => $ketua?->mahasiswa->name ?? 'Tidak ada ketua',
-                    'skema' => $kelompok->judul->where('is_proposal', true)->first()?->skema->nama_skema ?? 'Proses Bimbingan',
-                    'total_anggota' => $kelompok->mahasiswaKelompok->count(),
-                    'anggota' => $kelompok->mahasiswaKelompok
-                        ->where('status_mahasiswa', 'anggota')
-                        ->map(function ($item) {
-                            return [
-                                'nama' => $item->mahasiswa->name,
-                                'status' => $item->status_mahasiswa,
-                            ];
-                        })->values(),
-                ];
-            });
-
-        return $kelompokList->toArray();
+        // Memetakan hasil paginasi
+        return $kelompokList->setCollection($kelompokList->getCollection()->map(function ($kelompok) {
+            $ketua = $kelompok->mahasiswaKelompok->firstWhere('status_mahasiswa', 'ketua');
+            return [
+                'id_kelompok' => $kelompok->id,
+                'ketua' => $ketua?->mahasiswa->name ?? 'Tidak ada ketua',
+                'skema' => $kelompok->judul->where('is_proposal', true)->first()?->skema->nama_skema ?? 'Proses Bimbingan',
+                'total_anggota' => $kelompok->mahasiswaKelompok->count(),
+                'anggota' => $kelompok->mahasiswaKelompok
+                    ->where('status_mahasiswa', 'anggota')
+                    ->map(function ($item) {
+                        return [
+                            'nama' => $item->mahasiswa->name,
+                            'status' => $item->status_mahasiswa,
+                        ];
+                    })->values(),
+            ];
+        }));
     }
+
 
     public function getAllKelompok(array $data, array $filter): LengthAwarePaginator
     {

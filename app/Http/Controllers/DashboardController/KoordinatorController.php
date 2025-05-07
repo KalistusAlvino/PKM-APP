@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\DashboardController;
 
+use App\Charts\IdeDanJudulChart;
 use App\Charts\UploadedProposalBySkemaChart;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CariKetuaRequest;
@@ -32,15 +33,16 @@ class KoordinatorController extends Controller
         $this->kelompokDataRepository = $kelompokDataRepository;
         $this->validationRepository = $validationRepository;
     }
-    public function getDashboardKoordinator(UploadedProposalBySkemaChart $chart)
+    public function getDashboardKoordinator(UploadedProposalBySkemaChart $chart, IdeDanJudulChart $ideDanJudulChart)
     {
         $barChart = $chart->build();
+        $pieChart = $ideDanJudulChart->build();
         $mahasiswa = Mahasiswa::count();
         $dosen = Dosen::count();
         $kelompok = Kelompok::count();
         $skema = SkemaPkm::count();
         $key = 'dashboard';
-        return view('dashboard.koordinator.dashboard', compact('key', 'barChart', 'mahasiswa', 'dosen', 'kelompok', 'skema'));
+        return view('dashboard.koordinator.dashboard', compact('key', 'barChart', 'mahasiswa', 'dosen', 'kelompok', 'skema','pieChart'));
     }
     public function getDaftarKelompok(CariKetuaRequest $request, FilterKelompokRequest $filterKelompokRequest)
     {
