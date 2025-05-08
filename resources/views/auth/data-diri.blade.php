@@ -12,7 +12,7 @@
                                     <a class="small text-muted d-flex justify-content-start pb-5 align-items-center fs-5"
                                         style="text-decoration: none" href="{{ route('resend.verification') }}"><i
                                             class="fa-solid fa-arrow-left me-2"></i>Back</a>
-                                    <form action="{{ route('storeMahasiswa') }}" method="post">
+                                    <form action="{{ route('verify.simpanDataDiri') }}" method="post">
                                         @csrf
                                         <div class="w-100 text-center fw-semibold fs-3">
                                             <span class="text-secondary">

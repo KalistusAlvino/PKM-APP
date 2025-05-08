@@ -1,8 +1,6 @@
 @extends('dashboard.assets.main')
 @section('title', 'Dashboard Koordinator')
 @section('content')
-    <span style="display: inline-block; border-bottom: 2px solid #3b564d; width: 100%;"
-        class="mx-2 fw-bold fs-2 primary-color">Dashboard Koordinator</span>
     <div class="row d-flex align-items-stretch my-2">
         <div class="col-12 col-md-8">
             <div class="card bg-secondary-color shadow-lg py-2 px-2 flex-fill">

@@ -87,7 +87,7 @@
             </div>
         </div>
         <div class="col-12 col-md-4">
-            
+
             <div class="card bg-secondary-color shadow-lg my-2 py-2 px-2">
                 {!! $pieChart->container() !!}
             </div>
