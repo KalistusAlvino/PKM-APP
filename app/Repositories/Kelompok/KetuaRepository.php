@@ -32,14 +32,14 @@ class KetuaRepository implements KetuaRepositoryInterface
         ]);
     }
 
-    public function getDospem(array $data): Collection
+    public function getDospem(array $data): LengthAwarePaginator
     {
         return Dosen::withCount('kelompok')
             ->when(isset($data['cari']) && $data['cari'], function ($query) use ($data) {
                 return $query->where('name', 'like', '%' . $data['cari'] . '%');
             })
             ->having('kelompok_count', '<', 10)
-            ->get();
+            ->paginate(10);
     }
     public function postAnggota(array $data, $idKelompok): RegisterAnggota
     {

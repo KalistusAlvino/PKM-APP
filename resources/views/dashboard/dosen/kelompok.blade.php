@@ -21,51 +21,53 @@
         </div>
     </div>
     <div class="mx-2 my-4">
-        <table class="table table-striped my-3 align-middle">
-            <thead class="bg-secondary-color">
-                <tr>
-                    <th>No</th>
-                    <th>Ketua</th>
-                    <th>Total Anggota</th>
-                    <th>Skema</th>
-                    <th>Anggota</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($daftarKelompok as $index => $kelompok)
+        <div class="table-responsive">
+            <table class="table table-striped my-3 align-middle">
+                <thead class="bg-secondary-color">
                     <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $kelompok['ketua'] }}</td>
-                        <td>{{ $kelompok['total_anggota'] }}</td>
-                        <td>{{ $kelompok['skema'] }}</td>
-                        <td>
-                            @if ($kelompok['anggota']->isEmpty())
-                                <span class="text-muted">Belum ada anggota</span>
-                            @else
-                                <div class="d-flex flex-wrap">
-                                    @foreach ($kelompok['anggota'] as $anggota)
-                                        <div class="badge bg-primary-color text-white me-1 mb-1">
-                                            {{ $anggota['nama'] }}
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @endif
-                        </td>
-                        <td>
-                            <a href="{{ route('dosen.detail-kelompok', $kelompok['id_kelompok']) }}"
-                                class="btn btn-secondary">
-                                <i class="fa-solid fa-angle-right"></i>
-                            </a>
-                        </td>
+                        <th>No</th>
+                        <th>Ketua</th>
+                        <th>Total Anggota</th>
+                        <th>Skema</th>
+                        <th>Anggota</th>
+                        <th>Aksi</th>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="6" class="text-center text-muted fw-bold">Belum ada atau tidak ada kelompok</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @forelse ($daftarKelompok as $index => $kelompok)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $kelompok['ketua'] }}</td>
+                            <td>{{ $kelompok['total_anggota'] }}</td>
+                            <td>{{ $kelompok['skema'] }}</td>
+                            <td>
+                                @if ($kelompok['anggota']->isEmpty())
+                                    <span class="text-muted">Belum ada anggota</span>
+                                @else
+                                    <div class="d-flex flex-wrap">
+                                        @foreach ($kelompok['anggota'] as $anggota)
+                                            <div class="badge bg-primary-color text-white me-1 mb-1">
+                                                {{ $anggota['nama'] }}
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </td>
+                            <td>
+                                <a href="{{ route('dosen.detail-kelompok', $kelompok['id_kelompok']) }}"
+                                    class="btn btn-secondary">
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" class="text-center text-muted fw-bold">Belum ada atau tidak ada kelompok</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
     <div class="d-flex justify-content-center mt-4">
         {{ $daftarKelompok->links() }}

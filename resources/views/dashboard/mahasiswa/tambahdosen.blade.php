@@ -37,50 +37,46 @@
         </div>
     </div>
     <div class="row mx-1">
-        @forelse ($dospem as $dos)
-            <div class="col-12 col-lg-6">
-                <div class="card my-2">
-                    <div class="card-header bg-primary-color">
-                        <div class="d-flex flex-column mx-4 my-2 gap-3">
-                            <span class="fw-bold secondary-color fs-5">{{ $dos->name }}</span>
-                            <span class="secondary-color fs-5">{{ $dos->program_studi }}</span>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="mx-4 my-2">
-                            <span class="fw-bold primary-color fs-5">Bidang Minat PKM:</span>
-                            <div class="d-flex flex-row gap-2">
+        <div class="table-responsive">
+            <table class="table">
+                <thead class="bg-primary-color text-white">
+                    <tr>
+                        <th class="text-center">Nama Dosen</th>
+                        <th class="text-center">Program Studi</th>
+                        <th class="text-center">Bidang Minat PKM</th>
+                        <th class="text-center">Whatsapp Number</th>
+                        <th class="text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($dospem as $dos)
+                        <tr>
+                            <td class="text-center">{{ $dos->name }}</td>
+                            <td class="text-center">{{ $dos->program_studi }}</td>
+                            <td class="text-center">
                                 @foreach (explode(',', $dos->ketertarikan) as $ketertarikan)
-                                    <div class="card my-2 rounded-4 bg-primary-color">
-                                        <span class="my-2 mx-2 secondary-color">{{ $ketertarikan }}</span>
-                                    </div>
+                                    <div class="badge bg-primary text-white">{{ $ketertarikan }}</div>
                                 @endforeach
-                            </div>
-                        </div>
-                        <div class="mx-4 my-2">
-                            <span class="fw-bold primary-color fs-5">Whatsapp Number <i class="fa-brands fa-whatsapp"></i> :
-                            </span>
-                            <div class="d-flex flex-row gap-2">
-                                <div class="card my-2 rounded-4 bg-primary-color">
-                                    <span class="my-2 mx-2 secondary-color">{{ $dos->no_wa }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-primary-color d-flex justify-content-center">
-                        <button
-                            onclick="confirmAdd('{{ $dos->name }}','{{ route('storeInvite', [$id_kelompok, $dos->id]) }}')"
-                            class="btn bg-secondary-color mx-4 my-2" data-confirm-delete="true">
-                            Undang Dosen <i class="fa-solid fa-user-plus primary-color"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        @empty
-            <div class="card bg-third-color my-3">
-                <span class="primary-color fw-bold mx-2 my-2 fst-italic">Belum ada atau tidak ada dosen</span>
-            </div>
-        @endforelse
+                            </td>
+                            <td class="text-center">{{ $dos->no_wa }}</td>
+                            <td class="text-center">
+                                <button
+                                    onclick="confirmAdd('{{ $dos->name }}','{{ route('storeInvite', [$id_kelompok, $dos->id]) }}')"
+                                    class="btn bg-secondary-color" data-confirm-delete="true">
+                                    Undang Dosen <i class="fa-solid fa-user-plus primary-color"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center bg-third-color">
+                                <span class="primary-color fw-bold fst-italic">Belum ada atau tidak ada dosen</span>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 
 
