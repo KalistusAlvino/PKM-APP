@@ -33,9 +33,9 @@ class LoginController extends Controller
                 $user->isBiro() => 'biro.dashboard',
             };
 
-            return redirect()->intended(route($route))->with('success','Login Berhasil');
+            return redirect()->intended(route($route))->with('success', 'Login Berhasil');
         } catch (ValidationException $e) {
-            return redirect()->back()->withErrors(['errors'=>'Ada kesalahan saat melakukan Login']);
+            return redirect()->route('halamanLogin')->withErrors(['errors' => $e->getMessage()]);
         }
     }
 
@@ -45,9 +45,8 @@ class LoginController extends Controller
             $this->authRepository->logout();
 
             return redirect()->route('halamanHome');
-        }
-        catch (ValidationException $e) {
-            return redirect()->back()->withErrors(['errors'=>'Ada kesalahan saat melakukan logout']);
+        } catch (ValidationException $e) {
+            return redirect()->back()->withErrors(['errors' => 'Ada kesalahan saat melakukan logout']);
         }
     }
 }

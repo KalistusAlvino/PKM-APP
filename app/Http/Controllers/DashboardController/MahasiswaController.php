@@ -12,10 +12,13 @@ use App\Http\Requests\StoreJudulRequest;
 use App\Http\Requests\StoreOldAnggotaRequest;
 use App\Http\Requests\UpdateJudulRequest;
 use App\Http\Requests\UpdateKomentarRequest;
+use App\Mail\AnggotaVerificationMail;
+use App\Mail\EmailVerificationMail;
 use App\Models\Dosen;
 use App\Models\Fakultas;
 use App\Models\Judul;
 use App\Models\Komentar;
+use App\Models\Mahasiswa;
 use App\Models\SkemaPKM;
 use App\Repositories\Judul\JudulRepository;
 use App\Repositories\Kelompok\AnggotaRepository;
@@ -25,6 +28,7 @@ use App\Repositories\Kelompok\ValidationRepository;
 use Dotenv\Exception\ValidationException;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Request;
 
 
@@ -106,8 +110,9 @@ class MahasiswaController extends Controller
         try {
             $validate = $request->validated();
             $this->ketuaRepository->postAnggota($validate, $id);
-
-            return redirect()->route('mahasiswa.detail-kelompok', $id)->with('success', 'Berhasil Menambahkan Anggota');
+            $mahasiswa = Mahasiswa::where('email',$validate['email'])->first();
+            Mail::to($validate['email'])->send(new AnggotaVerificationMail($mahasiswa));
+            return redirect()->route('mahasiswa.detail-kelompok', $id)->with('success', 'Berhasil registrasi akun anggota, silahkan lakukan verifikasi email');
         } catch (Exception $e) {
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }

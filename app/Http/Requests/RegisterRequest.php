@@ -22,13 +22,13 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'token' => 'required|string|exists:mahasiswa,email_verification_token',
             'username' => 'required|string|min:8|max:8|unique:user,username',
             'role' => 'required',
             'no_wa' => 'required|string|min:11|max:13|unique:mahasiswa,no_wa',
             'fakultas' => 'required|string',
             'prodi' => 'required|string',
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:mahasiswa,email',
             'password' => 'required|min:8',
         ];
     }

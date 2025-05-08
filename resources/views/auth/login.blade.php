@@ -45,7 +45,6 @@
                                         </button>
                                     </div>
 
-                                    <a class="small text-muted" href="#!">Forgot password?</a>
                                     <p class="mb-5 pb-lg-2 third-color">Don't have an account? <a class="third-color"
                                             href="{{route('halamanRegister')}}">Register
                                             here</a>

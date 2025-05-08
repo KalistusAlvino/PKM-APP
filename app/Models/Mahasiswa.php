@@ -18,6 +18,8 @@ class Mahasiswa extends Model
         'fakultas',
         'prodi',
         'email',
+        'email_verification_token',
+        'email_verification_at',
         'no_wa',
     ];
 

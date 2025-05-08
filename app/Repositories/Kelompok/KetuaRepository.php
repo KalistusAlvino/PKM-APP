@@ -18,6 +18,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class KetuaRepository implements KetuaRepositoryInterface
 {
@@ -51,6 +52,7 @@ class KetuaRepository implements KetuaRepositoryInterface
             'role' => $data['role'],
             'password' => bcrypt('12345678'),
         ]);
+        $token = Str::uuid();
         $mahasiswa = Mahasiswa::create([
             'userId' => $user->id,
             'name' => $data['name'],
@@ -58,6 +60,7 @@ class KetuaRepository implements KetuaRepositoryInterface
             'prodi' => $data['prodi'],
             'email' => $data['email'],
             'no_wa' => $data['no_wa'],
+            'email_verification_token' => $token,
         ]);
         $mahasiswaKelompok = MahasiswaKelompok::create([
             'kelompokId' => $idKelompok,
@@ -65,6 +68,9 @@ class KetuaRepository implements KetuaRepositoryInterface
             'status_mahasiswa' => 'anggota',
             'tahun_daftar' => date('Y')
         ]);
+
+
+
         return new RegisterAnggota($user, $mahasiswa, $mahasiswaKelompok);
     }
     public function postOldAnggota(array $data, $idKelompok): MahasiswaKelompok

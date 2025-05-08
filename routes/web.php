@@ -36,7 +36,14 @@ Route::get('/', function () {
 Route::get('/', [HomeController::class, 'getHomePage'])->name('halamanHome');
 // User Register
 Route::get('/register', [RegisterController::class, 'getRegisterPage'])->name('halamanRegister');
-Route::post('/post-register', [RegisterController::class, 'storeMahasiswa'])->name('storeMahasiswa');
+Route::post('/register/email', [RegisterController::class, 'sendEmail'])->name('register.email');
+Route::post('/resend-verification', [RegisterController::class, 'resendVerification'])->name('resend.verification');
+Route::get('/verify/email', [RegisterController::class, 'verifyEmail'])->name('verify.email');
+Route::get('/verifikasi-email/data-diri/{token}', [RegisterController::class, 'dataDiri'])->name('verify.dataDiri');
+Route::get('/verifikasi-email/anggota/{id}', [AnggotaController::class, 'verifikasiAnggota'])->name('verify.anggota');
+Route::post('/register/simpan-data-diri', [RegisterController::class, 'simpanDataDiri'])->name('verify.simpanDataDiri');
+
+
 Route::get('/get-program-studi/{fakultas_id}', [RegisterController::class, 'getProgramStudi']);
 // End User Register
 
