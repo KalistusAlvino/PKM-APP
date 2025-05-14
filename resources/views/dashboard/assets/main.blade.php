@@ -17,39 +17,44 @@
         rel="stylesheet">
 
     <!-- Template Main CSS File -->
-    <link rel="stylesheet" href="{{asset('css/sidebar.css')}}">
-    <link rel="stylesheet" href="{{asset('css/bootstrap.css')}}">
-    <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
 
-      <!-- Font awesome icons -->
-      <link rel="stylesheet" href="{{ asset('fontawesome-free-6.7.2-web/css/all.css') }}">
+    <!-- Font awesome icons -->
+    <link rel="stylesheet" href="{{ asset('fontawesome-free-6.7.2-web/css/all.css') }}">
 
 
-      <!-- Sweet Alert CSS -->
-      <link rel="stylesheet" href="{{ asset('css/sweetalert2.min.css') }}">
+    <!-- Sweet Alert CSS -->
+    <link rel="stylesheet" href="{{ asset('css/sweetalert2.min.css') }}">
 
-      <!-- CSRF Token -->
-      <meta name="csrf-token" content="{{ csrf_token() }}">
+    {{-- Trix CSS --}}
+    <link rel="stylesheet" href="{{ asset('css/trix.min.css') }}">
 
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
 
 <body>
     @include('dashboard.assets.header')
     @switch(Auth::user()->role)
-    @case('mahasiswa')
-        @include('dashboard.assets.sidebar-mahasiswa')
+        @case('mahasiswa')
+            @include('dashboard.assets.sidebar-mahasiswa')
         @break
 
-    @case('dosen')
-        @include('dashboard.assets.sidebar-dosen')
+        @case('dosen')
+            @include('dashboard.assets.sidebar-dosen')
         @break
-    @case('koordinator')
-        @include('dashboard.assets.sidebar-koordinator')
+
+        @case('koordinator')
+            @include('dashboard.assets.sidebar-koordinator')
         @break
-    @case('biro')
-        @include('dashboard.assets.sidebar-biro')
+
+        @case('biro')
+            @include('dashboard.assets.sidebar-biro')
         @break
     @endswitch
     <main id="main" class="main">
@@ -61,16 +66,19 @@
             class="bi bi-arrow-up-short"></i></a>
 
     <!-- Template Main JS File -->
-    <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{asset('js/sidebar.js')}}"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/sidebar.js') }}"></script>
 
     <!-- Sweetalert2 JS File -->
     <script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
 
+    <!-- Trix -->
+    <script src="{{ asset('js/trix.umd.min.js') }}"></script>
+
     <!-- Swallfire -->
     <script>
-        @if(session('success'))
-        const Toast = Swal.mixin({
+        @if (session('success'))
+            const Toast = Swal.mixin({
                 toast: true,
                 position: "top-end",
                 showConfirmButton: false,
@@ -84,8 +92,8 @@
             Toast.fire({
                 icon: "success",
                 title: "{{ session('success') }}",
-                });
-        @elseif($errors->any())
+            });
+        @elseif ($errors->any())
             console.log("Errors:", @json($errors->all()));
             let errorMessages = @json($errors->all());
             let errorText = errorMessages.join("<br>");

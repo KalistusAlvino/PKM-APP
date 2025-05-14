@@ -12,19 +12,23 @@ use Illuminate\Support\Facades\Auth;
 
 class KelompokDataRepository implements KelompokDataRepositoryInterface
 {
-    public function getKelompokByAuthMahasiswa(array $data): array
+    public function getKelompokByAuthMahasiswa(array $data, array $filter): array
     {
         $mahasiswa = Mahasiswa::where('userId', Auth::id())->first();
         $kelompokList = [];
+
         foreach ($mahasiswa->mahasiswaKelompok as $mahasiswaKelompok) {
+            // Memeriksa ketua kelompok
             $ketua = $mahasiswaKelompok->where('status_mahasiswa', 'ketua')
                 ->where('kelompokId', $mahasiswaKelompok->kelompokId)
                 ->first();
 
+            // Filter berdasarkan nama ketua
             if (isset($data['nama_ketua']) && !str_contains(strtolower($ketua->mahasiswa->name), strtolower($data['nama_ketua']))) {
                 continue;
             }
 
+            // Menambahkan kelompok ke dalam daftar
             $kelompokList[] = [
                 'id_kelompok' => $mahasiswaKelompok->kelompokId,
                 'ketua' => $ketua->mahasiswa->name,
@@ -44,8 +48,30 @@ class KelompokDataRepository implements KelompokDataRepositoryInterface
             ];
         }
 
+        // Filter berdasarkan judul
+        if (isset($filter['filter_judul'])) {
+            $kelompokList = array_filter($kelompokList, function ($kelompok) use ($filter) {
+                if ($filter['filter_judul'] === 'true') {
+                    return Judul::where('id_kelompok', $kelompok['id_kelompok'])->where('is_proposal', true)->exists();
+                } elseif ($filter['filter_judul'] === 'false') {
+                    return !Judul::where('id_kelompok', $kelompok['id_kelompok'])->where('is_proposal', true)->exists();
+                }
+                return true; // Jika tidak ada filter, kembalikan true
+            });
+        }
+
+        // Filter berdasarkan tahun
+        if (isset($filter['filter_tahun'])) {
+            $kelompokList = array_filter($kelompokList, function ($kelompok) use ($filter) {
+                return MahasiswaKelompok::where('kelompokId', $kelompok['id_kelompok'])
+                    ->where('tahun_daftar', $filter['filter_tahun'])
+                    ->exists();
+            });
+        }
+
         return $kelompokList;
     }
+
 
     public function getDetailKelompokByIdKelompok($idKelompok)
     {
@@ -80,7 +106,7 @@ class KelompokDataRepository implements KelompokDataRepositoryInterface
         }
         return $informasiKelompok;
     }
-    public function getKelompokByAuthDosen(array $data): LengthAwarePaginator
+    public function getKelompokByAuthDosen(array $data, array $filter): LengthAwarePaginator
     {
         $dosen = Dosen::where('userId', Auth::id())->first();
 
@@ -94,6 +120,27 @@ class KelompokDataRepository implements KelompokDataRepositoryInterface
                         });
                 });
             })
+            ->when(isset($filter['filter_judul']), function ($query) use ($filter) {
+                if ($filter['filter_judul'] === 'true') {
+                    // Filter for groups with a valid title
+                    return $query->whereHas('judul', function ($subQuery) {
+                        $subQuery->where('is_proposal', true);
+                    });
+                } elseif ($filter['filter_judul'] === 'false') {
+                    // Filter kelompok yang tidak punya judul dengan is_proposal true
+                    return $query->whereDoesntHave('judul', function ($subQuery) {
+                        $subQuery->where('is_proposal', true);
+                    });
+                }
+            })
+            ->when(
+                isset($filter['filter_tahun']),
+                function ($query) use ($filter) {
+                    return $query->whereHas('mahasiswaKelompok', function ($subQuery) use ($filter) {
+                        $subQuery->where('tahun_daftar', $filter['filter_tahun']);
+                    });
+                }
+            )
             ->paginate(10); // Lakukan paginasi langsung
 
         // Memetakan hasil paginasi
@@ -140,7 +187,15 @@ class KelompokDataRepository implements KelompokDataRepositoryInterface
                         $subQuery->where('is_proposal', true);
                     });
                 }
-            });
+            })
+            ->when(
+                isset($filter['filter_tahun']),
+                function ($query) use ($filter) {
+                    return $query->whereHas('mahasiswaKelompok', function ($subQuery) use ($filter) {
+                        $subQuery->where('tahun_daftar', $filter['filter_tahun']);
+                    });
+                }
+            );
 
         // Paginate the results
         $daftarKelompok = $query->paginate(10); // Adjust the number 10 to your desired items per page

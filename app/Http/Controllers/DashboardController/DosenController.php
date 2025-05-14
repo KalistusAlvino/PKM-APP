@@ -5,6 +5,7 @@ namespace App\Http\Controllers\DashboardController;
 use App\Charts\uploadedProposalJudulByKelompokDosen;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CariKetuaRequest;
+use App\Http\Requests\FilterKelompokRequest;
 use App\Http\Requests\KomentarRequest;
 use App\Http\Requests\UpdateKomentarRequest;
 use App\Models\Invite;
@@ -53,10 +54,11 @@ class DosenController extends Controller
         return view('dashboard.dosen.undangan', compact('invite', 'key'));
     }
 
-    public function getDaftarKelompok(CariKetuaRequest $request)
+    public function getDaftarKelompok(CariKetuaRequest $request, FilterKelompokRequest $filterKelompokRequest)
     {
         $validate = $request->validated();
-        $daftarKelompok = $this->kelompokDataRepository->getKelompokByAuthDosen($validate);
+        $validatedFilter = $filterKelompokRequest->validated();
+        $daftarKelompok = $this->kelompokDataRepository->getKelompokByAuthDosen($validate, $validatedFilter);
         $key = 'daftar_kelompok';
         return view('dashboard.dosen.kelompok', compact('daftarKelompok', 'key'));
     }

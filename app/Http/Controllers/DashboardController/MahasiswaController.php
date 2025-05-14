@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CariDospemRequest;
 use App\Http\Requests\CariKetuaRequest;
 use App\Http\Requests\CariNIMRequest;
+use App\Http\Requests\FilterKelompokRequest;
 use App\Http\Requests\KomentarByMahasiswaRequest;
 use App\Http\Requests\StoreAnggotaRequest;
 use App\Http\Requests\StoreJudulRequest;
@@ -55,10 +56,11 @@ class MahasiswaController extends Controller
         $key = 'dashboard';
         return view('dashboard.mahasiswa.dashboard', compact('key', 'komentar', 'proposal'));
     }
-    public function getKelompokPage(CariKetuaRequest $request)
+    public function getKelompokPage(CariKetuaRequest $request, FilterKelompokRequest $filterKelompokRequest)
     {
         $validate = $request->validated();
-        $kelompokList = $this->kelompokDataRepository->getKelompokByAuthMahasiswa($validate);
+        $validateFilter = $filterKelompokRequest->validated();
+        $kelompokList = $this->kelompokDataRepository->getKelompokByAuthMahasiswa($validate, $validateFilter);
         $key = 'daftar_kelompok';
         return view('dashboard.mahasiswa.kelompok', compact('kelompokList', 'key'));
     }

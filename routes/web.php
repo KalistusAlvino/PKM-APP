@@ -5,6 +5,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController\LoginController;
 use App\Http\Controllers\AuthController\RegisterController;
 use App\Http\Controllers\Biro\ManajemenAkademikController;
+use App\Http\Controllers\Biro\ManajemenKontenController;
 use App\Http\Controllers\Biro\ManajemenSACController;
 use App\Http\Controllers\BiroKelompokController;
 use App\Http\Controllers\DashboardController\AnggotaController;
@@ -42,6 +43,8 @@ Route::get('/verify/email', [RegisterController::class, 'verifyEmail'])->name('v
 Route::get('/verifikasi-email/data-diri/{token}', [RegisterController::class, 'dataDiri'])->name('verify.dataDiri');
 Route::get('/verifikasi-email/anggota/{id}', [AnggotaController::class, 'verifikasiAnggota'])->name('verify.anggota');
 Route::post('/register/simpan-data-diri', [RegisterController::class, 'simpanDataDiri'])->name('verify.simpanDataDiri');
+Route::get('/berita/{id}', [HomeController::class, 'detailBerita'])->name('detail-berita');
+Route::get('/pengumuman/{id}', [HomeController::class, 'detailPengumuman'])->name('detail-pengumuman');
 
 
 Route::get('/get-program-studi/{fakultas_id}', [RegisterController::class, 'getProgramStudi']);
@@ -157,4 +160,25 @@ Route::middleware(['auth', 'role:biro'])->group(function () {
     //SAC
     Route::get('/biro/kegiatan-mahasiswa', [ManajemenSACController::class, 'kegiatanMahasiswa'])->name('biro.kegiatan-mahasiswa-page');
     Route::patch('/biro/kegiatan-mahasiswa/update-status/{id_kegiatan}', [ManajemenSACController::class, 'updateStatusKegiatan'])->name('biro.update-status-kegiatan');
+    //Manajemen Konten Berita
+    Route::get('/biro/manajemen-berita', [ManajemenKontenController::class, 'berita'])->name('biro.manajemen-berita');
+    Route::get('/biro/tambah-berita', [ManajemenKontenController::class, 'tambahBerita'])->name('biro.tambah-berita');
+    Route::post('/biro/store-berita', [ManajemenKontenController::class, 'storeBerita'])->name('biro.store-berita');
+    Route::get('/biro/update-berita/{id}', [ManajemenKontenController::class, 'updateBerita'])->name('biro.update-berita');
+    Route::put('/biro/update-berita/{id}', [ManajemenKontenController::class, 'storeUpdateBerita'])->name('biro.store-update-berita');
+        Route::delete('/biro/delete-berita/{id}',[ManajemenKontenController::class,'deleteBerita'])->name('biro.delete-berita');
+    //Manajemen Konten Pengumuman
+    Route::get('/biro/manajemen-pengumuman', [ManajemenKontenController::class, 'pengumuman'])->name('biro.manajemen-pengumuman');
+    Route::get('/biro/tambah-pengumuman', [ManajemenKontenController::class, 'tambahPengumuman'])->name('biro.tambah-pengumuman');
+    Route::post('/biro/store-pengumuman', [ManajemenKontenController::class, 'storePengumuman'])->name('biro.store-pengumuman');
+    Route::get('/biro/update-pengumuman/{id}', [ManajemenKontenController::class, 'updatePengumuman'])->name('biro.update-pengumuman');
+    Route::put('/biro/update-pengumuman/{id}', [ManajemenKontenController::class, 'storeUpdatePengumuman'])->name('biro.store-update-pengumuman');
+        Route::delete('/biro/delete-pengumuman/{id}',[ManajemenKontenController::class,'deletePengumuman'])->name('biro.delete-pengumuman');
+    //Manajemen Konten FAQ
+    Route::get('/biro/manajemen-faq', [ManajemenKontenController::class, 'faq'])->name('biro.manajemen-faq');
+    Route::get('/biro/tambah-faq', [ManajemenKontenController::class, 'tambahFAQ'])->name('biro.tambah-faq');
+    Route::post('/biro/store-faq', [ManajemenKontenController::class, 'storeFAQ'])->name('biro.store-faq');
+    Route::get('/biro/update-faq/{id}', [ManajemenKontenController::class, 'updateFAQ'])->name('biro.update-faq');
+    Route::put('/biro/update-faq/{id}', [ManajemenKontenController::class, 'storeUpdateFAQ'])->name('biro.store-update-faq');
+    Route::delete('/biro/delete-faq/{id}',[ManajemenKontenController::class,'deleteFAQ'])->name('biro.delete-faq');
 });

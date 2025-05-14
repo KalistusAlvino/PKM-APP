@@ -24,9 +24,31 @@
                 <div class="input-group mb-3">
                     <span class="input-group-text"><i class="fa-solid fa-filter"></i></span>
                     <select class="form-select" name="filter_judul" aria-label="Default select example" id="filterSelect">
-                        <option value="" {{ request('filter_judul') === null || request('filter_judul') === '' ? 'selected' : '' }}>Filter</option>
-                        <option value="true" {{ request('filter_judul') === 'true' ? 'selected' : '' }}>Judul valid</option>
-                        <option value="false" {{ request('filter_judul') === 'false' ? 'selected' : '' }}>Belum ada judul</option>
+                        <option value=""
+                            {{ request('filter_judul') === null || request('filter_judul') === '' ? 'selected' : '' }}>
+                            Filter</option>
+                        <option value="true" {{ request('filter_judul') === 'true' ? 'selected' : '' }}>Judul valid
+                        </option>
+                        <option value="false" {{ request('filter_judul') === 'false' ? 'selected' : '' }}>Belum ada judul
+                        </option>
+                    </select>
+                </div>
+            </form>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4">
+            <form id="filterTahunForm" method="GET" action="{{ route('biro.daftar-kelompok-page') }}">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"><i class="fa-solid fa-filter"></i></span>
+                    <select class="form-select" name="filter_tahun" aria-label="Default select example" id="filterSelectTahun">
+                        <option value=""
+                            {{ request('filter_tahun') === null || request('filter_tahun') === '' ? 'selected' : '' }}>
+                            Filter Tahun
+                        </option>
+                        @for ($year = date('Y'); $year >= date('Y') - 5; $year--)
+                            <option value="{{ $year }}" {{ request('filter_tahun') == $year ? 'selected' : '' }}>
+                                {{ $year }}
+                            </option>
+                        @endfor
                     </select>
                 </div>
             </form>
@@ -82,6 +104,9 @@
     <script>
         document.getElementById('filterSelect').addEventListener('change', function() {
             document.getElementById('filterForm').submit();
+        });
+        document.getElementById('filterSelectTahun').addEventListener('change', function() {
+            document.getElementById('filterTahunForm').submit();
         });
     </script>
 @endsection

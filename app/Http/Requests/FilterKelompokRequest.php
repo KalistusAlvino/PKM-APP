@@ -23,6 +23,7 @@ class FilterKelompokRequest extends FormRequest
     {
         return [
             'filter_judul' => 'nullable|in:true,false',
+            'filter_tahun' => 'nullable|integer|between:' . (date('Y') - 5) . ',' . date('Y'),
         ];
     }
 }
