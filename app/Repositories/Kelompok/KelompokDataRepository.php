@@ -56,7 +56,6 @@ class KelompokDataRepository implements KelompokDataRepositoryInterface
                 } elseif ($filter['filter_judul'] === 'false') {
                     return !Judul::where('id_kelompok', $kelompok['id_kelompok'])->where('is_proposal', true)->exists();
                 }
-                return true; // Jika tidak ada filter, kembalikan true
             });
         }
 
