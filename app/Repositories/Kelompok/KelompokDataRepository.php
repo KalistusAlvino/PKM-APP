@@ -33,7 +33,7 @@ class KelompokDataRepository implements KelompokDataRepositoryInterface
                 'id_kelompok' => $mahasiswaKelompok->kelompokId,
                 'ketua' => $ketua->mahasiswa->name,
                 'total_anggota' => MahasiswaKelompok::where('kelompokId', $mahasiswaKelompok->kelompokId)->count(),
-                'skema' => Judul::with('skema')->where('id_kelompok', $mahasiswaKelompok->kelompokId)->first()?->skema->nama_skema ?? 'Proses Bimbingan',
+                'skema' => Judul::with('skema')->where('id_kelompok', $mahasiswaKelompok->kelompokId)->where('is_proposal', true)->first()?->skema->nama_skema ?? 'Proses Bimbingan',
                 'dosen' => Kelompok::with('dosen')->where('id', $mahasiswaKelompok->kelompokId)->first()?->dosen->name ?? 'Belum ada dosen pembimbing',
                 'anggota' => MahasiswaKelompok::with('mahasiswa')
                     ->where('status_mahasiswa', 'anggota')

@@ -32,4 +32,7 @@ class Dosen extends Model
     {
         return $this->hasMany(Kelompok::class,'dospemId','id');
     }
+    public function invite() {
+        return $this->hasMany(Invite::class,'dospemId','id');
+    }
 }

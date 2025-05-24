@@ -32,11 +32,14 @@ class KetuaRepository implements KetuaRepositoryInterface
         ]);
     }
 
-    public function getDospem(array $data): LengthAwarePaginator
+    public function getDospem(array $data, $id_kelompok): LengthAwarePaginator
     {
         return Dosen::withCount('kelompok')
             ->when(isset($data['cari']) && $data['cari'], function ($query) use ($data) {
                 return $query->where('name', 'like', '%' . $data['cari'] . '%');
+            })
+            ->whereDoesntHave('invite', function ($query) use ($id_kelompok) {
+                $query->where('kelompokId', $id_kelompok);
             })
             ->having('kelompok_count', '<', 10)
             ->paginate(10);
@@ -68,22 +71,47 @@ class KetuaRepository implements KetuaRepositoryInterface
             'status_mahasiswa' => 'anggota',
             'tahun_daftar' => date('Y')
         ]);
-
-
-
+        $judul = Judul::with('proposal')->where('id_kelompok', $idKelompok)->where('is_proposal', true)->firstOrFail();
+        $jenis = Jenis::where('nama_jenis', 'PESERTA/PROPOSAL')->firstOrFail();
+        if ($judul && $judul->proposal) {
+            Kegiatan::create([
+                'id_jenis' => $jenis->id,
+                'id_file' => $judul->proposal->id,
+                'id_kelompok' => $idKelompok,
+                'id_mahasiswa' => $mahasiswa->id,
+                'nama_kegiatan' => 'Proposal Program Kreativitas Mahasiswa',
+                'kegiatan_inggris' => 'Student Creativity Program Proposal',
+                'tanggal' => Carbon::now(),
+                'status' => 'menunggu'
+            ]);
+        }
         return new RegisterAnggota($user, $mahasiswa, $mahasiswaKelompok);
     }
     public function postOldAnggota(array $data, $idKelompok): MahasiswaKelompok
     {
 
         $users = User::where('username', $data['username'])->with('mahasiswa')->firstOrFail();
-        $alreadyAnggota = $users->mahasiswa->mahasiswaKelompok->where('tahun_daftar',date('Y'))->count();
+        $alreadyAnggota = $users->mahasiswa->mahasiswaKelompok->where('tahun_daftar', date('Y'))->count();
         $anggota = MahasiswaKelompok::where('kelompokId', $idKelompok)->where('status_mahasiswa', 'anggota')->count();
         if ($anggota >= 5) {
             throw new \Exception('Kelompok sudah memiliki anggota maksimal.');
         }
         if ($alreadyAnggota >= 2) {
             throw new \Exception('Mahasiswa tersebut sudah memiliki batas jumlah berkelompok');
+        }
+        $judul = Judul::with('proposal')->where('id_kelompok', $idKelompok)->where('is_proposal', true)->firstOrFail();
+        $jenis = Jenis::where('nama_jenis', 'PESERTA/PROPOSAL')->firstOrFail();
+        if ($judul && $judul->proposal) {
+            Kegiatan::create([
+                'id_jenis' => $jenis->id,
+                'id_file' => $judul->proposal->id,
+                'id_kelompok' => $idKelompok,
+                'id_mahasiswa' => $users->mahasiswa->id,
+                'nama_kegiatan' => 'Proposal Program Kreativitas Mahasiswa',
+                'kegiatan_inggris' => 'Student Creativity Program Proposal',
+                'tanggal' => Carbon::now(),
+                'status' => 'menunggu'
+            ]);
         }
         return MahasiswaKelompok::create([
             'kelompokId' => $idKelompok,
@@ -167,9 +195,10 @@ class KetuaRepository implements KetuaRepositoryInterface
 
     public function getMahasiswaOutKelompok($idKelompok, array $data): LengthAwarePaginator
     {
-        return Mahasiswa::whereDoesntHave('mahasiswaKelompok', function ($query) use ($idKelompok) {
-            $query->where('kelompokId', $idKelompok);
-        })
+        return Mahasiswa::whereNotNull('email_verification_at')
+            ->whereDoesntHave('mahasiswaKelompok', function ($query) use ($idKelompok) {
+                $query->where('kelompokId', $idKelompok);
+            })
             ->has('mahasiswaKelompok', '<', 2)
             ->whereHas('user', function ($query) use ($data) {
                 $query->when(isset($data['nim']) && !empty($data['nim']), function ($q) use ($data) {

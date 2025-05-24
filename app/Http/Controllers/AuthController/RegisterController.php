@@ -34,8 +34,9 @@ class RegisterController extends Controller
     public function dataDiri($token)
     {
         $mahasiswa = Mahasiswa::where('email_verification_token', $token)->firstOrFail();
+        $nim = explode('@', $mahasiswa->email)[0];
         $fakultas = Fakultas::all();
-        return view('auth.data-diri', compact('fakultas', 'mahasiswa'));
+        return view('auth.data-diri', compact('fakultas', 'mahasiswa', 'nim'));
     }
     public function simpanDataDiri(RegisterRequest $request)
     {
@@ -45,7 +46,7 @@ class RegisterController extends Controller
 
             return redirect()->route('halamanLogin')->with('success', 'Registrasi berhasil silahkan login');
         } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Ada kesalahan saat melengkapi data diri');
+            return redirect()->back()->withErrors('error', 'Ada kesalahan saat melengkapi data diri');
         }
     }
     public function sendEmail(Request $request)
@@ -53,42 +54,33 @@ class RegisterController extends Controller
         $validated = $request->validate([
             'email' => 'required|email'
         ]);
-
-        // Cari mahasiswa berdasarkan email
         $mahasiswa = Mahasiswa::where('email', $validated['email'])->first();
 
-        // Jika mahasiswa sudah ada
         if ($mahasiswa) {
-            // Jika mahasiswa sudah terdaftar tetapi belum melakukan verifikasi, kirim ulang email
             if ($mahasiswa->email_verification_at === null) {
-                // Generate token baru untuk verifikasi ulang
                 $token = Str::uuid();
                 $mahasiswa->update([
                     'email_verification_token' => $token,
                 ]);
 
-                // Kirim email verifikasi ulang
                 Mail::to($validated['email'])->send(new EmailVerificationMail($mahasiswa));
 
                 return redirect()->route('verify.email', ['email' => $validated['email']])->with([
                     'success' => 'Email verifikasi telah dikirim ulang.',
                 ]);
             } else {
-                // Jika mahasiswa sudah terverifikasi
-                return redirect()->route('login')->with([
+                return redirect()->route('halamanLogin')->withErrors([
                     'error' => 'Email sudah terverifikasi, silakan login.'
                 ]);
             }
         }
 
-        // Jika mahasiswa belum ada di database, buat record baru
         $token = Str::uuid();
         $mahasiswa = Mahasiswa::create([
             'email' => $validated['email'],
             'email_verification_token' => $token,
         ]);
 
-        // Kirim email verifikasi
         Mail::to($validated['email'])->send(new EmailVerificationMail($mahasiswa));
 
         return redirect()->route('verify.email', ['email' => $validated['email']])->with([
@@ -134,7 +126,7 @@ class RegisterController extends Controller
 
             return redirect()->route('halamanLogin')->with('success', 'Pendaftaran Berhasil, Ayo Login!');
         } catch (ValidationException $e) {
-            return redirect()->back()->with('errors', 'Ada kesalahan dalam melakukan registrasi');
+            return redirect()->back()->withErrors('error', 'Ada kesalahan dalam melakukan registrasi');
         }
     }
 }

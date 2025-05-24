@@ -8,7 +8,7 @@
                     <div class="card shadow-lg" style="border-radius: 1rem; ">
                         <div class="row g-0">
                             <div class="col-md-6 col-lg-6">
-                                <form action="{{ route('register.email') }}" method="POST">
+                                <form id="emailForm" action="{{ route('register.email') }}" method="POST" novalidate>
                                     @csrf
                                     <div class="card-body p-4  p-lg-5 text-black">
                                         <a class="small text-muted d-flex justify-content-start pb-5 align-items-center fs-5"
@@ -20,14 +20,16 @@
                                                 imajinasimu
                                                 terbang tinggi dan wujudkan ide-ide brilianmu dalam PKM!</span>
                                         </div>
-                                        <div data-mdb-input-init class="form-outline mb-4 mt-5">
-                                            <label class="form-label" for="form2Example17">Email address</label>
-                                            <input type="email" id="form2Example17" name="email"
+                                        <div class="form-outline mb-4 mt-5">
+                                            <label class="form-label" for="emailFormMahasiswa">Email address</label>
+                                            <input type="email" id="emailFormMahasiswa" name="email"
                                                 class="form-control custom-input"
                                                 placeholder="example: abcd@students.ukdw.ac.id" required
                                                 pattern="^[a-zA-Z0-9._%+-]+@students\.ukdw\.ac\.id$"
                                                 title="Email harus berformat: username@students.ukdw.ac.id" />
-                                            <div class="invalid-feedback">Email harus berformat: username@students.ukdw.ac.id</div>
+                                            <div class="invalid-feedback">
+                                                Email harus berformat: username@students.ukdw.ac.id
+                                            </div>
                                         </div>
                                         <div class="mt-1 mb-4 d-flex justify-content-center">
                                             <button data-mdb-button-init data-mdb-ripple-init
@@ -53,6 +55,31 @@
             </div>
         </div>
     </section>
-    
+    <script>
+        (function() {
+            'use strict';
+
+            const form = document.getElementById('emailForm');
+            const emailInput = document.getElementById('emailFormMahasiswa');
+
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+                emailInput.classList.remove('is-invalid');
+
+                const emailPattern = /^[a-zA-Z0-9._%+-]+@students\.ukdw\.ac\.id$/;
+                if (!emailPattern.test(emailInput.value)) {
+                    emailInput.classList.add('is-invalid');
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+                form.classList.add('was-validated');
+            }, false);
+        })();
+    </script>
 
 @endsection

@@ -46,9 +46,9 @@
                                 </div>
                             </div>
                             <div data-mdb-input-init class="form-outline mb-3 mx-4">
-                                <label class="form-label primary-color fw-semibold">Email</label>
+                                <label class="form-label primary-color fw-semibold" hidden>Email</label>
                                 <input class="form-control" type="email" name="email" aria-describedby="emailHelp"
-                                    value="{{ old('email', $mhs->email) }}" required>
+                                    value="{{ old('email', $mhs->email) }}" required hidden>
                             </div>
                             <div data-mdb-input-init class="form-outline mb-4 mx-4">
                                 <label class="form-label primary-color fw-semibold">Whatsapp Number</label>
@@ -65,10 +65,6 @@
                 <div class="col-12 col-lg-6 my-2">
                     <div class="card shadow-lg" style="border-radius: 1rem;">
                         <span class="d-flex justify-content-center fw-bold primary-color my-4 fs-5">Update Password</span>
-                        <span class="d-flex justify-content-center primary-color">Logged in as :
-                            {{ Auth::user()->getNamaUserAttribute() }}</span>
-                        <span class="d-flex justify-content-center primary-color mb-4">Role:
-                            {{ ucwords(Auth::user()->role) }}</span>
                         <form action="{{ route('post-change-password') }}" method="POST">
                             @method('PUT')
                             @csrf

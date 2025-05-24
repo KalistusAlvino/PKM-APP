@@ -14,13 +14,11 @@ use App\Http\Requests\StoreOldAnggotaRequest;
 use App\Http\Requests\UpdateJudulRequest;
 use App\Http\Requests\UpdateKomentarRequest;
 use App\Mail\AnggotaVerificationMail;
-use App\Mail\EmailVerificationMail;
-use App\Models\Dosen;
 use App\Models\Fakultas;
 use App\Models\Judul;
+use App\Models\Kelompok;
 use App\Models\Komentar;
 use App\Models\Mahasiswa;
-use App\Models\SkemaPKM;
 use App\Repositories\Judul\JudulRepository;
 use App\Repositories\Kelompok\AnggotaRepository;
 use App\Repositories\Kelompok\KelompokDataRepository;
@@ -30,7 +28,6 @@ use Dotenv\Exception\ValidationException;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Request;
 
 
 class MahasiswaController extends Controller
@@ -100,9 +97,14 @@ class MahasiswaController extends Controller
     }
     public function getTambahDosenPage($id, CariDospemRequest $request)
     {
+
         $validate = $request->validated();
         $id_kelompok = $id;
-        $dospem = $this->ketuaRepository->getDospem($validate);
+        $hasDospem = Kelompok::whereNotNull('dospemId')->where('id', $id_kelompok)->exists();
+        if ($hasDospem) {
+            return redirect()->back()->withErrors(['error', 'Anda sudah memiliki dosen pembimbing']);
+        }
+        $dospem = $this->ketuaRepository->getDospem($validate, $id_kelompok);
         $key = 'daftar_kelompok';
         return view('dashboard.mahasiswa.tambahdosen', compact('id_kelompok', 'dospem', 'key'));
     }
@@ -112,7 +114,7 @@ class MahasiswaController extends Controller
         try {
             $validate = $request->validated();
             $this->ketuaRepository->postAnggota($validate, $id);
-            $mahasiswa = Mahasiswa::where('email',$validate['email'])->first();
+            $mahasiswa = Mahasiswa::where('email', $validate['email'])->first();
             Mail::to($validate['email'])->send(new AnggotaVerificationMail($mahasiswa));
             return redirect()->route('mahasiswa.detail-kelompok', $id)->with('success', 'Berhasil registrasi akun anggota, silahkan lakukan verifikasi email');
         } catch (Exception $e) {

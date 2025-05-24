@@ -28,6 +28,10 @@ class Invite extends Model
         return $this->belongsTo(Kelompok::class,'kelompokId','id');
     }
 
+    public function dosen() {
+        return $this->belongsTo(Dosen::class,'dospemId','id');
+    }
+
 
 
 }

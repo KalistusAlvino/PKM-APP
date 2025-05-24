@@ -19,16 +19,16 @@
                                                 Terimakasih sudah melakukan verifikasi email!
                                             </span>
                                         </div>
-                                        <input type="hidden" name="token" value="{{ $mahasiswa->email_verification_token }}">
+                                        <input type="hidden" name="token"
+                                            value="{{ $mahasiswa->email_verification_token }}">
                                         <div class="row mt-5">
                                             <div class="col-6">
                                                 <div data-mdb-input-init class="form-outline mb-4">
                                                     <label class="form-label" for="nimForm">NIM</label>
                                                     <input type="text" id="nimForm" name="username"
                                                         class="form-control custom-input" placeholder="example: 722104**"
-                                                        inputmode="numeric"
-                                                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                                        minlength="8" required />
+                                                        value="{{ $nim }}" required readonly
+                                                        style="background-color: #e9ecef" />
                                                     <input type="text" id="role" name="role" value="mahasiswa"
                                                         hidden />
                                                 </div>
@@ -40,7 +40,6 @@
                                                         class="form-control custom-input"
                                                         placeholder="example: 0822********" inputmode="numeric"
                                                         oninput="this.value = this.value.replace(/[^0-9]/g, '')" required />
-
                                                 </div>
                                             </div>
                                         </div>
@@ -77,15 +76,11 @@
                                                 class="form-control custom-input" placeholder="example: Chris Jhon"
                                                 required />
                                         </div>
-
-
                                         <div data-mdb-input-init class="form-outline mb-4">
                                             <label class="form-label" for="form2Example27">Password</label>
                                             <input type="password" id="form2Example27" class="form-control" name="password"
                                                 required />
-
                                         </div>
-
                                         <div class="pt-1 mb-4">
                                             <button data-mdb-button-init data-mdb-ripple-init
                                                 class="btn bg-third-color w-100" type="submit">
