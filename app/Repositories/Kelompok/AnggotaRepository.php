@@ -15,7 +15,7 @@ class AnggotaRepository implements AnggotaRepositoryInterface
     public function storeKetua($id_mahasiswa)
     {
         $mahasiswa = MahasiswaKelompok::where('mahasiswaId', $id_mahasiswa)
-            ->where('status', 'ketua')
+            ->where('status_mahasiswa', 'ketua')
             ->where('tahun_daftar', date('Y'))
             ->exists();
         if ($mahasiswa) {

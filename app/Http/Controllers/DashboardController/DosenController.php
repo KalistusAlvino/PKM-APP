@@ -88,7 +88,7 @@ class DosenController extends Controller
 
             return redirect()->route('dosen.daftar-undangan')->with('success', 'Berhasil Menerima Undangan Mahasiswa');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(['error' => 'Ada kesalahan saat menerima undangan']);
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
     public function detailUndangan($id_undangan)
