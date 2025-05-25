@@ -4,7 +4,6 @@ namespace App\Repositories\Users;
 
 use App\Models\Mahasiswa;
 use App\Models\User;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 

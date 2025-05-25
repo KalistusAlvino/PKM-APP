@@ -15,8 +15,11 @@ class InviteRepository implements InviteRepositoryInterface
 
     public function insertDospem($id_kelompok, $id_dosen): ?Kelompok
     {
-        $kelompok = Kelompok::findOrFail($id_kelompok);
-        $kelompok->update([
+        $alreadyMax = Kelompok::where('dospemId', $id_dosen)->count();
+        if ($alreadyMax >= 10) {
+            throw new \Exception('Anda sudah memiliki batas maksimal bimbingan');
+        }
+        $kelompok = Kelompok::findOrFail($id_kelompok)->update([
             'dospemId' => $id_dosen
         ]);
         Invite::where('kelompokId', $id_kelompok)->delete();
