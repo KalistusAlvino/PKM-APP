@@ -17,10 +17,31 @@ class KelompokDataRepository implements KelompokDataRepositoryInterface
         $mahasiswa = Mahasiswa::where('userId', Auth::id())->first();
         $kelompokList = [];
 
-        foreach ($mahasiswa->mahasiswaKelompok as $mahasiswaKelompok) {
-            // Memeriksa ketua kelompok
-            $ketua = $mahasiswaKelompok->where('status_mahasiswa', 'ketua')
-                ->where('kelompokId', $mahasiswaKelompok->kelompokId)
+        $mahasiswaKelompok = MahasiswaKelompok::with([
+            'kelompok.dosen',
+            'kelompok.judul.skema',
+            'mahasiswa',
+        ])
+            ->where('mahasiswaId', $mahasiswa->id)
+            ->orderBy('tahun_daftar', 'desc')
+            ->get();
+
+        foreach ($mahasiswaKelompok as $item) {
+            $kelompok = $item->kelompok;
+            $anggotaList = MahasiswaKelompok::with('mahasiswa')
+                ->where('status_mahasiswa', 'anggota')
+                ->where('kelompokId', $item->kelompokId)
+                ->get()
+                ->map(function ($anggota) {
+                    return [
+                        'nama' => $anggota->mahasiswa->name,
+                        'status' => $anggota->status_mahasiswa,
+                    ];
+                });
+
+            $ketua = MahasiswaKelompok::with('mahasiswa')
+                ->where('status_mahasiswa', 'ketua')
+                ->where('kelompokId', $item->kelompokId)
                 ->first();
 
             // Filter berdasarkan nama ketua
@@ -28,27 +49,21 @@ class KelompokDataRepository implements KelompokDataRepositoryInterface
                 continue;
             }
 
-            // Menambahkan kelompok ke dalam daftar
+            $judulProposal = $kelompok->judul->firstWhere('is_proposal', true);
+            $skema = $judulProposal ? $judulProposal->skema->nama_skema : 'Proses Bimbingan';
+
             $kelompokList[] = [
-                'id_kelompok' => $mahasiswaKelompok->kelompokId,
-                'ketua' => $ketua->mahasiswa->name,
-                'total_anggota' => MahasiswaKelompok::where('kelompokId', $mahasiswaKelompok->kelompokId)->count(),
-                'skema' => Judul::with('skema')->where('id_kelompok', $mahasiswaKelompok->kelompokId)->where('is_proposal', true)->first()?->skema->nama_skema ?? 'Proses Bimbingan',
-                'dosen' => Kelompok::with('dosen')->where('id', $mahasiswaKelompok->kelompokId)->first()?->dosen->name ?? 'Belum ada dosen pembimbing',
-                'anggota' => MahasiswaKelompok::with('mahasiswa')
-                    ->where('status_mahasiswa', 'anggota')
-                    ->where('kelompokId', $mahasiswaKelompok->kelompokId)
-                    ->get()
-                    ->map(function ($item) {
-                        return [
-                            'nama' => $item->mahasiswa->name,
-                            'status' => $item->status_mahasiswa,
-                        ];
-                    }),
+                'id_kelompok' => $item->kelompokId,
+                'ketua' => $ketua->mahasiswa->name ?? '-',
+                'total_anggota' => MahasiswaKelompok::where('kelompokId', $item->kelompokId)->count(),
+                'tahun_daftar' => $item->tahun_daftar,
+                'skema' => $skema,
+                'dosen' => $kelompok->dosen->name ?? 'Belum ada dosen pembimbing',
+                'anggota' => $anggotaList,
             ];
         }
 
-        // Filter berdasarkan judul
+        // Filter berdasarkan judul jika diperlukan
         if (isset($filter['filter_judul'])) {
             $kelompokList = array_filter($kelompokList, function ($kelompok) use ($filter) {
                 if ($filter['filter_judul'] === 'true') {
@@ -68,7 +83,7 @@ class KelompokDataRepository implements KelompokDataRepositoryInterface
             });
         }
 
-        return $kelompokList;
+        return array_values($kelompokList); // Reset index array
     }
 
 
@@ -121,12 +136,10 @@ class KelompokDataRepository implements KelompokDataRepositoryInterface
             })
             ->when(isset($filter['filter_judul']), function ($query) use ($filter) {
                 if ($filter['filter_judul'] === 'true') {
-                    // Filter for groups with a valid title
                     return $query->whereHas('judul', function ($subQuery) {
                         $subQuery->where('is_proposal', true);
                     });
                 } elseif ($filter['filter_judul'] === 'false') {
-                    // Filter kelompok yang tidak punya judul dengan is_proposal true
                     return $query->whereDoesntHave('judul', function ($subQuery) {
                         $subQuery->where('is_proposal', true);
                     });
@@ -140,26 +153,35 @@ class KelompokDataRepository implements KelompokDataRepositoryInterface
                     });
                 }
             )
-            ->paginate(10); // Lakukan paginasi langsung
-
-        // Memetakan hasil paginasi
-        return $kelompokList->setCollection($kelompokList->getCollection()->map(function ($kelompok) {
-            $ketua = $kelompok->mahasiswaKelompok->firstWhere('status_mahasiswa', 'ketua');
-            return [
-                'id_kelompok' => $kelompok->id,
-                'ketua' => $ketua?->mahasiswa->name ?? 'Tidak ada ketua',
-                'skema' => $kelompok->judul->where('is_proposal', true)->first()?->skema->nama_skema ?? 'Proses Bimbingan',
-                'total_anggota' => $kelompok->mahasiswaKelompok->count(),
-                'anggota' => $kelompok->mahasiswaKelompok
-                    ->where('status_mahasiswa', 'anggota')
-                    ->map(function ($item) {
-                        return [
-                            'nama' => $item->mahasiswa->name,
-                            'status' => $item->status_mahasiswa,
-                        ];
-                    })->values(),
-            ];
-        }));
+            ->paginate(10);
+        return $kelompokList->setCollection(
+            $kelompokList->getCollection()
+                ->sortByDesc(function ($kelompok) {
+                    $tahun = $kelompok->mahasiswaKelompok
+                        ->sortBy('tahun_daftar')
+                        ->first()?->tahun_daftar ?? 0;
+                    return $tahun;
+                })
+                ->values()
+                ->map(function ($kelompok) {
+                    $ketua = $kelompok->mahasiswaKelompok->firstWhere('status_mahasiswa', 'ketua');
+                    return [
+                        'id_kelompok' => $kelompok->id,
+                        'ketua' => $ketua?->mahasiswa->name ?? 'Tidak ada ketua',
+                        'skema' => $kelompok->judul->where('is_proposal', true)->first()?->skema->nama_skema ?? 'Proses Bimbingan',
+                        'total_anggota' => $kelompok->mahasiswaKelompok->count(),
+                        'tahun_daftar' => $kelompok->mahasiswaKelompok->first()?->tahun_daftar,
+                        'anggota' => $kelompok->mahasiswaKelompok
+                            ->where('status_mahasiswa', 'anggota')
+                            ->map(function ($item) {
+                                return [
+                                    'nama' => $item->mahasiswa->name,
+                                    'status' => $item->status_mahasiswa,
+                                ];
+                            })->values(),
+                    ];
+                })
+        );
     }
 
 
@@ -200,20 +222,28 @@ class KelompokDataRepository implements KelompokDataRepositoryInterface
         $daftarKelompok = $query->paginate(10); // Adjust the number 10 to your desired items per page
 
         // Map the paginated results
-        return $daftarKelompok->setCollection($daftarKelompok->getCollection()->map(function ($kelompok) {
-            return [
-                'id_kelompok' => $kelompok->id,
-                'ketua' => $kelompok->mahasiswaKelompok
-                    ->where('status_mahasiswa', 'ketua')
-                    ->first()?->mahasiswa->name ?? 'Tidak ada ketua',
-                'nim' => $kelompok->mahasiswaKelompok
-                    ->where('status_mahasiswa', 'ketua')
-                    ->first()?->mahasiswa->user->username ?? 'Tidak ada ketua',
-                'skema' => $kelompok->judul->where('is_proposal', true)->first()?->skema->nama_skema ?? 'Proses Bimbingan',
-                'judul' => $kelompok->judul->where('is_proposal', true)->first()?->nama_skema ?? 'Proses Bimbingan',
-                'dosen' => $kelompok->dosen->name ?? 'Belum ada dosen pembimbing',
-                'total_anggota' => $kelompok->mahasiswaKelompok->count(),
-            ];
-        }));
+        return $daftarKelompok->setCollection($daftarKelompok->getCollection()
+            ->sortByDesc(function ($kelompok) {
+                $tahun = $kelompok->mahasiswaKelompok
+                    ->sortBy('tahun_daftar')
+                    ->first()?->tahun_daftar ?? 0;
+                return $tahun;
+            })
+            ->map(function ($kelompok) {
+                return [
+                    'id_kelompok' => $kelompok->id,
+                    'ketua' => $kelompok->mahasiswaKelompok
+                        ->where('status_mahasiswa', 'ketua')
+                        ->first()?->mahasiswa->name ?? 'Tidak ada ketua',
+                    'nim' => $kelompok->mahasiswaKelompok
+                        ->where('status_mahasiswa', 'ketua')
+                        ->first()?->mahasiswa->user->username ?? 'Tidak ada ketua',
+                    'tahun_daftar' => $kelompok->mahasiswaKelompok->first()?->tahun_daftar,
+                    'skema' => $kelompok->judul->where('is_proposal', true)->first()?->skema->nama_skema ?? 'Proses Bimbingan',
+                    'judul' => $kelompok->judul->where('is_proposal', true)->first()?->nama_skema ?? 'Proses Bimbingan',
+                    'dosen' => $kelompok->dosen->name ?? 'Belum ada dosen pembimbing',
+                    'total_anggota' => $kelompok->mahasiswaKelompok->count(),
+                ];
+            }));
     }
 }

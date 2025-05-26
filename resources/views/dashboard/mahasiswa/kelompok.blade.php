@@ -56,7 +56,7 @@
                     <div class="row">
                         <div class="col-12 mx-2 my-2">
                             <div class="d-flex flex-row justify-content-between align-items-center">
-                                <h4 class="fw-medium primary-color text-center">Kelompok {{ $index + 1 }}</h4>
+                                <h4 class="fw-medium primary-color text-center">Kelompok {{ $index + 1 }} - {{$kelompok['tahun_daftar']}}</h4>
                                 <a href="{{ route('mahasiswa.detail-kelompok', $kelompok['id_kelompok']) }}"
                                     class="m-0 p-0 border rounded-circle bg-secondary-color mx-3 d-flex align-items-center justify-content-center link-underline link-underline-opacity-0"
                                     style="width: 50px; height: 50px;">

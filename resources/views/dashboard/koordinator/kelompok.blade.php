@@ -66,6 +66,7 @@
                         <th>Skema</th>
                         <th>Judul</th>
                         <th>Dosen Pembimbing</th>
+                        <th>Tahun</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -79,6 +80,7 @@
                             <td>{{ $kelompok['skema'] }}</td>
                             <td> {{ Str::limit($kelompok['judul'], 50, '...') }}</td>
                             <td>{{ $kelompok['dosen'] }}</td>
+                            <td>{{ $kelompok['tahun_daftar'] }}</td>
                             <td>
                                 <a href="{{ route('koordinator.detail-kelompok', $kelompok['id_kelompok']) }}"
                                     class="btn btn-secondary">

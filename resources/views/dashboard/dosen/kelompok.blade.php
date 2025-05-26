@@ -65,6 +65,7 @@
                         <th>Total Anggota</th>
                         <th>Skema</th>
                         <th>Anggota</th>
+                        <th>Tahun</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -87,6 +88,9 @@
                                         @endforeach
                                     </div>
                                 @endif
+                            </td>
+                            <td>
+                                {{$kelompok['tahun_daftar']}}
                             </td>
                             <td>
                                 <a href="{{ route('dosen.detail-kelompok', $kelompok['id_kelompok']) }}"
