@@ -80,7 +80,6 @@ class MahasiswaController extends Controller
         } catch (Exception $e) {
             return redirect()->route('mahasiswa.daftar-kelompok')->withErrors(['error' => $e->getMessage()]);
         }
-
     }
 
     public function getTambahAnggotaPage($id, CariNIMRequest $request)

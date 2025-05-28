@@ -101,9 +101,12 @@ class KelompokDataRepository implements KelompokDataRepositoryInterface
                 ->map(function ($item) {
                     return [
                         'id_mk' => $item->id,
+                        'id_mhs' => $item->mahasiswa->id,
                         'id_kelompok' => $item->kelompokId,
                         'nama' => $item->mahasiswa->name,
                         'username' => $item->mahasiswa->user->username ?? null,
+                        'is_verified' => $item->mahasiswa->email_verification_at !== null,
+                        'token' => $item->mahasiswa->email_verification_token ?? null,
                     ];
                 });
 

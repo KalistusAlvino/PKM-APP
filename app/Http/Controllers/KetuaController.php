@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProposalRequest;
+use App\Mail\AnggotaVerificationMail;
 use App\Models\Mahasiswa;
 use App\Repositories\Kelompok\KetuaRepository;
 use Dotenv\Exception\ValidationException;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rule;
+use Str;
 
 class KetuaController extends Controller
 {
@@ -42,14 +47,13 @@ class KetuaController extends Controller
     {
         try {
             $validate = $request->validated();
-            if($request->hasFile('nama_file')){
+            if ($request->hasFile('nama_file')) {
                 $file = $request->file('nama_file');
 
                 $this->ketuaRepository->postProposalFinal($file, $validate['judulId'], $id_kelompok);
             }
             return redirect()->route('mahasiswa.detail-kelompok', $id_kelompok)->with('success', 'Berhasil Melakukan Upload File');
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
@@ -70,6 +74,49 @@ class KetuaController extends Controller
             });
 
         return $mahasiswaBukanAnggota;
+    }
+    public function emailAnggota($token, $id_kelompok)
+    {
+        $mhs = Mahasiswa::where('email_verification_token', $token)->firstOrFail();
+        $key = 'daftar_kelompok';
+        return view('dashboard.mahasiswa.reverivied-anggota', compact('mhs', 'id_kelompok', 'key'));
+    }
+
+    public function updateEmailAnggota(Request $request, $token, $id_kelompok)
+    {
+        try {
+            $validated = $request->validate([
+                'email' => 'required',
+                'email',
+                Rule::unique('mahasiswa', 'email')->ignore($token, 'email_verification_token'),
+            ]);
+
+            $newToken = Str::uuid();
+            $mahasiswa = Mahasiswa::where('email_verification_token', $token)->firstOrFail();
+            $mahasiswa->update([
+                'email_verification_token' => $newToken,
+                'email' => $validated['email']
+            ]);
+            Mail::to($validated['email'])->send(new AnggotaVerificationMail($mahasiswa));
+            return redirect()->route('mahasiswa.detail-kelompok', $id_kelompok)->with('success', 'Berhasil mengganti email anggota');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function resendEmailAnggota($token, $id_kelompok)
+    {
+        try {
+            $newToken = Str::uuid();
+            $mahasiswa = Mahasiswa::where('email_verification_token', $token)->firstOrFail();
+            $mahasiswa->update([
+                'email_verification_token' => $newToken,
+            ]);
+            Mail::to($mahasiswa->email)->send(new AnggotaVerificationMail($mahasiswa));
+             return redirect()->route('mahasiswa.detail-kelompok', $id_kelompok)->with('success', 'Berhasil mengirim ulang email verifikasi anggota');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
     }
 
 }

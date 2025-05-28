@@ -94,6 +94,9 @@ Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
             Route::post('/post-file/{id_kelompok}', [KetuaController::class, 'storeFile'])->name('storeFile');
             Route::delete('/delete-anggota/{id_kelompok}/{id_mk}', [KetuaController::class, 'deleteAnggota'])->name('deleteAnggota');
             Route::patch('/delete-dospem/{id_kelompok}', [KetuaController::class, 'deleteDospem'])->name('deleteDospem');
+            Route::get('/detail-kelompok/email-anggota/{token}/{id_kelompok}',[KetuaController::class,'emailAnggota'])->name('emailAnggota');
+            Route::put('/detail-kelompok/email-anggota/{token}/{id_kelompok}',[KetuaController::class,'updateEmailAnggota'])->name('updateEmailAnggota');
+            Route::post('/detail-kelompok/resend-email-anggota/{token}/{id_kelompok}',[KetuaController::class,'resendEmailAnggota'])->name('resendEmailAnggota');
         });
     });
 });

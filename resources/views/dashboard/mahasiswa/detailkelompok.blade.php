@@ -86,7 +86,12 @@
                                                 ({{ $anggota['username'] }})
                                             </span>
                                         </div>
-                                        <button class="btn btn-danger tes me-4 ms-3 my-2"
+                                        @if (!$anggota['is_verified'])
+                                            <a href="{{route('emailAnggota',[$anggota['token'], $anggota['id_kelompok']])}}" class="btn bg-primary-color my-2 ms-2">
+                                                <i class="fa-solid fa-envelope-open-text text-white"></i>
+                                            </a>
+                                        @endif
+                                        <button class="btn btn-danger tes me-4 ms-2 my-2"
                                             onclick="confirmDeleteAnggota('{{ $anggota['nama'] }}','{{ route('deleteAnggota', [$anggota['id_kelompok'], $anggota['id_mk']]) }}')">
                                             <i class="fa-regular fa-trash-can"></i>
                                         </button>
