@@ -69,8 +69,8 @@ class KetuaRepository implements KetuaRepositoryInterface
             'status_mahasiswa' => 'anggota',
             'tahun_daftar' => date('Y')
         ]);
-        $judul = Judul::with('proposal')->where('id_kelompok', $idKelompok)->where('is_proposal', true)->firstOrFail();
-        $jenis = Jenis::where('nama_jenis', 'PESERTA/PROPOSAL')->firstOrFail();
+        $judul = Judul::with('proposal')->where('id_kelompok', $idKelompok)->where('is_proposal', true)->first();
+        $jenis = Jenis::where('nama_jenis', 'PESERTA/PROPOSAL')->first();
         if ($judul && $judul->proposal) {
             Kegiatan::create([
                 'id_jenis' => $jenis->id,
@@ -90,15 +90,15 @@ class KetuaRepository implements KetuaRepositoryInterface
 
         $users = User::where('username', $data['username'])->with('mahasiswa')->firstOrFail();
         $alreadyAnggota = $users->mahasiswa->mahasiswaKelompok->where('tahun_daftar', date('Y'))->count();
-        $anggota = MahasiswaKelompok::where('kelompokId', $idKelompok)->where('status_mahasiswa', 'anggota')->count();
+        $anggota = MahasiswaKelompok::where('kelompokId', $idKelompok)->where('tahun_daftar', date('Y'))->count();
         if ($anggota >= 5) {
             throw new \Exception('Kelompok sudah memiliki anggota maksimal.');
         }
         if ($alreadyAnggota >= 2) {
             throw new \Exception('Mahasiswa tersebut sudah memiliki batas jumlah berkelompok');
         }
-        $judul = Judul::with('proposal')->where('id_kelompok', $idKelompok)->where('is_proposal', true)->firstOrFail();
-        $jenis = Jenis::where('nama_jenis', 'PESERTA/PROPOSAL')->firstOrFail();
+        $judul = Judul::with('proposal')->where('id_kelompok', $idKelompok)->where('is_proposal', true)->first();
+        $jenis = Jenis::where('nama_jenis', 'PESERTA/PROPOSAL')->first();
         if ($judul && $judul->proposal) {
             Kegiatan::create([
                 'id_jenis' => $jenis->id,
