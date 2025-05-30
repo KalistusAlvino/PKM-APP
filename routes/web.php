@@ -43,8 +43,11 @@ Route::get('/verify/email', [RegisterController::class, 'verifyEmail'])->name('v
 Route::get('/verifikasi-email/data-diri/{token}', [RegisterController::class, 'dataDiri'])->name('verify.dataDiri');
 Route::get('/verifikasi-email/anggota/{id}', [AnggotaController::class, 'verifikasiAnggota'])->name('verify.anggota');
 Route::post('/register/simpan-data-diri', [RegisterController::class, 'simpanDataDiri'])->name('verify.simpanDataDiri');
-Route::get('/berita/{id}', [HomeController::class, 'detailBerita'])->name('detail-berita');
+Route::get('/berita',[HomeController::class,'daftarBerita'])->name('daftar-berita');
+Route::get('/pengumuman',[HomeController::class,'daftarPengumuman'])->name('daftar-pengumuman');
+Route::get('/faq',[HomeController::class,'daftarFAQ'])->name('daftar-faq');
 Route::get('/pengumuman/{id}', [HomeController::class, 'detailPengumuman'])->name('detail-pengumuman');
+Route::get('/berita/{id}', [HomeController::class, 'detailBerita'])->name('detail-berita');
 
 
 Route::get('/get-program-studi/{fakultas_id}', [RegisterController::class, 'getProgramStudi']);

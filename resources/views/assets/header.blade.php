@@ -17,13 +17,13 @@
                     <a class="nav-link primary-color" aria-current="page" href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link primary-color" aria-current="page" href="/berita">Pengumuman</a>
+                    <a class="nav-link primary-color" aria-current="page" href="{{route('daftar-pengumuman')}}">Pengumuman</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link primary-color" aria-current="page" href="/dokter">Berita</a>
+                    <a class="nav-link primary-color" aria-current="page" href="{{route('daftar-berita')}}">Berita</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link primary-color" aria-current="page" href="/dokter">Tentang PKM</a>
+                    <a class="nav-link primary-color" aria-current="page" href="{{route('daftar-faq')}}">FAQ</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link border rounded-3 border-white btn-hover" aria-current="page" href={{route('halamanLogin')}}>

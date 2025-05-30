@@ -18,6 +18,21 @@ class HomeController extends Controller
         return view('landing.home',compact('berita','pengumuman','faq'));
     }
 
+    public function daftarBerita() {
+        $berita = Berita::orderBy('created_at','asc')->limit(6)->get();
+        return view('landing.berita.daftar-berita',compact('berita'));
+    }
+
+    public function daftarPengumuman() {
+        $pengumuman = Pengumuman::orderBy('created_at','asc')->limit(6)->get();
+        return view('landing.pengumuman.daftar-pengumuman',compact('pengumuman'));
+    }
+
+    public function daftarFAQ() {
+        $faq = FAQ::orderBy('created_at','asc')->get();
+        return view('landing.faq.daftar-faq', compact('faq'));
+    }
+
     public function detailBerita($id) {
         $berita = Berita::findOrFail($id);
         return view('landing.berita.detail-berita',compact('berita'));

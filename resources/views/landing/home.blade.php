@@ -24,9 +24,14 @@
     <section id="pengumuman">
         <div class="container-fluid content-height bg-third-color">
             <div class="container content-height d-flex flex-column">
-                <h3 class="pt-5 primary-color fw-bold border-bottom pb-2 border-3">
-                    <i class="fa-solid fa-bullhorn pe-2"></i> Pengumuman
-                </h3>
+                <div class="d-flex border-bottom border-3 align-items-center justify-content-between">
+                    <h3 class="pt-5 primary-color fw-bold pb-2">
+                        <i class="fa-solid fa-bullhorn pe-2"></i> Pengumuman
+                    </h3>
+                    <a href="{{route('daftar-pengumuman')}}" class="pt-5 text-white fw-bold pb-2">
+                        Lihat selengkapnya
+                    </a>
+                </div>
                 <div class="pt-3 flex-grow-1 d-flex align-items-center">
                     <div class="row">
                         @forelse ($pengumuman as $item)
@@ -72,9 +77,14 @@
     <section id="berita">
         <div class="container-fluid content-height">
             <div class="container content-height d-flex flex-column">
-                <h3 class="pt-5 primary-color fw-bold border-bottom pb-2 border-3">
-                    <i class="fa-regular fa-newspaper pe-2"></i> Berita
-                </h3>
+                 <div class="d-flex border-bottom border-3 align-items-center justify-content-between">
+                    <h3 class="pt-5 primary-color fw-bold pb-2">
+                        <i class="fa-regular fa-newspaper pe-2"></i> Berita
+                    </h3>
+                    <a href="{{route('daftar-berita')}}" class="pt-5 third-color fw-bold pb-2">
+                        Lihat selengkapnya
+                    </a>
+                </div>
                 <div class="pt-3 flex-grow-1 d-flex align-items-center">
                     <div class="row">
                         @forelse ($berita as $item)
@@ -120,9 +130,14 @@
     <section id="faq">
         <div class="container-fluid content-height bg-third-color">
             <div class="container content-height">
-                <h3 class="pt-5 primary-color fw-bold border-bottom pb-2 border-3">
-                    <i class="fa-regular fa-circle-question pe-2"></i> Frequently Asked Questions
-                </h3>
+                <div class="d-flex border-bottom border-3 align-items-center justify-content-between">
+                    <h3 class="pt-5 primary-color fw-bold pb-2">
+                        <i class="fa-regular fa-circle-question pe-2"></i> FAQ
+                    </h3>
+                    <a href="{{route('daftar-faq')}}" class="pt-5 text-white fw-bold pb-2">
+                        Lihat selengkapnya
+                    </a>
+                </div>
                 <div class="pt-3 d-flex flex-column align-items-center">
                     @forelse ($faq as $item)
                         <div class="accordion accordion-flush shadow-lg mb-3" id="accordionFlushExample{{ $item->id }}"
