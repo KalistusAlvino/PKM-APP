@@ -81,7 +81,6 @@ class BiroController extends Controller
 
             return redirect()->route('biro.koordinator-account-page')->with('success', 'Berhasil menambahkan data Koordinator');
         } catch (ValidationException $e) {
-            dd($e);
             return redirect()->back()->with('errors', $e->getMessage());
         }
     }
