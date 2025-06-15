@@ -14,9 +14,9 @@
             </div>
             <!-- Announcements Grid -->
             <div class="row g-4 mb-5">
-                @forelse ($pengumuman as $item)
-                    <div class="pt-3 flex-grow-1 d-flex align-items-center">
-                        <div class="row">
+                <div class="pt-3 flex-grow-1 d-flex align-items-center">
+                    <div class="row">
+                        @forelse ($pengumuman as $item)
                             <div class="col-6 col-lg-4 mb-3 mb-lg-0">
                                 <div class="card bg-gray shadow-lg">
                                     <img src="{{ $item->gambar ? asset('storage/' . $item->gambar) : 'https://place-hold.it/700x600' }}"
@@ -37,18 +37,18 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @empty
+                            <div class="pt-3">
+                                <div class="alert alert-info text-center" role="alert">
+                                    <h5 class="alert-heading">Tidak Ada Berita</h5>
+                                    <p>Belum ada berita yang tersedia saat ini. Silakan cek kembali nanti.</p>
+                                    <hr>
+                                    <p class="mb-0">Anda juga dapat menghubungi kami untuk informasi lebih lanjut.</p>
+                                </div>
+                            </div>
+                        @endforelse
                     </div>
-                @empty
-                    <div class="pt-3">
-                        <div class="alert alert-info text-center" role="alert">
-                            <h5 class="alert-heading">Tidak Ada Berita</h5>
-                            <p>Belum ada berita yang tersedia saat ini. Silakan cek kembali nanti.</p>
-                            <hr>
-                            <p class="mb-0">Anda juga dapat menghubungi kami untuk informasi lebih lanjut.</p>
-                        </div>
-                    </div>
-                @endforelse
+                </div>
             </div>
         </div>
     </div>

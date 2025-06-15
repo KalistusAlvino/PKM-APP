@@ -28,34 +28,30 @@
                     <h3 class="pt-5 primary-color fw-bold pb-2">
                         <i class="fa-solid fa-bullhorn pe-2"></i> Pengumuman
                     </h3>
-                    <a href="{{route('daftar-pengumuman')}}" class="pt-5 text-white fw-bold pb-2">
+                    <a href="{{ route('daftar-pengumuman') }}" class="pt-5 text-white fw-bold pb-2">
                         Lihat selengkapnya
                     </a>
                 </div>
                 <div class="pt-3 flex-grow-1 d-flex align-items-center">
                     <div class="row">
                         @forelse ($pengumuman as $item)
-                            <div class="pt-3 flex-grow-1 d-flex align-items-center">
-                                <div class="row">
-                                    <div class="col-12 col-lg-6 mb-3 mb-lg-0">
-                                        <div class="card bg-gray shadow-lg">
-                                            <img src="{{ $item->gambar ? asset('storage/' . $item->gambar) : 'https://place-hold.it/700x600' }}"
-                                                class="card-img-top img-fixed-height" alt="...">
-                                            <div class="card-body" style="height: 200px;">
-                                                <p class="text-secondary">
-                                                    <i class="fa-regular fa-calendar me-1"></i>
-                                                    {{ $item->created_at->diffForHumans() }}
-                                                </p>
-                                                <h5 class="card-title fw-semibold primary-color fs-4 card-title-custom">
-                                                    {{ $item->title }}</h5>
-                                                <div class="card-text card-text-custom text-justify mb-2">
-                                                    {!! $item->isi !!}</div>
-                                                <a href="{{ route('detail-pengumuman', $item->id) }}"
-                                                    class="d-flex justify-content-end text-secondary align-items-center"><i
-                                                        class="fa-solid fa-arrow-up-right-from-square me-1"></i>Lihat
-                                                    selengkapnya</a>
-                                            </div>
-                                        </div>
+                            <div class="col-12 col-lg-6 mb-3 mb-lg-0">
+                                <div class="card bg-gray shadow-lg">
+                                    <img src="{{ $item->gambar ? asset('storage/' . $item->gambar) : 'https://place-hold.it/700x600' }}"
+                                        class="card-img-top img-fixed-height" alt="...">
+                                    <div class="card-body" style="height: 200px;">
+                                        <p class="text-secondary">
+                                            <i class="fa-regular fa-calendar me-1"></i>
+                                            {{ $item->created_at->diffForHumans() }}
+                                        </p>
+                                        <h5 class="card-title fw-semibold primary-color fs-4 card-title-custom">
+                                            {{ $item->title }}</h5>
+                                        <div class="card-text card-text-custom text-justify mb-2">
+                                            {!! $item->isi !!}</div>
+                                        <a href="{{ route('detail-pengumuman', $item->id) }}"
+                                            class="d-flex justify-content-end text-secondary align-items-center"><i
+                                                class="fa-solid fa-arrow-up-right-from-square me-1"></i>Lihat
+                                            selengkapnya</a>
                                     </div>
                                 </div>
                             </div>
@@ -77,43 +73,42 @@
     <section id="berita">
         <div class="container-fluid content-height">
             <div class="container content-height d-flex flex-column">
-                 <div class="d-flex border-bottom border-3 align-items-center justify-content-between">
+                <div class="d-flex border-bottom border-3 align-items-center justify-content-between">
                     <h3 class="pt-5 primary-color fw-bold pb-2">
                         <i class="fa-regular fa-newspaper pe-2"></i> Berita
                     </h3>
-                    <a href="{{route('daftar-berita')}}" class="pt-5 third-color fw-bold pb-2">
+                    <a href="{{ route('daftar-berita') }}" class="pt-5 third-color fw-bold pb-2">
                         Lihat selengkapnya
                     </a>
                 </div>
                 <div class="pt-3 flex-grow-1 d-flex align-items-center">
                     <div class="row">
                         @forelse ($berita as $item)
-                            <div class="pt-3 flex-grow-1 d-flex align-items-center">
-                                <div class="row">
-                                    <div class="col-12 col-lg-6 mb-3 mb-lg-0">
-                                        <div class="card bg-gray shadow-lg">
-                                            <img src="{{ $item->gambar ? asset('storage/' . $item->gambar) : 'https://place-hold.it/700x600' }}"
-                                                class="card-img-top img-fixed-height" alt="...">
-                                            <div class="card-body" style="height: 200px;">
-                                                <p class="text-secondary">
-                                                    <i class="fa-regular fa-calendar me-1"></i>
-                                                    {{ $item->created_at->diffForHumans() }}
-                                                </p>
-                                                <h5 class="card-title fw-semibold primary-color fs-4 card-title-custom">
-                                                    {{ $item->title }}</h5>
-                                                <div class="card-text card-text-custom text-justify mb-2">
-                                                    {!! $item->isi !!}</div>
-                                                <a href="{{ route('detail-berita', $item->id) }}"
-                                                    class="d-flex justify-content-end text-secondary align-items-center"><i
-                                                        class="fa-solid fa-arrow-up-right-from-square me-1"></i>Lihat
-                                                    selengkapnya</a>
-                                            </div>
+                            <div class="col-12 col-lg-6 mb-3">
+                                <div class="card bg-gray shadow-lg">
+                                    <img src="{{ $item->gambar ? asset('storage/' . $item->gambar) : 'https://place-hold.it/700x600' }}"
+                                        class="card-img-top img-fixed-height" alt="...">
+                                    <div class="card-body" style="height: 200px;">
+                                        <p class="text-secondary">
+                                            <i class="fa-regular fa-calendar me-1"></i>
+                                            {{ $item->created_at->diffForHumans() }}
+                                        </p>
+                                        <h5 class="card-title fw-semibold primary-color fs-4 card-title-custom">
+                                            {{ $item->title }}
+                                        </h5>
+                                        <div class="card-text card-text-custom text-justify mb-2">
+                                            {!! $item->isi !!}
                                         </div>
+                                        <a href="{{ route('detail-berita', $item->id) }}"
+                                            class="d-flex justify-content-end text-secondary align-items-center">
+                                            <i class="fa-solid fa-arrow-up-right-from-square me-1"></i>
+                                            Lihat selengkapnya
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                         @empty
-                            <div class="pt-3">
+                            <div class="col-12">
                                 <div class="alert alert-info text-center" role="alert">
                                     <h5 class="alert-heading">Tidak Ada Berita</h5>
                                     <p>Belum ada berita yang tersedia saat ini. Silakan cek kembali nanti.</p>
@@ -124,6 +119,7 @@
                         @endforelse
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -134,7 +130,7 @@
                     <h3 class="pt-5 primary-color fw-bold pb-2">
                         <i class="fa-regular fa-circle-question pe-2"></i> FAQ
                     </h3>
-                    <a href="{{route('daftar-faq')}}" class="pt-5 text-white fw-bold pb-2">
+                    <a href="{{ route('daftar-faq') }}" class="pt-5 text-white fw-bold pb-2">
                         Lihat selengkapnya
                     </a>
                 </div>
