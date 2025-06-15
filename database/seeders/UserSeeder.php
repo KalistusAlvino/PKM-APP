@@ -22,16 +22,16 @@ class UserSeeder extends Seeder
         ]);
         Koordinator::create([
             'userId' => $user->id,
-            'name' => 'Koordinator Satu',
+            'name' => 'Koordinator PKM',
         ]);
         $user = User::create([
-            'username' => 'biro1',
+            'username' => 'biro3',
             'role' => 'biro',
             'password' => bcrypt('12345678'),
         ]);
         Biro::create([
             'userId' => $user->id,
-            'name' => 'Biro Satu',
+            'name' => 'Biro Kemahasiswaan',
         ]);
     }
 }
